@@ -71,6 +71,19 @@ namespace IntranetPOPS1819.Models
 			return m;
 		}
 
+		public Collaborateurs ObtenirCollaborateur(int id)
+		{
+			return bdd.Collaborateurs.FirstOrDefault(u => u.Id == id);
+		}
+
+		public Collaborateurs ObtenirCollaborateur(string idString)
+		{
+			int id;
+			if (int.TryParse(idString, out id))
+				return ObtenirCollaborateur(id);
+			return null;
+		}
+
 		public Collaborateurs Authentifier(string mail, string motDePasse)
 		{
 			string motDePasseEncode = EncodeMD5(motDePasse);

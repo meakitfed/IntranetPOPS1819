@@ -14,5 +14,7 @@ namespace IntranetPOPS1819.Models
 		Mission AjoutMission(string nom, int serviceId);
 		Mission AjoutMission(string nom);
 		Collaborateurs Authentifier(string mail, string motDePasse);
+		Collaborateurs ObtenirCollaborateur(int id);
+		Collaborateurs ObtenirCollaborateur(string idString);
 	}
 }

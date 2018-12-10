@@ -7,11 +7,13 @@ using System.Web.Mvc;
 
 namespace IntranetPOPS1819.Controllers
 {
-    public class HomeController : Controller
+	[Authorize]
+	public class HomeController : Controller
     {
         public ActionResult Index()
         {
 			IDal dal = new Dal();
+
 			return View();
         }
 		
