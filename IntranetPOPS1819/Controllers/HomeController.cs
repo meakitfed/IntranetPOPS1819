@@ -7,7 +7,6 @@ using System.Web.Mvc;
 
 namespace IntranetPOPS1819.Controllers
 {
-	[Authorize]
 	public class HomeController : Controller
     {
         public ActionResult Index()
