@@ -92,7 +92,7 @@ namespace IntranetPOPS1819.Models
 
 		private string EncodeMD5(string motDePasse)
 		{
-			string motDePasseSel = "ChoixResto" + motDePasse + "ASP.NET MVC";
+			string motDePasseSel = "Encodage123" + motDePasse + "IntranetPOPS";
 			return BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(ASCIIEncoding.Default.GetBytes(motDePasseSel)));
 		}
 	}

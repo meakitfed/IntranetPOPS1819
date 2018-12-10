@@ -1,7 +1,37 @@
-﻿@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@model IntranetPOPS1819.ViewModel.CollaborateurViewModel
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+@if (Model.Authentifie)
+{
+	<h3>
+		Vous êtes déjà authentifié avec le login :
+		@Model.Collaborateur.Prenom
+	</h3>
+	@Html.ActionLink("Voulez-vous vous déconnecter ?", "Deconnexion")
+}
+else
+{
+	<p>
+		Veuillez vous authentifier :
+	</p>
+	using (Html.BeginForm())
+	{
+		<div>
+			@Html.LabelFor(m => m.Collaborateur.Prenom)
+			@Html.TextBoxFor(m => m.Collaborateur.Prenom)
+			@Html.ValidationMessageFor(m => m.Collaborateur.Prenom)
+		</div>
+		<div>
+			@Html.LabelFor(m => m.Collaborateur.MotDePasse)
+			@Html.PasswordFor(m => m.Collaborateur.MotDePasse)
+			@Html.ValidationMessageFor(m => m.Collaborateur.MotDePasse)
+		</div>
+		<input type="submit" value="Se connecter" />
+		<br />
+		@Html.ActionLink("Créer un compte", "CreerCompte")
+	}
+}
 
