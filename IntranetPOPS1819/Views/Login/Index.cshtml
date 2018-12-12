@@ -20,9 +20,9 @@ else
 	using (Html.BeginForm())
 	{
 		<div>
-			@Html.LabelFor(m => m.Collaborateur.Prenom)
-			@Html.TextBoxFor(m => m.Collaborateur.Prenom)
-			@Html.ValidationMessageFor(m => m.Collaborateur.Prenom)
+			@Html.LabelFor(m => m.Collaborateur.Mail)
+			@Html.TextBoxFor(m => m.Collaborateur.Mail)
+			@Html.ValidationMessageFor(m => m.Collaborateur.Mail)
 		</div>
 		<div>
 			@Html.LabelFor(m => m.Collaborateur.MotDePasse)
