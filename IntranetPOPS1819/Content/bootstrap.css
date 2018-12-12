@@ -374,6 +374,7 @@ h1, .h1 {
 
 h2, .h2 {
   font-size: 2rem;
+  text-align: center;
 }
 
 h3, .h3 {
