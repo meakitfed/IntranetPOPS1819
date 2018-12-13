@@ -25,6 +25,8 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult Index()
 		{
+			Dal d = new Dal();
+			d.AjoutCollaborateur("nathan", "nathan", "nathan", "nathan");
 			CollaborateurViewModel viewModel = new CollaborateurViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
