@@ -12,10 +12,12 @@ namespace IntranetPOPS1819.Models
         public DbSet<Service> Services { get; set; }
         public DbSet<Collaborateur> Collaborateurs { get; set; }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+		/*protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			Database.SetInitializer<BddContext>(null);
 			base.OnModelCreating(modelBuilder);
-		}
+		}*/
+
 	}
+	
 }
