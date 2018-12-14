@@ -1,4 +1,5 @@
 ﻿using IntranetPOPS1819.Models;
+using IntranetPOPS1819.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,12 @@ namespace IntranetPOPS1819.Controllers
         {
             Dal d = new Dal();
             d.AjoutCollaborateur("Nathan", "Bonnard", "nathan.bonnard@u-psud.fr", "nathan");
-            Collaborateur c = d.ObtenirCollaborateur("1");
-            return View(c);
+            CollaborateurViewModel viewModel = new CollaborateurViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
+            if(HttpContext.User.Identity.IsAuthenticated)
+            {
+                viewModel.Collaborateur = d.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            }
+            return View(viewModel);
         }
     }
 }

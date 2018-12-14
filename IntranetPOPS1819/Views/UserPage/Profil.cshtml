@@ -1,4 +1,4 @@
-﻿@model IntranetPOPS1819.Models.Collaborateur
+﻿@model IntranetPOPS1819.ViewModel.CollaborateurViewModel
 @{
     ViewBag.Title = "Profil";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,11 +16,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3 table-bordered">
-                    <h2>@model.Nom @model.Prenom</h2>
+                    <h2>@Model.Collaborateur.Nom @Model.Collaborateur.Prenom</h2>
                     <!-- Photo de profil -->
                     <p>Service : Massages</p>
                     <p>Rôle : Collaborateur</p>
-                    <p></p><a href="mailto:nathan.bonnard@u-psud.fr" />@model.Mail</a></>
+                    <p><a href="mailto:nathan.bonnard@u-psud.fr">@Model.Collaborateur.Mail</a></p>
                     <p>01 02 03 04 05</p>
                 </div>
                 <div class="col-md-6">

@@ -7,7 +7,7 @@ using System.Web;
 namespace IntranetPOPS1819.Models
 {
     public class Collaborateur
-    {
+    { 
         public int Id { get; set; }
         public string Nom { get; set; }
         public string Prenom { get; set; }
