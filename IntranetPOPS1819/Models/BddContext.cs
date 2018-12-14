@@ -17,5 +17,7 @@ namespace IntranetPOPS1819.Models
 			Database.SetInitializer<BddContext>(null);
 			base.OnModelCreating(modelBuilder);
 		}
+
 	}
+	
 }
