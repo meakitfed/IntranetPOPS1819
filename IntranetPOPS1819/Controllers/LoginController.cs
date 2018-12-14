@@ -40,7 +40,7 @@ namespace IntranetPOPS1819.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				Collaborateurs utilisateur = dal.Authentifier(viewModel.Collaborateur.Mail, viewModel.Collaborateur.MotDePasse);
+				Collaborateur utilisateur = dal.Authentifier(viewModel.Collaborateur.Mail, viewModel.Collaborateur.MotDePasse);
 				if (utilisateur != null)
 				{
 					FormsAuthentication.SetAuthCookie(utilisateur.Id.ToString(), false);
@@ -59,7 +59,7 @@ namespace IntranetPOPS1819.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult CreerCompte(Collaborateurs utilisateur)
+		public ActionResult CreerCompte(Collaborateur utilisateur)
 		{
 			if (ModelState.IsValid)
 			{

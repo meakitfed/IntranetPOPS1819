@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntranetPOPS1819.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,10 @@ namespace IntranetPOPS1819.Controllers
         // GET: UserPage
         public ActionResult Profil()
         {
-            return View();
+            Dal d = new Dal();
+            d.AjoutCollaborateur("Nathan", "Bonnard", "nathan.bonnard@u-psud.fr", "nathan");
+            Collaborateur c = d.ObtenirCollaborateur("1");
+            return View(c);
         }
     }
 }

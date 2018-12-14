@@ -21,7 +21,7 @@ namespace IntranetPOPS1819.Models
             bdd.Dispose();
         }
 
-        public List<Collaborateurs> ObtenirTousLesCollaborateur()
+        public List<Collaborateur> ObtenirTousLesCollaborateur()
         {
             return bdd.Collaborateurs.ToList();
         }
@@ -36,9 +36,9 @@ namespace IntranetPOPS1819.Models
             return bdd.Services.ToList();
         }
 
-        public Collaborateurs AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
+        public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
         {
-			Collaborateurs c = new Collaborateurs { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};
+			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};
 			bdd.Collaborateurs.Add(c);
             bdd.SaveChanges();
 			return c;
@@ -47,7 +47,7 @@ namespace IntranetPOPS1819.Models
 		public Service AjoutService(string nom)
 		{
 			Service s = new Service { Nom = nom };
-			s.Collaborateurs = new List<Collaborateurs>();
+			s.Collaborateurs = new List<Collaborateur>();
 			s.Missions = new List<Mission>();
 			bdd.Services.Add(s);
 			bdd.SaveChanges();
@@ -71,12 +71,12 @@ namespace IntranetPOPS1819.Models
 			return m;
 		}
 
-		public Collaborateurs ObtenirCollaborateur(int id)
+		public Collaborateur ObtenirCollaborateur(int id)
 		{
 			return bdd.Collaborateurs.FirstOrDefault(u => u.Id == id);
 		}
 
-		public Collaborateurs ObtenirCollaborateur(string idString)
+		public Collaborateur ObtenirCollaborateur(string idString)
 		{
 			int id;
 			if (int.TryParse(idString, out id))
@@ -84,7 +84,7 @@ namespace IntranetPOPS1819.Models
 			return null;
 		}
 
-		public Collaborateurs Authentifier(string mail, string motDePasse)
+		public Collaborateur Authentifier(string mail, string motDePasse)
 		{
 			string motDePasseEncode = EncodeMD5(motDePasse);
 			return bdd.Collaborateurs.FirstOrDefault(u => u.Mail == mail && u.MotDePasse == motDePasseEncode);

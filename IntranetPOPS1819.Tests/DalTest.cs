@@ -34,7 +34,7 @@ namespace IntranetPOPS1819.Tests
             public void CreerCreerCollaborateur_AvecUnNouveauCreerCollaborateur_ObtientTousLesCreerCollaborateurRenvoitBienLeCreerCollaborateur()
             {
                     dal.AjoutCollaborateur("Minh", "Nguyen", "minh.nguyen@u-psud.fr", "mdp");
-                    List<Collaborateurs> collab = dal.ObtenirTousLesCollaborateur();
+                    List<Collaborateur> collab = dal.ObtenirTousLesCollaborateur();
 
                     Assert.IsNotNull(collab);
                     Assert.AreEqual(1, collab.Count);
@@ -56,7 +56,7 @@ namespace IntranetPOPS1819.Tests
 			[TestMethod]
 			public void CreerCollaborateur_CheckConnexion()
 			{
-				Collaborateurs c = dal.AjoutCollaborateur("Minh", "Nguyen", "minh.nguyen@u-psud.fr", "bonmotdepasse");
+				Collaborateur c = dal.AjoutCollaborateur("Minh", "Nguyen", "minh.nguyen@u-psud.fr", "bonmotdepasse");
 				Assert.AreEqual(null, dal.Authentifier("minh.nguyen@u-psud.fr", "mauvaismotdepasse"));
 				Assert.AreEqual(c, dal.Authentifier("minh.nguyen@u-psud.fr", "bonmotdepasse"));
 			}

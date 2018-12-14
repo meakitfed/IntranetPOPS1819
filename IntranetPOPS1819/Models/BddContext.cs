@@ -10,7 +10,7 @@ namespace IntranetPOPS1819.Models
     {
 		public DbSet<Mission> Missions { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<Collaborateurs> Collaborateurs { get; set; }
+        public DbSet<Collaborateur> Collaborateurs { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
