@@ -25,8 +25,12 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult Index()
 		{
-			Dal d = new Dal();
-			d.AjoutCollaborateur("nathan", "nathan", "nathan", "nathan");
+			//dal.AjoutCollaborateur("nathan", "nathan", "nathan", "nathan");
+			bool connected = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+			if(connected)
+			{
+				return Redirect("/UserPage/Profil");
+			}
 			CollaborateurViewModel viewModel = new CollaborateurViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
@@ -46,7 +50,7 @@ namespace IntranetPOPS1819.Controllers
 					FormsAuthentication.SetAuthCookie(utilisateur.Id.ToString(), false);
 					if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
 						return Redirect(returnUrl);
-					return Redirect("/");
+					return Redirect("/UserPage/Profil");
 				}
 				ModelState.AddModelError("Utilisateur.Prenom", "Prénom et/ou mot de passe incorrect(s)");
 			}

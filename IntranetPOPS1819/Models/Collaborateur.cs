@@ -24,5 +24,7 @@ namespace IntranetPOPS1819.Models
 
         //Garder ? TODO
         public bool Admin { get; set; }
+
+		public List<Congés> Congés { get; set; }
     }
 }
