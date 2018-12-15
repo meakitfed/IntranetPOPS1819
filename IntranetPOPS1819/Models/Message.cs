@@ -11,5 +11,6 @@ namespace IntranetPOPS1819.Models
 		public String Titre { get; set; }
         public DateTime Date { get; set; }
         public String Contenu { get; set; }
+        public bool Lu { get; set; }
     }
 }
