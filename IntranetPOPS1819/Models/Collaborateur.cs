@@ -26,5 +26,9 @@ namespace IntranetPOPS1819.Models
         public bool Admin { get; set; }
 
 		public List<Congés> Congés { get; set; }
-    }
+		public List<NoteDeFrais> NotesDeFrais { get; set; }
+
+		public List<Message> Messages { get; set; }
+		public List<Message> Notifications { get; set; }
+	}
 }

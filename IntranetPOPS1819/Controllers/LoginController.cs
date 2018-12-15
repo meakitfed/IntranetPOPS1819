@@ -25,7 +25,6 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult Index()
 		{
-			//dal.AjoutCollaborateur("nathan", "nathan", "nathan", "nathan");
 			bool connected = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
 			if(connected)
 			{

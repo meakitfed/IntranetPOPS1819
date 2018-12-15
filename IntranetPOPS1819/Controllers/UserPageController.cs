@@ -21,7 +21,7 @@ namespace IntranetPOPS1819.Controllers
 		{
 			dal = dalIoc;
 		}
-		// GET: UserPage
+
 		public ActionResult Profil()
         {
             CollaborateurViewModel viewModel = new CollaborateurViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };

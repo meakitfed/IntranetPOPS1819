@@ -9,7 +9,7 @@ namespace IntranetPOPS1819.Models
     {
 		public int Id { get; set; }
         public Mission Mission { get; set; }
-        public StatutLigneDeFrais statut { get; set; }
+        public StatutLigneDeFrais Statut { get; set; }
 
         //TODO rajouter qlq chose pour les Files
         //Maybe un id + nom de Ligne de Frais qui irait chercher sur le serveur le doc ? 
@@ -17,5 +17,7 @@ namespace IntranetPOPS1819.Models
 
     public enum StatutLigneDeFrais
     {
+		Validée,
+		Refusée
     }
 }
