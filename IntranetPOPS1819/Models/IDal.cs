@@ -17,6 +17,7 @@ namespace IntranetPOPS1819.Models
 		Collaborateur Authentifier(string mail, string motDePasse);
 		Collaborateur ObtenirCollaborateur(int id);
 		Collaborateur ObtenirCollaborateur(string idString);
+		void AssignerService(int idService, int idCollaborateur);
 		void InitializeBdd();
 	}
 }

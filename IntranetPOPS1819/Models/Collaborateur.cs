@@ -31,12 +31,12 @@ namespace IntranetPOPS1819.Models
 		public bool Admin { get; set; } = false;
 		public string Telephone { get; set; } = "Pas de numéro";
 
-		public List<Mission> Missions { get; set; } = new List<Mission>();
-		public Dictionary<StatutCongé, List<Congés>> Congés { get; set; } = new Dictionary<StatutCongé, List<Congés>>();
-		public List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
-		public List<Message> Messages { get; set; } = new List<Message>();
-		public List<Message> Notifications { get; set; } = new List<Message>();
-		public Service Service { get; set; }
+		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
+		public virtual Dictionary<StatutCongé, List<Congés>> Congés { get; set; } = new Dictionary<StatutCongé, List<Congés>>();
+		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
+		public virtual List<Message> Messages { get; set; } = new List<Message>();
+		public virtual List<Message> Notifications { get; set; } = new List<Message>();
+		public virtual Service Service { get; set; }
 		
 		public int GetNombreCongesPrisCetteAnnee()
 		{

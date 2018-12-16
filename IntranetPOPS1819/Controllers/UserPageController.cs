@@ -25,10 +25,10 @@ namespace IntranetPOPS1819.Controllers
 		[Authorize]
 		public ActionResult Profil()
         {
-            CollaborateurViewModel viewModel = new CollaborateurViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
+            CollaborateurViewModel viewModel = new CollaborateurViewModel { _Authentifie = HttpContext.User.Identity.IsAuthenticated };
             if(HttpContext.User.Identity.IsAuthenticated)
             {
-                viewModel.Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+                viewModel._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             }
             return View(viewModel);
         }

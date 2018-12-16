@@ -30,10 +30,10 @@ namespace IntranetPOPS1819.Controllers
 			{
 				return Redirect("/UserPage/Profil");
 			}
-			CollaborateurViewModel viewModel = new CollaborateurViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
+			CollaborateurViewModel viewModel = new CollaborateurViewModel { _Authentifie = HttpContext.User.Identity.IsAuthenticated };
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				viewModel.Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				viewModel._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 			}
 			return View(viewModel);
 		}
@@ -43,7 +43,7 @@ namespace IntranetPOPS1819.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				Collaborateur utilisateur = dal.Authentifier(viewModel.Collaborateur.Mail, viewModel.Collaborateur.MotDePasse);
+				Collaborateur utilisateur = dal.Authentifier(viewModel._Collaborateur.Mail, viewModel._Collaborateur.MotDePasse);
 				if (utilisateur != null)
 				{
 					FormsAuthentication.SetAuthCookie(utilisateur.Id.ToString(), false);

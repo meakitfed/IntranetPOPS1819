@@ -26,31 +26,31 @@ namespace IntranetPOPS1819.Controllers
 		[Authorize]
 		public ActionResult Index()
 		{
-			OngletNoteDeFraisViewModel viewModel = new OngletNoteDeFraisViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
+			System.Diagnostics.Debug.WriteLine("Passage dans Index 1 NoteDeFraisControlleur");
+			OngletNoteDeFraisViewModel vm = new OngletNoteDeFraisViewModel { _Authentifie = HttpContext.User.Identity.IsAuthenticated };
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				System.Diagnostics.Debug.WriteLine("aaaaaaaaaaaaaaaaaaaaaah" + dal.ObtenirTousLesServices().Count);
-				viewModel.Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 			}
-			return View(viewModel);
+			return View(vm);
 		}
 
 		[HttpPost]
-		public ActionResult Index(OngletNoteDeFraisViewModel viewModel, string returnUrl)
+		public ActionResult Index(OngletNoteDeFraisViewModel vm)
 		{
-			if (ModelState.IsValid)
+			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				Collaborateur utilisateur = dal.Authentifier(viewModel.Collaborateur.Mail, viewModel.Collaborateur.MotDePasse);
-				if (utilisateur != null)
+				//vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				System.Diagnostics.Debug.WriteLine("Passage dans Index 2 NoteDeFraisControlleur");
+				System.Diagnostics.Debug.WriteLine("Info ! " + vm._Collaborateur + "   " + vm._Frais);
+				if (ModelState.IsValid)
 				{
-					FormsAuthentication.SetAuthCookie(utilisateur.Id.ToString(), false);
-					/*if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
-						return Redirect(returnUrl);*/
-					return Redirect("/UserPage/Profil");
+					System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
 				}
-				ModelState.AddModelError("Utilisateur.Prenom", "Prénom et/ou mot de passe incorrect(s)");
+				return View(vm);
 			}
-			return View(viewModel);
+			return View();
+
 		}
 	}
 }

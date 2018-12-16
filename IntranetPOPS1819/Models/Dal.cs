@@ -97,6 +97,13 @@ namespace IntranetPOPS1819.Models
 			return bdd.Collaborateurs.FirstOrDefault(u => u.Id == id);
 		}
 
+		public void AssignerService(int idService, int idCollaborateur)
+		{
+			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
+			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollaborateur);
+			c.Service = s;
+			bdd.SaveChanges();
+		}
 
 		public Collaborateur ObtenirCollaborateur(string idString)
 		{

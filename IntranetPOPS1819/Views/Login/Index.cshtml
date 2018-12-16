@@ -4,7 +4,7 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (!Model.Authentifie)
+@if (!Model._Authentifie)
 {
     <p>
         Veuillez vous authentifier :
@@ -12,14 +12,14 @@
 	using (Html.BeginForm())
 	{
 		<div>
-			@Html.LabelFor(m => m.Collaborateur.Mail)
-			@Html.TextBoxFor(m => m.Collaborateur.Mail)
-			@Html.ValidationMessageFor(m => m.Collaborateur.Mail)
+			@Html.LabelFor(m => m._Collaborateur.Mail)
+			@Html.TextBoxFor(m => m._Collaborateur.Mail)
+			@Html.ValidationMessageFor(m => m._Collaborateur.Mail)
 		</div>
 		<div>
-			@Html.LabelFor(m => m.Collaborateur.MotDePasse)
-			@Html.PasswordFor(m => m.Collaborateur.MotDePasse)
-			@Html.ValidationMessageFor(m => m.Collaborateur.MotDePasse)
+			@Html.LabelFor(m => m._Collaborateur.MotDePasse)
+			@Html.PasswordFor(m => m._Collaborateur.MotDePasse)
+			@Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
 		</div>
 		<input type="submit" value="Se connecter" />
 	}

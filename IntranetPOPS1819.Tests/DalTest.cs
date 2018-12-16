@@ -60,6 +60,15 @@ namespace IntranetPOPS1819.Tests
 				Assert.AreEqual(null, dal.Authentifier("minh.nguyen@u-psud.fr", "mauvaismotdepasse"));
 				Assert.AreEqual(c, dal.Authentifier("minh.nguyen@u-psud.fr", "bonmotdepasse"));
 			}
+
+			[TestMethod]
+			public void AssignerServiceACollaborateur()
+			{
+				Service compta = dal.AjoutService("Comptabilité");
+				Collaborateur n = dal.AjoutCollaborateur("Minh", "Nguyen", "minh.nguyen@u-psud.fr", "bonmotdepasse");
+				dal.AssignerService(compta.Id, n.Id);
+				Assert.AreEqual(compta, dal.ObtenirTousLesCollaborateur()[0].Service);
+			}
 		}
     }
 }

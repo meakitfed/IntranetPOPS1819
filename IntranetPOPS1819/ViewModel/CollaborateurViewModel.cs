@@ -8,7 +8,7 @@ namespace IntranetPOPS1819.ViewModel
 {
 	public class CollaborateurViewModel
 	{
-		public Collaborateur Collaborateur { get; set; }
-		public bool Authentifie { get; set; }
+		public Collaborateur _Collaborateur { get; set; }
+		public bool _Authentifie { get; set; }
 	}
 }

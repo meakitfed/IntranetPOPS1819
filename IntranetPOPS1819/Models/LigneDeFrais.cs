@@ -12,7 +12,7 @@ namespace IntranetPOPS1819.Models
 		[Required]
 		[Display(Name = "Nom de la Dépense")]
 		public string Nom { get; set; }
-		[Required]
+		
 		[Display(Name = "Mission Associée")]
 		public Mission Mission { get; set; }
 		[Required]
