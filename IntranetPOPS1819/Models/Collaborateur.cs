@@ -7,28 +7,78 @@ using System.Web;
 namespace IntranetPOPS1819.Models
 {
     public class Collaborateur
-    { 
-        public int Id { get; set; }
-        public string Nom { get; set; }
-        public string Prenom { get; set; }
+    {
+		public Collaborateur()
+		{
+			foreach(StatutCongé s in Enum.GetValues(typeof(StatutCongé)))
+			{
+				Congés[s] = new List<Congés>();
+			}
+		}
+
+		//variables
+		public int Id { get; set; }
 		[Required]
 		[Display(Name = "Mail")]
 		public string Mail { get; set; }
 		[Required]
 		[Display(Name = "Mot de passe")]
 		public string MotDePasse { get; set; }
-        public Service Service { get; set; }
-        public List<Mission> Missions { get; set; }
+		public string Nom { get; set; }
+        public string Prenom { get; set; }
+		public int CongésRestants { get; set; } = 0;
+		//Garder ? TODO
+		public bool Admin { get; set; } = false;
+		public string Telephone { get; set; } = "Pas de numéro";
 
-        public int JoursRestants { get; set; }
+		public List<Mission> Missions { get; set; } = new List<Mission>();
+		public Dictionary<StatutCongé, List<Congés>> Congés { get; set; } = new Dictionary<StatutCongé, List<Congés>>();
+		public List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
+		public List<Message> Messages { get; set; } = new List<Message>();
+		public List<Message> Notifications { get; set; } = new List<Message>();
+		public Service Service { get; set; }
+		
+		public int GetNombreCongesPrisCetteAnnee()
+		{
+			int nb = 0;
+			if(Congés[StatutCongé.Validé] != null)
+			{
+				foreach (Congés c in Congés[StatutCongé.Validé])
+				{
+					if (c.Date.Year == DateTime.Now.Year) nb += c.Durée;
+				}
+				return nb;
+			}
+			return 0;
+		}
 
-        //Garder ? TODO
-        public bool Admin { get; set; }
+		public int GetNombreCongesEnAttente()
+		{
+			int nb = 0;
+			if (Congés[StatutCongé.EnCours] != null)
+			{
+				foreach (Congés c in Congés[StatutCongé.EnCours])
+				{
+					nb += c.Durée;
+				}
+				return nb;
+			}
+			return 0;
+			
+		}
 
-		public List<Congés> Congés { get; set; }
-		public List<NoteDeFrais> NotesDeFrais { get; set; }
-
-		public List<Message> Messages { get; set; }
-		public List<Message> Notifications { get; set; }
+		public int GetNombreCongesValidesFuturs()
+		{
+			int nb = 0;
+			if (Congés[StatutCongé.Validé] != null)
+			{
+				foreach (Congés c in Congés[StatutCongé.Validé])
+				{
+					if (c.Date.CompareTo(DateTime.Now) > 0) nb += c.Durée;
+				}
+				return nb;
+			}
+			return 0;
+		}
 	}
 }

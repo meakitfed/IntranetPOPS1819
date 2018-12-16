@@ -9,37 +9,34 @@ using System.Web.Security;
 
 namespace IntranetPOPS1819.Controllers
 {
-	public class LoginController : Controller
-	{
+    public class NoteDeFraisController : Controller
+    {
 		private IDal dal;
 
-		public LoginController() : this(new Dal())
+		public NoteDeFraisController() : this(new Dal())
 		{
 
 		}
 
-		private LoginController(IDal dalIoc)
+		private NoteDeFraisController(IDal dalIoc)
 		{
 			dal = dalIoc;
 		}
 
+		[Authorize]
 		public ActionResult Index()
 		{
-			bool connected = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
-			if(connected)
-			{
-				return Redirect("/UserPage/Profil");
-			}
-			CollaborateurViewModel viewModel = new CollaborateurViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
+			OngletNoteDeFraisViewModel viewModel = new OngletNoteDeFraisViewModel { Authentifie = HttpContext.User.Identity.IsAuthenticated };
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
+				System.Diagnostics.Debug.WriteLine("aaaaaaaaaaaaaaaaaaaaaah" + dal.ObtenirTousLesServices().Count);
 				viewModel.Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 			}
 			return View(viewModel);
 		}
 
 		[HttpPost]
-		public ActionResult Index(CollaborateurViewModel viewModel, string returnUrl)
+		public ActionResult Index(OngletNoteDeFraisViewModel viewModel, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
@@ -54,30 +51,6 @@ namespace IntranetPOPS1819.Controllers
 				ModelState.AddModelError("Utilisateur.Prenom", "Prénom et/ou mot de passe incorrect(s)");
 			}
 			return View(viewModel);
-		}
-
-		//[Authorize]
-		public ActionResult CreerCompte()
-		{
-			return View();
-		}
-
-		[HttpPost]
-		public ActionResult CreerCompte(Collaborateur utilisateur)
-		{
-			if (ModelState.IsValid)
-			{
-				int id = dal.AjoutCollaborateur(utilisateur.Nom, utilisateur.Prenom, utilisateur.Mail, utilisateur.MotDePasse).Id;
-				FormsAuthentication.SetAuthCookie(id.ToString(), false);
-				return Redirect("/");
-			}
-			return View(utilisateur);
-		}
-
-		public ActionResult Deconnexion()
-		{
-			FormsAuthentication.SignOut();
-			return Redirect("/");
 		}
 	}
 }

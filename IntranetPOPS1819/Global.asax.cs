@@ -1,5 +1,7 @@
-﻿using System;
+﻿using IntranetPOPS1819.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,6 +17,13 @@ namespace IntranetPOPS1819
             AreaRegistration.RegisterAllAreas();
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+			IDatabaseInitializer<BddContext> init = new InitDataBase();
+			Database.SetInitializer(init);
+			init.InitializeDatabase(new BddContext());
+			Dal d = new Dal();
+			d.InitializeBdd();
+
 		}
     }
 }

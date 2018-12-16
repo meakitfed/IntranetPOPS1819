@@ -9,6 +9,7 @@ namespace IntranetPOPS1819.Models
     public interface IDal : IDisposable
     {
         List<Collaborateur> ObtenirTousLesCollaborateur();
+		List<Service> ObtenirTousLesServices();
 		Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp);
 		Service AjoutService(string nom);
 		Mission AjoutMission(string nom, int serviceId);
@@ -16,5 +17,6 @@ namespace IntranetPOPS1819.Models
 		Collaborateur Authentifier(string mail, string motDePasse);
 		Collaborateur ObtenirCollaborateur(int id);
 		Collaborateur ObtenirCollaborateur(string idString);
+		void InitializeBdd();
 	}
 }

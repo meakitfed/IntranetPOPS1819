@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -21,7 +22,7 @@ namespace IntranetPOPS1819.Models
             bdd.Dispose();
         }
 
-        public List<Collaborateur> ObtenirTousLesCollaborateur()
+		public List<Collaborateur> ObtenirTousLesCollaborateur()
         {
             return bdd.Collaborateurs.ToList();
         }
@@ -36,7 +37,27 @@ namespace IntranetPOPS1819.Models
             return bdd.Services.ToList();
         }
 
-        public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
+		public void InitializeBdd()
+		{
+			Service Comptabilité = new Service { Nom = "Comptabilité" };
+			Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp"), Service = Comptabilité };
+			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Service = Comptabilité };
+
+			NoteDeFrais n1 = new NoteDeFrais { Actif = true, Date = DateTime.Today, Statut = StatutNote.Brouillon };
+			NoteDeFrais n2 = new NoteDeFrais { Actif = false, Date = DateTime.Today, Statut = StatutNote.Enregistré };
+			NoteDeFrais n3 = new NoteDeFrais { Actif = false, Date = DateTime.Today, Statut = StatutNote.Enregistré };
+
+			nathan.NotesDeFrais.Add(n1);
+			nathan.NotesDeFrais.Add(n2);
+			nathan.NotesDeFrais.Add(n3);
+
+			bdd.Services.Add(Comptabilité);
+			bdd.Collaborateurs.Add(nathan);
+			bdd.Collaborateurs.Add(brian);
+			bdd.SaveChanges();
+		}
+
+		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
         {
 			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};
 			bdd.Collaborateurs.Add(c);
@@ -75,6 +96,7 @@ namespace IntranetPOPS1819.Models
 		{
 			return bdd.Collaborateurs.FirstOrDefault(u => u.Id == id);
 		}
+
 
 		public Collaborateur ObtenirCollaborateur(string idString)
 		{

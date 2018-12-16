@@ -13,17 +13,17 @@ namespace IntranetPOPS1819.Models
         public DateTime Date { get; set; }
         public int Durée { get; set; }
     }
+}
+public enum StatutCongé
+{
+	EnCours,
+	Validé,
+	Refusé
+}
 
-    public enum StatutCongé
-    {
-        EnCours,
-        Validé,
-        Refusé
-    }
-    public enum TypeCongé
-    {
-        RTT,
-        SansSolde,
-        Absence
-    }
+public enum TypeCongé
+{
+	RTT,
+	SansSolde,
+	Absence
 }
