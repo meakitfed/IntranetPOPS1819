@@ -40,7 +40,7 @@ namespace IntranetPOPS1819.Controllers
 		{
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				//vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 				System.Diagnostics.Debug.WriteLine("Passage dans Index 2 NoteDeFraisControlleur");
 				System.Diagnostics.Debug.WriteLine("Info ! " + vm._Collaborateur + "   " + vm._Frais);
 				if (ModelState.IsValid)

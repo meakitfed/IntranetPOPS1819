@@ -27,22 +27,22 @@
 				@using (Html.BeginForm())
 				{
 					<div>
-						@Html.LabelFor(Model => Model._Frais.Nom)
-						@Html.TextBoxFor(Model => Model._Frais.Nom)
-						@Html.ValidationMessageFor(Model => Model._Frais.Nom)
+						@Html.LabelFor(m => m._Frais.Nom)
+						@Html.TextBoxFor(m => m._Frais.Nom)
+						@Html.ValidationMessageFor(m => m._Frais.Nom)
 					</div>
 					<div>
 						TODO Mission input
 					</div>
 					<div>
-						@Html.LabelFor(Model => Model._Frais.Somme)
-						@Html.TextBoxFor(Model => Model._Frais.Somme)
-						@Html.ValidationMessageFor(Model => Model._Frais.Somme)
+						@Html.LabelFor(m => m._Frais.Somme)
+						@Html.TextBoxFor(m => m._Frais.Somme)
+						@Html.ValidationMessageFor(m => m._Frais.Somme)
 					</div>
 					<div>
-						@Html.CheckBoxFor(Model => Model._Frais.Complete)
-						@Html.LabelFor(Model => Model._Frais.Complete)
-						@Html.ValidationMessageFor(Model => Model._Frais.Complete)
+						@Html.CheckBoxFor(m => m._Frais.Complete)
+						@Html.LabelFor(m => m._Frais.Complete)
+						@Html.ValidationMessageFor(m => m._Frais.Complete)
 					</div>
 					<input type="submit" value="Ajouter la dépense" />
 				}
