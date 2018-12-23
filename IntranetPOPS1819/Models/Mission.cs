@@ -8,26 +8,10 @@ namespace IntranetPOPS1819.Models
 {
     public class Mission
     {
-		private Service service;
-
 		public int Id { get; set; }
         public string Nom { get; set; }
         public StatutMission Statut { get; set; }
-        public Service Service
-		{
-			get
-			{
-				return service;
-			}
-			set
-			{
-				service = value;
-				if(service != null && service.Missions.FirstOrDefault(m => m.Id == Id) == null)
-				{
-					service.Missions.Add(this);
-				}
-			}
-		}
+        public Service Service { get; set; }
     }
 
     public enum StatutMission

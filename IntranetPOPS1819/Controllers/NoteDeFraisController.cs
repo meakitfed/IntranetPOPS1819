@@ -26,7 +26,7 @@ namespace IntranetPOPS1819.Controllers
 		[Authorize]
 		public ActionResult Index()
 		{
-			System.Diagnostics.Debug.WriteLine("Passage dans Index 1 NoteDeFraisControlleur");
+			System.Diagnostics.Debug.WriteLine("Passage dans Index GET NoteDeFraisControlleur");
 			OngletNoteDeFraisViewModel vm = new OngletNoteDeFraisViewModel { _Authentifie = HttpContext.User.Identity.IsAuthenticated };
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
@@ -41,7 +41,7 @@ namespace IntranetPOPS1819.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				System.Diagnostics.Debug.WriteLine("Passage dans Index 2 NoteDeFraisControlleur");
+				System.Diagnostics.Debug.WriteLine("Passage dans Index HttpPost NoteDeFraisControlleur");
 				System.Diagnostics.Debug.WriteLine("Info ! " + vm._Collaborateur + "   " + vm._Frais);
 				if (ModelState.IsValid)
 				{

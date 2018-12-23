@@ -14,8 +14,15 @@
 				<h2>Historique Notes de Frais</h2>
 				@foreach (NoteDeFrais n in Model._Collaborateur.NotesDeFrais)
 				{
-					<div><button>@n.Date.Month @(n.Actif ? " - Actif" : "")</button></div>
+					<p><button href="" onclick="javascript:toggleVisibility(('Note' + @n.Id)); return false;">Mois : @n.Date.Month @(n.Actif ? " - Actif" : "")</button></p>
+					<div id=@("Note" + n.Id) style="display:none;">
+						@foreach (LigneDeFrais l in n.LignesDeFrais)
+						{
+							<p><button>@l.Nom</button></p>
+						}
+					</div>
 				}
+				
 			</div>
 			<div class="col-md-6">
 				<h1>Notes de Frais : TODO Date Dynamique</h1>
@@ -26,23 +33,25 @@
 			<div class="col-md-3">
 				@using (Html.BeginForm())
 				{
+					@Html.HiddenFor(Model => Model.IdNoteDeFrais)
 					<div>
-						@Html.LabelFor(m => m._Frais.Nom)
-						@Html.TextBoxFor(m => m._Frais.Nom)
-						@Html.ValidationMessageFor(m => m._Frais.Nom)
+						@Html.LabelFor(Model => Model._Frais.Nom)
+						@Html.TextBoxFor(Model => Model._Frais.Nom)
+						@Html.ValidationMessageFor(Model => Model._Frais.Nom)
 					</div>
 					<div>
-						TODO Mission input
+						@Html.LabelFor(Model => Model._Frais.Mission.Nom)
+						@Html.DropDownListFor(Model => Model._Frais.Mission, new SelectList(Model._Collaborateur.Missions, "Id", "Nom"))
 					</div>
 					<div>
-						@Html.LabelFor(m => m._Frais.Somme)
-						@Html.TextBoxFor(m => m._Frais.Somme)
-						@Html.ValidationMessageFor(m => m._Frais.Somme)
+						@Html.LabelFor(Model => Model._Frais.Somme)
+						@Html.TextBoxFor(Model => Model._Frais.Somme)
+						@Html.ValidationMessageFor(Model => Model._Frais.Somme)
 					</div>
 					<div>
-						@Html.CheckBoxFor(m => m._Frais.Complete)
-						@Html.LabelFor(m => m._Frais.Complete)
-						@Html.ValidationMessageFor(m => m._Frais.Complete)
+						@Html.CheckBoxFor(Model => Model._Frais.Complete)
+						@Html.LabelFor(Model => Model._Frais.Complete)
+						@Html.ValidationMessageFor(Model => Model._Frais.Complete)
 					</div>
 					<input type="submit" value="Ajouter la dépense" />
 				}
