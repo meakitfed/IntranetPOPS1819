@@ -119,7 +119,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\octicons.css" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
@@ -196,6 +195,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CongesController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NoteDeFraisController.cs" />
     <Compile Include="Controllers\UserPageController.cs" />
@@ -226,6 +226,8 @@
     <Content Include="Views\Shared\Navbar.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\NoteDeFrais\Index.cshtml" />
+    <Content Include="Views\Login\Deconnexion.cshtml" />
+    <Content Include="Views\Login\TestCalendrier.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -235,6 +237,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Conges\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

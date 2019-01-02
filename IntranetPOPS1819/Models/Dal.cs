@@ -43,6 +43,7 @@ namespace IntranetPOPS1819.Models
 
 			Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp"), Service = Comptabilité };
 			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Service = Comptabilité };
+            brian.Admin = true;
 
 			NoteDeFrais n1 = new NoteDeFrais { Actif = true, Date = new DateTime(2019, 1, 1), Statut = StatutNote.Brouillon };
 			NoteDeFrais n2 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 12, 1), Statut = StatutNote.Enregistré };
