@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace IntranetPOPS1819.Models
 {
@@ -15,5 +12,6 @@ namespace IntranetPOPS1819.Models
 
         //Garder ? TODO
         public int NbAbsents { get; set; }
+
     }
 }

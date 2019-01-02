@@ -12,7 +12,7 @@ namespace IntranetPOPS1819.Models
 		{
 			foreach(StatutCongé s in Enum.GetValues(typeof(StatutCongé)))
 			{
-				Congés[s] = new List<Congés>();
+				Congés[s] = new List<Conges>();
 			}
 		}
 
@@ -32,7 +32,7 @@ namespace IntranetPOPS1819.Models
 		public string Telephone { get; set; } = "Pas de numéro";
 
 		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
-		public virtual Dictionary<StatutCongé, List<Congés>> Congés { get; set; } = new Dictionary<StatutCongé, List<Congés>>();
+		public virtual Dictionary<StatutCongé, List<Conges>> Congés { get; set; } = new Dictionary<StatutCongé, List<Conges>>();
 		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
@@ -43,9 +43,9 @@ namespace IntranetPOPS1819.Models
 			int nb = 0;
 			if(Congés[StatutCongé.Validé] != null)
 			{
-				foreach (Congés c in Congés[StatutCongé.Validé])
+				foreach (Conges c in Congés[StatutCongé.Validé])
 				{
-					if (c.Date.Year == DateTime.Now.Year) nb += c.Durée;
+                    if (c.Debut.Year == DateTime.Now.Year) nb += c.Fin.Subtract(c.Debut).Days;
 				}
 				return nb;
 			}
@@ -57,9 +57,9 @@ namespace IntranetPOPS1819.Models
 			int nb = 0;
 			if (Congés[StatutCongé.EnCours] != null)
 			{
-				foreach (Congés c in Congés[StatutCongé.EnCours])
+				foreach (Conges c in Congés[StatutCongé.EnCours])
 				{
-					nb += c.Durée;
+					nb += c.Fin.Subtract(c.Debut).Days;
 				}
 				return nb;
 			}
@@ -72,9 +72,9 @@ namespace IntranetPOPS1819.Models
 			int nb = 0;
 			if (Congés[StatutCongé.Validé] != null)
 			{
-				foreach (Congés c in Congés[StatutCongé.Validé])
+				foreach (Conges c in Congés[StatutCongé.Validé])
 				{
-					if (c.Date.CompareTo(DateTime.Now) > 0) nb += c.Durée;
+					if (c.Debut.CompareTo(DateTime.Now) > 0) nb += c.Fin.Subtract(c.Debut).Days;
 				}
 				return nb;
 			}

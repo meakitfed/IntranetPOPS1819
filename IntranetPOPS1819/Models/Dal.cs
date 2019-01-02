@@ -22,7 +22,7 @@ namespace IntranetPOPS1819.Models
             bdd.Dispose();
         }
 
-		public List<Collaborateur> ObtenirTousLesCollaborateur()
+		public List<Collaborateur> ObtenirTousLesCollaborateurs()
         {
             return bdd.Collaborateurs.ToList();
         }
@@ -39,13 +39,20 @@ namespace IntranetPOPS1819.Models
 
 		public void InitializeBdd()
 		{
-			Service Comptabilité = new Service { Nom = "Comptabilité" };
 
-			Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp"), Service = Comptabilité };
-			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Service = Comptabilité };
-            brian.Admin = true;
+            Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp") };
+			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
+            Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede") };
+            Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa") };
+            List<Collaborateur> collabos = new List<Collaborateur>
+            {
+                nathan,
+                brian,
+                didier,
+                isabelle
+            };
 
-			NoteDeFrais n1 = new NoteDeFrais { Actif = true, Date = new DateTime(2019, 1, 1), Statut = StatutNote.Brouillon };
+            NoteDeFrais n1 = new NoteDeFrais { Actif = true, Date = new DateTime(2019, 1, 1), Statut = StatutNote.Brouillon };
 			NoteDeFrais n2 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 12, 1), Statut = StatutNote.Enregistré };
 			NoteDeFrais n3 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 11, 1), Statut = StatutNote.Enregistré };
 			NoteDeFrais n4 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 10, 1), Statut = StatutNote.Enregistré };
@@ -61,13 +68,19 @@ namespace IntranetPOPS1819.Models
 			nathan.NotesDeFrais.Add(n6);
 			nathan.NotesDeFrais.Add(n7);
 
-			Random r = new Random();
+            Service compta = new Service { Nom = "Comptabilité", Chef = didier };
+            Service rh = new Service { Nom = "RH", Chef = isabelle };
+            List<Service> services = new List<Service>();
+            services.Add(compta);
+            services.Add(rh);
+
+            Random r = new Random();
 			List<Mission> Missions = new List<Mission>();
 			string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
 			for (int j = 0; j < labelsMission.Length; j++)
 			{
 				int rand = r.Next(0, labelsMission.Length);
-				Missions.Add(new Mission { Nom = labelsMission[rand], Service = Comptabilité, Statut = StatutMission.EnCours});
+				Missions.Add(new Mission { Nom = labelsMission[rand], Service = compta, Statut = StatutMission.EnCours});
 			}
 
 			string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
@@ -90,11 +103,13 @@ namespace IntranetPOPS1819.Models
 			{
 				bdd.NotesDeFrais.Add(n);
 			}
-			bdd.Services.Add(Comptabilité);
-			bdd.Collaborateurs.Add(nathan);
-			bdd.Collaborateurs.Add(brian);
-			bdd.SaveChanges();
-		}
+
+            foreach(Service s in services)
+                bdd.Services.Add(s);
+            foreach(Collaborateur c in collabos)
+                bdd.Collaborateurs.Add(c);
+            bdd.SaveChanges();
+        }
 
 		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
         {
