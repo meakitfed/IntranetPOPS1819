@@ -44,13 +44,6 @@ namespace IntranetPOPS1819.Models
 			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
             Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede") };
             Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa") };
-            List<Collaborateur> collabos = new List<Collaborateur>
-            {
-                nathan,
-                brian,
-                didier,
-                isabelle
-            };
 
             NoteDeFrais n1 = new NoteDeFrais { Actif = true, Date = new DateTime(2019, 1, 1), Statut = StatutNote.Brouillon };
 			NoteDeFrais n2 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 12, 1), Statut = StatutNote.Enregistré };
@@ -70,9 +63,20 @@ namespace IntranetPOPS1819.Models
 
             Service compta = new Service { Nom = "Comptabilité", Chef = didier };
             Service rh = new Service { Nom = "RH", Chef = isabelle };
-            List<Service> services = new List<Service>();
-            services.Add(compta);
-            services.Add(rh);
+            List<Service> services = new List<Service>
+            {
+                compta,
+                rh
+            };
+            didier.Service = compta;
+            isabelle.Service = rh;
+            List<Collaborateur> collabos = new List<Collaborateur>
+            {
+                nathan,
+                brian,
+                didier,
+                isabelle
+            };
 
             Random r = new Random();
 			List<Mission> Missions = new List<Mission>();
