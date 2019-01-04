@@ -1,0 +1,15 @@
+﻿@using IntranetPOPS1819.Models
+@model IntranetPOPS1819.Models.LigneDeFrais
+
+@if (Model != null)
+{
+	<p>Date : @Model.Date.ToShortDateString()</p>
+	<p>Mission associée : @if (Model.Mission != null) { @Model.Mission.Nom }</p>
+	<p>Statut du frais : @Model.Statut</p>
+	<p>Somme demandée : @Model.Somme</p>
+	<p>Documents associés : TODO</p>
+}
+else
+{
+	<p>Sélectionnez une ligne de frais</p>
+}

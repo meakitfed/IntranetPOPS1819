@@ -162,6 +162,8 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -226,6 +228,7 @@
     <Content Include="Views\Shared\Navbar.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\NoteDeFrais\Index.cshtml" />
+    <Content Include="Views\NoteDeFrais\InformationLigneDeFrais.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

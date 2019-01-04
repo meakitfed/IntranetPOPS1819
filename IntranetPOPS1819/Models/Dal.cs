@@ -95,6 +95,21 @@ namespace IntranetPOPS1819.Models
 			bdd.SaveChanges();
 		}
 
+		public void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne)
+		{
+			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
+			if(c != null)
+			{
+				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
+				if(note != null)
+				{
+					note.LignesDeFrais.Add(ligne);
+					System.Diagnostics.Debug.WriteLine("Création ligne de frais dans la BDD");
+					bdd.SaveChanges();
+				}
+			}
+		}
+
 		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
         {
 			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};

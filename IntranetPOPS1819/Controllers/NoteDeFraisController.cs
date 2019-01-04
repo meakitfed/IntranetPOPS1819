@@ -42,15 +42,27 @@ namespace IntranetPOPS1819.Controllers
 			{
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 				System.Diagnostics.Debug.WriteLine("Passage dans Index HttpPost NoteDeFraisControlleur");
-				System.Diagnostics.Debug.WriteLine("Info ! " + vm._Collaborateur + "   " + vm._Frais);
-				if (ModelState.IsValid)
+				if (true)
 				{
 					System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
+					dal.AjoutLigneDeFrais(vm._Collaborateur.Id, 1, vm._Frais);
 				}
 				return View(vm);
 			}
 			return View();
 
+		}
+
+		public ActionResult InformationLigneDeFrais(int idNote = default(int), int idLigne = default(int))
+		{
+			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur");
+			Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+			if(idNote != default(int) && idLigne != default(int))
+			{
+				LigneDeFrais ligne = c.NotesDeFrais.FirstOrDefault(n => n.Id == idNote).LignesDeFrais.FirstOrDefault(l => l.Id == idLigne);
+				return PartialView(ligne);
+			}
+			return PartialView(null);
 		}
 	}
 }

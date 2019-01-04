@@ -12,7 +12,6 @@ namespace IntranetPOPS1819.ViewModel
 	{
 		public Collaborateur _Collaborateur { get; set; }
 		public LigneDeFrais _Frais { get; set; }
-		public int IdNoteDeFrais { get; set; }
 		public bool _Authentifie { get; set; }
 	}
 }
