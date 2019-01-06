@@ -109,7 +109,10 @@ namespace IntranetPOPS1819.Models
 				}
 			}
 		}
-
+		public Mission GetMission(int idMission)
+		{
+			return bdd.Missions.FirstOrDefault(m => m.Id == idMission);
+		}
 		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
         {
 			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};

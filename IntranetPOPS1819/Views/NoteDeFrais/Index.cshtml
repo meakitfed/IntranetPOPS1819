@@ -8,7 +8,6 @@
 }
 
 @Html.Partial("../Shared/Navbar")
-
 <div>
 	<div class="container-fluid">
 		<div class="row">
@@ -21,11 +20,11 @@
 						@for(int j =0; j < @Model._Collaborateur.NotesDeFrais[i].LignesDeFrais.Count; j++)
 						{
 							@Ajax.ActionLink(@Model._Collaborateur.NotesDeFrais[i].LignesDeFrais[j].Nom, "InformationLigneDeFrais", new { idNote = Model._Collaborateur.NotesDeFrais[i].Id, idLigne = Model._Collaborateur.NotesDeFrais[i].LignesDeFrais[j].Id }, new AjaxOptions
-					   {
-						   InsertionMode = InsertionMode.Replace,
-						   UpdateTargetId = "InfoLigneActive",
-						   HttpMethod = "Post"
-					   }, new { @class = "btn" })
+							{
+							   InsertionMode = InsertionMode.Replace,
+							   UpdateTargetId = "InfoLigneActive",
+							   HttpMethod = "Post"
+							}, new { @class = "btn" })
 						}
 					</div>
 				}
@@ -48,7 +47,8 @@
 					</div>
 					<div>
 						@Html.LabelFor(Model => Model._Frais.Mission)
-						@Html.DropDownListFor(Model => Model._Frais.Mission, new SelectList(Model._Collaborateur.Missions, "Id", "Nom"))
+						@Html.DropDownListFor(Model => Model._IdMission, new SelectList(Model._Collaborateur.Missions, "Id", "Nom"))
+						@Html.ValidationMessageFor(Model => Model._Frais.Mission)
 					</div>
 					<div>
 						@Html.LabelFor(Model => Model._Frais.Somme)

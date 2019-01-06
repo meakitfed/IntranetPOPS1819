@@ -45,6 +45,7 @@ namespace IntranetPOPS1819.Controllers
 				if (true)
 				{
 					System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
+					vm._Frais.Mission = dal.GetMission(vm._IdMission);
 					dal.AjoutLigneDeFrais(vm._Collaborateur.Id, 1, vm._Frais);
 				}
 				return View(vm);
