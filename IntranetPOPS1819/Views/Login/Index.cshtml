@@ -1,7 +1,7 @@
 ﻿@model IntranetPOPS1819.ViewModel.CollaborateurViewModel
 @{
-	ViewBag.Title = "Index";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @if (!Model._Authentifie)
@@ -9,19 +9,19 @@
     <p>
         Veuillez vous authentifier :
     </p>
-	using (Html.BeginForm())
-	{
-		<div>
-			@Html.LabelFor(m => m._Collaborateur.Mail)
-			@Html.TextBoxFor(m => m._Collaborateur.Mail)
-			@Html.ValidationMessageFor(m => m._Collaborateur.Mail)
-		</div>
-		<div>
-			@Html.LabelFor(m => m._Collaborateur.MotDePasse)
-			@Html.PasswordFor(m => m._Collaborateur.MotDePasse)
-			@Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
-		</div>
-		<input type="submit" value="Se connecter" />
-	}
+    using (Html.BeginForm())
+    {
+        <div>
+            @Html.LabelFor(m => m._Collaborateur.Mail)
+            @Html.TextBoxFor(m => m._Collaborateur.Mail)
+            @Html.ValidationMessageFor(m => m._Collaborateur.Mail)
+        </div>
+        <div>
+            @Html.LabelFor(m => m._Collaborateur.MotDePasse)
+            @Html.PasswordFor(m => m._Collaborateur.MotDePasse)
+            @Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
+        </div>
+        <input type="submit" value="Se connecter" />
+    }
 }
 

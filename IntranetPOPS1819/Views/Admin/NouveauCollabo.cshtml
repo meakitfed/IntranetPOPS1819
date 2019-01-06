@@ -1,0 +1,36 @@
+﻿@model IntranetPOPS1819.Models.Collaborateur
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>NouveauCollabo</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm())
+        {
+            <div>
+                @Html.LabelFor(Model => Model.Prenom)
+                @Html.TextBoxFor(Model => Model.Prenom)
+                @Html.ValidationMessageFor(Model => Model.Prenom)
+            </div>
+            <div>
+                @Html.LabelFor(Model => Model.Nom)
+                @Html.TextBoxFor(Model => Model.Nom)
+                @Html.ValidationMessageFor(Model => Model.Nom)
+            </div>
+            <div>
+                @Html.LabelFor(Model => Model.Mail)
+                @Html.TextBoxFor(Model => Model.Mail)
+                @Html.ValidationMessageFor(Model => Model.Mail)
+            </div>
+            <input type="submit" value="Ajouter collabo" />
+        }
+    </div>
+</body>
+</html>

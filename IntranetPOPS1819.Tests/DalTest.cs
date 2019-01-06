@@ -34,7 +34,7 @@ namespace IntranetPOPS1819.Tests
             public void CreerCreerCollaborateur_AvecUnNouveauCreerCollaborateur_ObtientTousLesCreerCollaborateurRenvoitBienLeCreerCollaborateur()
             {
                     dal.AjoutCollaborateur("Minh", "Nguyen", "minh.nguyen@u-psud.fr", "mdp");
-                    List<Collaborateur> collab = dal.ObtenirTousLesCollaborateur();
+                    List<Collaborateur> collab = dal.ObtenirTousLesCollaborateurs();
 
                     Assert.IsNotNull(collab);
                     Assert.AreEqual(1, collab.Count);
@@ -67,7 +67,7 @@ namespace IntranetPOPS1819.Tests
 				Service compta = dal.AjoutService("Comptabilité");
 				Collaborateur n = dal.AjoutCollaborateur("Minh", "Nguyen", "minh.nguyen@u-psud.fr", "bonmotdepasse");
 				dal.AssignerService(compta.Id, n.Id);
-				Assert.AreEqual(compta, dal.ObtenirTousLesCollaborateur()[0].Service);
+				Assert.AreEqual(compta, dal.ObtenirTousLesCollaborateurs()[0].Service);
 			}
 		}
     }
