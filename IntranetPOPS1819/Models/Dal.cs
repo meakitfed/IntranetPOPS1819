@@ -61,24 +61,27 @@ namespace IntranetPOPS1819.Models
 			nathan.NotesDeFrais.Add(n6);
 			nathan.NotesDeFrais.Add(n7);
 
-            Service compta = new Service { Nom = "Comptabilité", Chef = didier };
-            Service rh = new Service { Nom = "RH", Chef = isabelle };
-            List<Service> services = new List<Service>
-            {
-                compta,
-                rh
-            };
-            didier.Service = compta;
-            isabelle.Service = rh;
-            List<Collaborateur> collabos = new List<Collaborateur>
+            Service compta = new Service { Nom = "Comptabilité"/*, Chef = didier*/ };
+            Service rh = new Service { Nom = "RH"/*, Chef = isabelle*/ };
+            
+			didier.Service = compta;
+			isabelle.Service = rh;
+
+			List<Service> services = new List<Service>
+			{
+				compta,
+				rh
+			};
+			List<Collaborateur> collabos = new List<Collaborateur>
             {
                 nathan,
                 brian,
                 didier,
                 isabelle
             };
+			
 
-            Random r = new Random();
+			Random r = new Random();
 			List<Mission> Missions = new List<Mission>();
 			string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
 			for (int j = 0; j < labelsMission.Length; j++)
@@ -98,6 +101,7 @@ namespace IntranetPOPS1819.Models
 					n.LignesDeFrais.Add(ligne);
 				}
 			}
+
 			foreach(Mission m in Missions)
 			{
 				nathan.Missions.Add(m);
@@ -133,6 +137,7 @@ namespace IntranetPOPS1819.Models
 		{
 			return bdd.Missions.FirstOrDefault(m => m.Id == idMission);
 		}
+
 		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
         {
 			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};

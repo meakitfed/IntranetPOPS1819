@@ -1,31 +1,20 @@
-﻿@model IntranetPOPS1819.Models.Service
-@{ 
-    Layout = null;
+﻿@model IntranetPOPS1819.ViewModel.NouveauServiceViewModel
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Nouveau Service</title>
-</head>
-<body>
-    <div>
-        @using (Html.BeginForm())
-        {
-            <div>
-                @Html.LabelFor(Model => Model.Nom)
-                @Html.TextBoxFor(Model => Model.Nom)
-                @Html.ValidationMessageFor(Model => Model.Nom)
-            </div>
-            <div>
-                @Html.LabelFor(Model => Model.Chef)
-                @Html.TextBoxFor(Model => Model.Chef)
-                @Html.ValidationMessageFor(Model => Model.Chef.Nom)
-            </div>
-            <input type="submit" value="Ajouter collabo" />
-        }
-    </div>
-</body>
-</html>
+@Html.Partial("../Shared/Navbar")
+<div>
+	@using (Html.BeginForm())
+	{
+		<div>
+			@Html.LabelFor(Model => Model._Service.Nom)
+			@Html.TextBoxFor(Model => Model._Service.Nom)
+			@Html.ValidationMessageFor(Model => Model._Service.Nom)
+		</div>
+		<input type="submit" value="Ajouter service" />
+	}
+</div>
+

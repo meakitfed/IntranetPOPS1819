@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IntranetPOPS1819.Models
 {
@@ -34,8 +35,11 @@ namespace IntranetPOPS1819.Models
 		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
+
+		/*[ForeignKey("Service")]
+		public int ServiceRefId { get; set; }*/
 		public virtual Service Service { get; set; }
-		
+
 		public int GetNombreCongesPrisCetteAnnee()
 		{
 			int nb = 0;

@@ -42,12 +42,10 @@ namespace IntranetPOPS1819.Controllers
 			{
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 				System.Diagnostics.Debug.WriteLine("Passage dans Index HttpPost NoteDeFraisControlleur");
-				if (true)
-				{
-					System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
-					vm._Frais.Mission = dal.GetMission(vm._IdMission);
-					dal.AjoutLigneDeFrais(vm._Collaborateur.Id, 1, vm._Frais);
-				}
+				//TODO valider le form? 
+				System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
+				vm._Frais.Mission = dal.GetMission(vm._IdMission);
+				dal.AjoutLigneDeFrais(vm._Collaborateur.Id, 1, vm._Frais);
 				return View(vm);
 			}
 			return View();
