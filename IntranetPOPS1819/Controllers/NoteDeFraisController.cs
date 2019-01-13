@@ -31,6 +31,7 @@ namespace IntranetPOPS1819.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				dal.MiseAJourNotesDeFrais(vm._Collaborateur.Id);
 			}
 			return View(vm);
 		}
@@ -45,7 +46,7 @@ namespace IntranetPOPS1819.Controllers
 				//TODO valider le form? 
 				System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
 				vm._Frais.Mission = dal.GetMission(vm._IdMission);
-				dal.AjoutLigneDeFrais(vm._Collaborateur.Id, 1, vm._Frais);
+				dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
 				return View(vm);
 			}
 			return View();

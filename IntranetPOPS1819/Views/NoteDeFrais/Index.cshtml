@@ -12,9 +12,9 @@
 		<div class="row">
 			<div class="col-md-3 table-bordered">
 				<h2>Historique Notes de Frais</h2>
-				@for(int i = 0; i < Model._Collaborateur.NotesDeFrais.Count; i++)
+				@for(int i = Model._Collaborateur.NotesDeFrais.Count - 1; i >= 0 ; i--)
 				{
-					<p><button href="" onclick="javascript:toggleVisibility(('Note' + @Model._Collaborateur.NotesDeFrais[i].Id)); return false;">Mois : @Model._Collaborateur.NotesDeFrais[i].Date.Month @(@Model._Collaborateur.NotesDeFrais[i].Actif ? " - Actif" : "")</button></p>
+					<p><button href="" onclick="javascript:toggleVisibility(('Note' + @Model._Collaborateur.NotesDeFrais[i].Id)); return false;">@Model._Collaborateur.NotesDeFrais[i].Date.ToString("MMMM-yyyy") @(@Model._Collaborateur.NotesDeFrais[i].Actif ? " - Actif" : "")</button></p>
 					<div id=@("Note" + @Model._Collaborateur.NotesDeFrais[i].Id) style="display:none;">
 						@for(int j =0; j < @Model._Collaborateur.NotesDeFrais[i].LignesDeFrais.Count; j++)
 						{
@@ -39,6 +39,11 @@
 			<div class="col-md-3">
 				@using (Html.BeginForm())
 				{
+					<div>
+						@Html.LabelFor(Model => Model._Collaborateur.NotesDeFrais)
+						@Html.DropDownListFor(Model => Model._IdNoteDeFrais, new SelectList(Model._Collaborateur.NotesDeFrais, "Id", "Date"))
+						@Html.ValidationMessageFor(Model => Model._Collaborateur.NotesDeFrais)
+					</div>
 					<div>
 						@Html.LabelFor(Model => Model._Frais.Nom)
 						@Html.TextBoxFor(Model => Model._Frais.Nom)

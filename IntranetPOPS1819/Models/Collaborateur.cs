@@ -9,7 +9,8 @@ namespace IntranetPOPS1819.Models
     {
 		public Collaborateur()
 		{
-			foreach(StatutCongé s in Enum.GetValues(typeof(StatutCongé)))
+			DateCreationCompte = DateTime.Now;
+			foreach (StatutCongé s in Enum.GetValues(typeof(StatutCongé)))
 			{
 				Congés[s] = new List<Conges>();
 			}
@@ -36,9 +37,31 @@ namespace IntranetPOPS1819.Models
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
 
+		public DateTime DateCreationCompte { get; set; }
+
 		/*[ForeignKey("Service")]
 		public int ServiceRefId { get; set; }*/
 		public virtual Service Service { get; set; }
+
+		public void MiseAJourNotesDeFrais()
+		{
+			if(NotesDeFrais.Count == 0)
+			{
+				NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(DateCreationCompte.Year, DateCreationCompte.Month, 1), Statut = StatutNote.Brouillon });
+			}
+			DateTime d = NotesDeFrais[NotesDeFrais.Count - 1].Date;
+			d = d.AddMonths(1);
+			while ( d < DateTime.Now)
+			{
+				NotesDeFrais.Add(new NoteDeFrais { Date = d, Statut = StatutNote.Brouillon, Actif = false});
+				d = d.AddMonths(1);
+			}
+			foreach(NoteDeFrais n in NotesDeFrais)
+			{
+				n.Actif = false;
+			}
+			NotesDeFrais[NotesDeFrais.Count - 1].Actif = true;
+		}
 
 		public int GetNombreCongesPrisCetteAnnee()
 		{

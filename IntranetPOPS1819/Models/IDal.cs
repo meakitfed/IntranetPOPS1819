@@ -18,6 +18,7 @@ namespace IntranetPOPS1819.Models
 		Collaborateur ObtenirCollaborateur(int id);
 		Collaborateur ObtenirCollaborateur(string idString);
 		Mission GetMission(int idMission);
+		void MiseAJourNotesDeFrais(int IdCollaborateur);
 		void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
 		void AssignerService(int idService, int idCollaborateur);
 		void InitializeBdd();

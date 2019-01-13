@@ -14,5 +14,6 @@ namespace IntranetPOPS1819.ViewModel
 		public LigneDeFrais _Frais { get; set; }
 		public bool _Authentifie { get; set; }
 		public int _IdMission { get; set; }
+		public int _IdNoteDeFrais { get; set; }
 	}
 }

@@ -36,30 +36,24 @@ namespace IntranetPOPS1819.Models
         {
             return bdd.Services.ToList();
         }
-
+		public void MiseAJourNotesDeFrais(int IdCollaborateur)
+		{
+			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == IdCollaborateur);
+			if (c != null)
+			{
+				c.MiseAJourNotesDeFrais();
+				bdd.SaveChanges();
+			}
+		}
 		public void InitializeBdd()
 		{
-
             Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp") };
+			nathan.DateCreationCompte = new DateTime(2018, 1, 1);
 			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
-            Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede") };
+			brian.DateCreationCompte = new DateTime(2017, 1, 1);
+			nathan.DateCreationCompte = new DateTime(2018, 1, 1);
+			Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede") };
             Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa") };
-
-            NoteDeFrais n1 = new NoteDeFrais { Actif = true, Date = new DateTime(2019, 1, 1), Statut = StatutNote.Brouillon };
-			NoteDeFrais n2 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 12, 1), Statut = StatutNote.Enregistré };
-			NoteDeFrais n3 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 11, 1), Statut = StatutNote.Enregistré };
-			NoteDeFrais n4 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 10, 1), Statut = StatutNote.Enregistré };
-			NoteDeFrais n5 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 9, 1), Statut = StatutNote.Enregistré };
-			NoteDeFrais n6 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 8, 1), Statut = StatutNote.Enregistré };
-			NoteDeFrais n7 = new NoteDeFrais { Actif = false, Date = new DateTime(2018, 7, 1), Statut = StatutNote.Enregistré };
-
-			nathan.NotesDeFrais.Add(n1);
-			nathan.NotesDeFrais.Add(n2);
-			nathan.NotesDeFrais.Add(n3);
-			nathan.NotesDeFrais.Add(n4);
-			nathan.NotesDeFrais.Add(n5);
-			nathan.NotesDeFrais.Add(n6);
-			nathan.NotesDeFrais.Add(n7);
 
             Service compta = new Service { Nom = "Comptabilité"/*, Chef = didier*/ };
             Service rh = new Service { Nom = "RH"/*, Chef = isabelle*/ };
@@ -106,10 +100,6 @@ namespace IntranetPOPS1819.Models
 			{
 				nathan.Missions.Add(m);
 				bdd.Missions.Add(m);
-			}
-			foreach (NoteDeFrais n in nathan.NotesDeFrais)
-			{
-				bdd.NotesDeFrais.Add(n);
 			}
 
             foreach(Service s in services)
