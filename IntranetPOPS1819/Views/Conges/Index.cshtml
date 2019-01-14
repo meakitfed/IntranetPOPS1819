@@ -1,4 +1,6 @@
 ﻿@model IntranetPOPS1819.Models.Conges
+@using IntranetPOPS1819.Models
+
 @{
     Layout = null;
 }
@@ -11,9 +13,11 @@
     <title>Index</title>
 </head>
 <body>
+    @Html.Partial("../Shared/Navbar")
+
     @using (Html.BeginForm())
     {
-        <div>
+        <div class="navbar navbar-inverse">
             @Html.LabelFor(Model => Model.Debut)
             @Html.TextBoxFor(Model => Model.Debut)
             @Html.ValidationMessageFor(Model => Model.Debut)
