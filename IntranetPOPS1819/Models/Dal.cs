@@ -52,11 +52,11 @@ namespace IntranetPOPS1819.Models
 			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
 			brian.DateCreationCompte = new DateTime(2017, 1, 1);
 			nathan.DateCreationCompte = new DateTime(2018, 1, 1);
-			Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede") };
-            Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa") };
+			Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true };
+            Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true };
 
-            Service compta = new Service { Nom = "Comptabilité"/*, Chef = didier*/ };
-            Service rh = new Service { Nom = "RH"/*, Chef = isabelle*/ };
+            Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier } };
+            Service rh = new Service { Nom = "RH" };
             
 			didier.Service = compta;
 			isabelle.Service = rh;
@@ -123,7 +123,18 @@ namespace IntranetPOPS1819.Models
 				}
 			}
 		}
-		public Mission GetMission(int idMission)
+
+        public void AjoutNotif(int idCollab, Message m)
+        {
+            Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
+            if (c != null)
+            {
+                c.Notifications.Add(m);
+                bdd.SaveChanges();
+            }
+        }
+
+        public Mission GetMission(int idMission)
 		{
 			return bdd.Missions.FirstOrDefault(m => m.Id == idMission);
 		}

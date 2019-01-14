@@ -22,8 +22,10 @@ namespace IntranetPOPS1819.Controllers
             IDal dal = new Dal();
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-				//TODO
-                //dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Chef.Notifications.Add(notif);
+                //TODO
+                dal.AjoutNotif(dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Chef().Id, notif);
+                System.Diagnostics.Debug.WriteLine("Notif ajoutée");
+                System.Diagnostics.Debug.WriteLine(HttpContext.User.Identity.Name + " : " + dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Notifications.Count);
             }
             return View();
         }

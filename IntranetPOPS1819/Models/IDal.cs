@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IntranetPOPS1819.Models
 {
@@ -20,7 +17,8 @@ namespace IntranetPOPS1819.Models
 		Mission GetMission(int idMission);
 		void MiseAJourNotesDeFrais(int IdCollaborateur);
 		void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
-		void AssignerService(int idService, int idCollaborateur);
+        void AjoutNotif(int idCollab, Message m);
+        void AssignerService(int idService, int idCollaborateur);
 		void InitializeBdd();
 	}
 }
