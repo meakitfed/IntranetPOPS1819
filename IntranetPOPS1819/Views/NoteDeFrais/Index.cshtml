@@ -12,20 +12,33 @@
 		<div class="row">
 			<div class="col-md-3 table-bordered">
 				<h2>Historique Notes de Frais</h2>
-				@for(int i = Model._Collaborateur.NotesDeFrais.Count - 1; i >= 0 ; i--)
-				{
-					<p><button href="" onclick="javascript:toggleVisibility(('Note' + @Model._Collaborateur.NotesDeFrais[i].Id)); return false;">@Model._Collaborateur.NotesDeFrais[i].Date.ToString("MMMM-yyyy") @(@Model._Collaborateur.NotesDeFrais[i].Actif ? " - Actif" : "")</button></p>
-					<div id=@("Note" + @Model._Collaborateur.NotesDeFrais[i].Id) style="display:none;">
-						@for(int j =0; j < @Model._Collaborateur.NotesDeFrais[i].LignesDeFrais.Count; j++)
-						{
-							@Ajax.ActionLink(@Model._Collaborateur.NotesDeFrais[i].LignesDeFrais[j].Nom, "InformationLigneDeFrais", new { idNote = Model._Collaborateur.NotesDeFrais[i].Id, idLigne = Model._Collaborateur.NotesDeFrais[i].LignesDeFrais[j].Id }, new AjaxOptions
+				@{
+					int a = Model._Collaborateur.NotesDeFrais.Count - 1;
+					int d = DateTime.Now.Year;
+
+					while (d >= Model._Collaborateur.NotesDeFrais[0].Date.Year && a >= 0)
+					{
+						<button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
+						<div id=@(("Année" + d)) style="display:none;">
+							@while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
 							{
-							   InsertionMode = InsertionMode.Replace,
-							   UpdateTargetId = "InfoLigneActive",
-							   HttpMethod = "Post"
-							}, new { @class = "btn" })
-						}
-					</div>
+								<button class="btn btn-block btn-2" href="" onclick="javascript:toggleVisibility(('Note' + @Model._Collaborateur.NotesDeFrais[a].Id)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM") @(@Model._Collaborateur.NotesDeFrais[a].Actif ? " - Actif" : "")</button>
+								<div id=@("Note" + Model._Collaborateur.NotesDeFrais[a].Id) style="display:none;">
+									@for (int k = 0; k < Model._Collaborateur.NotesDeFrais[a].LignesDeFrais.Count; k++)
+									{
+										@Ajax.ActionLink(Model._Collaborateur.NotesDeFrais[a].LignesDeFrais[k].Nom, "InformationLigneDeFrais", new { idNote = Model._Collaborateur.NotesDeFrais[a].Id, idLigne = Model._Collaborateur.NotesDeFrais[a].LignesDeFrais[k].Id }, new AjaxOptions
+									   {
+										   InsertionMode = InsertionMode.Replace,
+										   UpdateTargetId = "InfoLigneActive",
+										   HttpMethod = "Post"
+									   }, new { @class = "btn btn-block btn-3" })
+									}
+								</div>
+								a--;
+							}
+						</div>
+						d--;
+					}
 				}
 			</div>
 			<div class="col-md-6">

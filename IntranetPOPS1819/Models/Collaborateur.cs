@@ -9,7 +9,7 @@ namespace IntranetPOPS1819.Models
     {
 		public Collaborateur()
 		{
-			DateCreationCompte = DateTime.Now;
+			LastUpdate = DateTime.Now;
 			foreach (StatutCongé s in Enum.GetValues(typeof(StatutCongé)))
 			{
 				Congés[s] = new List<Conges>();
@@ -37,7 +37,8 @@ namespace IntranetPOPS1819.Models
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
 
-		public DateTime DateCreationCompte { get; set; }
+		public DateTime LastUpdate { get; set; }
+		public int LastUpdateNoteDeFrais { get; set; }
 
 		/*[ForeignKey("Service")]
 		public int ServiceRefId { get; set; }*/
@@ -45,22 +46,49 @@ namespace IntranetPOPS1819.Models
 
 		public void MiseAJourNotesDeFrais()
 		{
-			if(NotesDeFrais.Count == 0)
+			/*if (DateTime.Today != LastUpdate.Date)
 			{
-				NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(DateCreationCompte.Year, DateCreationCompte.Month, 1), Statut = StatutNote.Brouillon });
-			}
-			DateTime d = NotesDeFrais[NotesDeFrais.Count - 1].Date;
-			d = d.AddMonths(1);
-			while ( d < DateTime.Now)
-			{
-				NotesDeFrais.Add(new NoteDeFrais { Date = d, Statut = StatutNote.Brouillon, Actif = false});
+				System.Diagnostics.Debug.WriteLine("Passage MiseAJourNotesDeFrais, avec mise à jour");
+				if (NotesDeFrais.Count == 0)
+				{
+					NotesDeFrais.Add(new List<NoteDeFrais>()
+					{
+						new NoteDeFrais { Date = new DateTime(LastUpdate.Year, LastUpdate.Month, 1), Statut = StatutNote.Brouillon }
+					});
+				}
+				DateTime d = LastUpdate;
 				d = d.AddMonths(1);
+				while (d < DateTime.Now)
+				{
+					if (!NotesDeFrais.ContainsKey(d.Year))
+					{
+						NotesDeFrais[d.Year] = new List<NoteDeFrais>
+						{
+							new NoteDeFrais { Date = d, Statut = StatutNote.Brouillon, Actif = false }
+						};
+					}
+					else
+					{
+						NotesDeFrais[d.Year].Add(new NoteDeFrais { Date = d, Statut = StatutNote.Brouillon, Actif = false });
+					}
+					d = d.AddMonths(1);
+				}
+
+				foreach (KeyValuePair<int, List<NoteDeFrais>> dic in NotesDeFrais)
+				{
+					foreach (NoteDeFrais n in dic.Value)
+					{
+						n.Actif = false;
+					}
+				}
+				NotesDeFrais[DateTime.Now.Year][NotesDeFrais[DateTime.Now.Year].Count - 1].Actif = true;
+				LastUpdate = DateTime.Now;
 			}
-			foreach(NoteDeFrais n in NotesDeFrais)
+			else
 			{
-				n.Actif = false;
-			}
-			NotesDeFrais[NotesDeFrais.Count - 1].Actif = true;
+				System.Diagnostics.Debug.WriteLine("Passage MiseAJourNotesDeFrais, sans mise à jour");
+			}*/
+			
 		}
 
 		public int GetNombreCongesPrisCetteAnnee()
