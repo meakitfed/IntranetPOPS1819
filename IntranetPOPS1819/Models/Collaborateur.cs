@@ -44,53 +44,6 @@ namespace IntranetPOPS1819.Models
 		public int ServiceRefId { get; set; }*/
 		public virtual Service Service { get; set; }
 
-		public void MiseAJourNotesDeFrais()
-		{
-			/*if (DateTime.Today != LastUpdate.Date)
-			{
-				System.Diagnostics.Debug.WriteLine("Passage MiseAJourNotesDeFrais, avec mise à jour");
-				if (NotesDeFrais.Count == 0)
-				{
-					NotesDeFrais.Add(new List<NoteDeFrais>()
-					{
-						new NoteDeFrais { Date = new DateTime(LastUpdate.Year, LastUpdate.Month, 1), Statut = StatutNote.Brouillon }
-					});
-				}
-				DateTime d = LastUpdate;
-				d = d.AddMonths(1);
-				while (d < DateTime.Now)
-				{
-					if (!NotesDeFrais.ContainsKey(d.Year))
-					{
-						NotesDeFrais[d.Year] = new List<NoteDeFrais>
-						{
-							new NoteDeFrais { Date = d, Statut = StatutNote.Brouillon, Actif = false }
-						};
-					}
-					else
-					{
-						NotesDeFrais[d.Year].Add(new NoteDeFrais { Date = d, Statut = StatutNote.Brouillon, Actif = false });
-					}
-					d = d.AddMonths(1);
-				}
-
-				foreach (KeyValuePair<int, List<NoteDeFrais>> dic in NotesDeFrais)
-				{
-					foreach (NoteDeFrais n in dic.Value)
-					{
-						n.Actif = false;
-					}
-				}
-				NotesDeFrais[DateTime.Now.Year][NotesDeFrais[DateTime.Now.Year].Count - 1].Actif = true;
-				LastUpdate = DateTime.Now;
-			}
-			else
-			{
-				System.Diagnostics.Debug.WriteLine("Passage MiseAJourNotesDeFrais, sans mise à jour");
-			}*/
-			
-		}
-
 		public int GetNombreCongesPrisCetteAnnee()
 		{
 			int nb = 0;
