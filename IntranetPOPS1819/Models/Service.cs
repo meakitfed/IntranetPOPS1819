@@ -24,5 +24,14 @@ namespace IntranetPOPS1819.Models
 		//Garder ? TODO
 		public int NbAbsents { get; set; }
 
+        public Collaborateur Chef()
+        {
+            foreach(Collaborateur c in Collaborateurs)
+            {
+                if (c.Chef) return c;
+            }
+
+            return null;
+        }
     }
 }

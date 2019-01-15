@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IntranetPOPS1819.Models
 {
@@ -29,6 +28,7 @@ namespace IntranetPOPS1819.Models
 		public int CongésRestants { get; set; } = 0;
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
+        public bool Chef { get; set; } = false;
 		public string Telephone { get; set; } = "Pas de numéro";
 
 		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
