@@ -11,17 +11,19 @@
     </p>
     using (Html.BeginForm())
     {
-        <div>
-            @Html.LabelFor(m => m._Collaborateur.Mail)
-            @Html.TextBoxFor(m => m._Collaborateur.Mail)
-            @Html.ValidationMessageFor(m => m._Collaborateur.Mail)
-        </div>
-        <div>
-            @Html.LabelFor(m => m._Collaborateur.MotDePasse)
+    <div id="inner">
+        Identifiant : &nbsp;&nbsp;&nbsp;&nbsp;
+        @Html.TextBoxFor(m => m._Collaborateur.Mail)
+        @Html.ValidationMessageFor(m => m._Collaborateur.Mail)
+    </div>
+        <div id="inner">
+            Mot de passe : 
             @Html.PasswordFor(m => m._Collaborateur.MotDePasse)
             @Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
         </div>
-        <input type="submit" value="Se connecter" />
+        <div id="inner">
+            <input type="submit" value="Se connecter" />
+        </div>
     }
 }
 
