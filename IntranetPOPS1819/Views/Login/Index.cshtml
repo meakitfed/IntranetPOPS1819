@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (!Model._Authentifie)
+@if (!@User.Identity.IsAuthenticated)
 {
     <p>
         Veuillez vous authentifier :
