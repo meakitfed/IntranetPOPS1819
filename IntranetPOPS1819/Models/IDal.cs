@@ -17,6 +17,7 @@ namespace IntranetPOPS1819.Models
 		Mission GetMission(int idMission);
 		void MiseAJourNotesDeFrais(int IdCollaborateur);
 		void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
+        void AjoutConge(int idCollab, Conges c);
         void AjoutNotif(int idCollab, Message m);
         void AssignerService(int idService, int idCollaborateur);
 		void InitializeBdd();

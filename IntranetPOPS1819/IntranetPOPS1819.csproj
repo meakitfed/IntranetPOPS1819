@@ -258,6 +258,7 @@
     <Compile Include="Models\NoteDeFrais.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\CongesViewModel.cs" />
     <Compile Include="ViewModel\CollaborateurViewModel.cs" />
     <Compile Include="ViewModel\NouveauCollaborateurViewModel.cs" />
     <Compile Include="ViewModel\NouveauServiceViewModel.cs" />
