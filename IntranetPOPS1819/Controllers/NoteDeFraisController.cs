@@ -30,8 +30,12 @@ namespace IntranetPOPS1819.Controllers
 			OngletNoteDeFraisViewModel vm = new OngletNoteDeFraisViewModel { _Authentifie = HttpContext.User.Identity.IsAuthenticated };
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
+				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
+				System.Diagnostics.Debug.WriteLine("nbr key " + dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).NotesDeFrais.Count);
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				dal.MiseAJourNotesDeFrais(vm._Collaborateur.Id);
+				Dal d = new Dal();
+				
+				//System.Diagnostics.Debug.WriteLine("nbr key " + d.ObtenirCollaborateur(HttpContext.User.Identity.Name).NotesDeFrais.Keys.Count);
 			}
 			return View(vm);
 		}
@@ -43,10 +47,19 @@ namespace IntranetPOPS1819.Controllers
 			{
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 				System.Diagnostics.Debug.WriteLine("Passage dans Index HttpPost NoteDeFraisControlleur");
-				//TODO valider le form? 
+				//TODO valider le form?
 				System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
 				vm._Frais.Mission = dal.GetMission(vm._IdMission);
-				dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
+				foreach (NoteDeFrais n in vm._Collaborateur.NotesDeFrais)
+				{
+					if(n.Id == vm._IdNoteDeFrais)
+					{
+						dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
+						return View(vm);
+					}
+				}
+
+				
 				return View(vm);
 			}
 			return View();

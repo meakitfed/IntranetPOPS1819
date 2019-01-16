@@ -36,22 +36,52 @@ namespace IntranetPOPS1819.Models
         {
             return bdd.Services.ToList();
         }
+		public void MiseAJourNotesDeFrais(string idString)
+		{
+			int id;
+			if (int.TryParse(idString, out id))
+				MiseAJourNotesDeFrais(id);
+		}
+
 		public void MiseAJourNotesDeFrais(int IdCollaborateur)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == IdCollaborateur);
 			if (c != null)
 			{
-				c.MiseAJourNotesDeFrais();
+				if (DateTime.Today != c.LastUpdate.Date)
+				{
+					if (c.NotesDeFrais.Count == 0)
+					{
+						AjoutNoteDeFrais(c.LastUpdate.Year, IdCollaborateur, c.LastUpdate.Month);
+					}
+					DateTime d = c.LastUpdate;
+					d = d.AddMonths(1);
+					while (d < DateTime.Now)
+					{
+						AjoutNoteDeFrais(d.Year, IdCollaborateur, d.Month);
+						d = d.AddMonths(1);
+					}
+
+					foreach (NoteDeFrais n in c.NotesDeFrais)
+					{
+						n.Actif = false;
+					}
+					c.NotesDeFrais[c.NotesDeFrais.Count - 1].Actif = true;
+					c.LastUpdate = DateTime.Now;
+				}
+				else
+				{
+					System.Diagnostics.Debug.WriteLine("Passage MiseAJourNotesDeFrais, sans mise à jour");
+				}
 				bdd.SaveChanges();
 			}
 		}
 		public void InitializeBdd()
 		{
             Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp") };
-			nathan.DateCreationCompte = new DateTime(2018, 1, 1);
+			nathan.LastUpdate = new DateTime(2018, 1, 1);
 			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
-			brian.DateCreationCompte = new DateTime(2017, 1, 1);
-			nathan.DateCreationCompte = new DateTime(2018, 1, 1);
+			brian.LastUpdate = new DateTime(2017, 1, 1);
 			Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true };
             Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true };
 
@@ -60,6 +90,9 @@ namespace IntranetPOPS1819.Models
             
 			didier.Service = compta;
 			isabelle.Service = rh;
+
+            Conges conge = new Conges { Debut = new DateTime(1999, 9, 9) };
+            didier.Congés.FirstOrDefault(con => con.Key == StatutConge.EnCours).Value.Add(conge);
 
 			List<Service> services = new List<Service>
 			{
@@ -108,7 +141,15 @@ namespace IntranetPOPS1819.Models
                 bdd.Collaborateurs.Add(c);
             bdd.SaveChanges();
         }
-
+		public void AjoutNoteDeFrais(int year, int idCollab, int month)
+		{
+			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
+			if (c != null)
+			{
+				c.NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false });
+				bdd.SaveChanges();
+			}
+		}
 		public void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
@@ -123,6 +164,17 @@ namespace IntranetPOPS1819.Models
 				}
 			}
 		}
+
+        public void AjoutConge(int idCollab, Conges c)
+        {
+            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Congés.FirstOrDefault(con => con.Key == c.Statut).Value.Add(c);
+            bdd.SaveChanges();
+            System.Diagnostics.Debug.WriteLine("Création congé dans la BDD");
+            foreach (var con in bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Congés.FirstOrDefault(con => con.Key == c.Statut).Value)
+            {
+                System.Diagnostics.Debug.WriteLine(con.Debut);
+            }
+        }
 
         public void AjoutNotif(int idCollab, Message m)
         {
