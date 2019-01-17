@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Data.SqlTypes;
 
 namespace IntranetPOPS1819.Models
 {
-    public class Conges
+    public class Conge
     {
 		public int Id { get; set; }
         public StatutConge Statut { get; set; }

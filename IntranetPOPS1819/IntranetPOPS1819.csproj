@@ -249,7 +249,7 @@
     </Compile>
     <Compile Include="Models\BddContext.cs" />
     <Compile Include="Models\Collaborateur.cs" />
-    <Compile Include="Models\Conges.cs" />
+    <Compile Include="Models\Conge.cs" />
     <Compile Include="Models\Dal.cs" />
     <Compile Include="Models\IDal.cs" />
     <Compile Include="Models\InitDataBase.cs" />
@@ -266,7 +266,9 @@
     <Compile Include="ViewModel\OngletNoteDeFraisViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config" />
+    <Content Include="Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />

@@ -18,7 +18,7 @@ namespace IntranetPOPS1819
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-			IDatabaseInitializer<BddContext> init = new InitDataBase();
+			IDatabaseInitializer<BddContext> init = new DropCreateDatabaseAlways<BddContext>();
 			Database.SetInitializer(init);
 			init.InitializeDatabase(new BddContext());
 			Dal d = new Dal();

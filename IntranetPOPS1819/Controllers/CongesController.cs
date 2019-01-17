@@ -27,7 +27,7 @@ namespace IntranetPOPS1819.Controllers
             IDal dal = new Dal();
             vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             System.Diagnostics.Debug.WriteLine(vm._Collaborateur.Nom);
-            string txt = "Service : \nCliquez pour consulter";
+            string txt = "Service : " + vm._Collaborateur.Service.Nom + "\n";
             Message notif = new Message { Titre = "Demande de validation congé", Date = DateTime.Now, Contenu = txt};
 
             

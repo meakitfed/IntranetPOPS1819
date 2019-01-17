@@ -91,8 +91,8 @@ namespace IntranetPOPS1819.Models
 			didier.Service = compta;
 			isabelle.Service = rh;
 
-            Conges conge = new Conges { Debut = new DateTime(1999, 9, 9) };
-            didier.Congés.FirstOrDefault(con => con.Key == StatutConge.EnCours).Value.Add(conge);
+            Conge conge = new Conge { Debut = new DateTime(1999, 9, 9), Fin = new DateTime(9991, 1, 1), Statut = StatutConge.EnCours };
+            didier.Conges.Add(conge);
 
 			List<Service> services = new List<Service>
 			{
@@ -165,14 +165,14 @@ namespace IntranetPOPS1819.Models
 			}
 		}
 
-        public void AjoutConge(int idCollab, Conges c)
+        public void AjoutConge(int idCollab, Conge c)
         {
-            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Congés.FirstOrDefault(con => con.Key == c.Statut).Value.Add(c);
+            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.SaveChanges();
             System.Diagnostics.Debug.WriteLine("Création congé dans la BDD");
-            foreach (var con in bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Congés.FirstOrDefault(con => con.Key == c.Statut).Value)
+            foreach (var con in bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges)
             {
-                System.Diagnostics.Debug.WriteLine(con.Debut);
+                System.Diagnostics.Debug.WriteLine(con);
             }
         }
 

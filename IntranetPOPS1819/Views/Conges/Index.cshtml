@@ -1,6 +1,7 @@
 ﻿@model IntranetPOPS1819.ViewModel.CongesViewModel
 @{
-    Layout = null;
+    ViewBag.Title = "Profil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -11,16 +12,17 @@
     <title>Index</title>
 </head>
 <body>
+    @Html.Partial("../Shared/Navbar")
     @using (Html.BeginForm())
     {
         <div>
             @Html.LabelFor(Model => Model._Conge.Debut)
-            @Html.TextBoxFor(Model => Model._Conge.Debut)
+            @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
             @Html.ValidationMessageFor(Model => Model._Conge.Debut)
         </div>
         <div>
             @Html.LabelFor(Model => Model._Conge.Fin)
-            @Html.TextBoxFor(Model => Model._Conge.Fin)
+            @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
             @Html.ValidationMessageFor(Model => Model._Conge.Fin)
         </div>
         <div>
@@ -30,15 +32,17 @@
         </div>
         <input type="submit" value="Demnader congé" />
     }
+    <p>Liste des demandes : </p>
     @try
     {
-        foreach (var c in Model._Collaborateur.Congés.Values.First())
+        foreach (var c in Model._Collaborateur.Conges)
         {
             <ul>
-                <li>@c.Debut</li>
+                <li>Du @c.Debut au @c.Fin - @c.Type - @c.Statut</li>
             </ul>
         }
-    } catch(System.NullReferenceException e)
+    }
+    catch (System.NullReferenceException e)
     {
         <p>@e.Source</p>
         <p>Aucune demande pour le moment</p>

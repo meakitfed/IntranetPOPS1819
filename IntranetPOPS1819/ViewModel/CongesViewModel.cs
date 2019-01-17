@@ -6,6 +6,6 @@ namespace IntranetPOPS1819.ViewModel
     {
         public Collaborateur _Collaborateur { get; set; }
         public bool _Authentifie { get; set; }
-        public Conges _Conge { get; set; }
+        public Conge _Conge { get; set; }
     }
 }
