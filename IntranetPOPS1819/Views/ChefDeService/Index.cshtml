@@ -1,0 +1,46 @@
+﻿@using IntranetPOPS1819.Models
+@model IntranetPOPS1819.ViewModel.ChefDeServiceViewModel
+@{
+	ViewBag.Title = "Chef De Service";
+
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("../Shared/Navbar")
+
+<h2>@Model._Collaborateur.Service.Nom</h2>
+<div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-3 table-bordered">
+				@for (int k = 0; k < Model._Collaborateur.Service.Collaborateurs.Count; k++)
+				{
+					<button class="btn btn-block btn-2" href="" onclick="javascript:toggleVisibility(('c' + @Model._Collaborateur.Service.Collaborateurs[k].Id)); return false;">@Model._Collaborateur.Service.Collaborateurs[k].Nom</button>
+					<div id=@("c" + Model._Collaborateur.Service.Collaborateurs[k].Id) style="display:none;">
+						@foreach (LigneDeFrais l in Model._Collaborateur.Service.Collaborateurs[k].GetLigneDeFraisAValider())
+						{
+							@Ajax.ActionLink(l.Nom, "InformationLigneDeFraisSelection", new { idCollab = Model._Collaborateur.Service.Collaborateurs[k].Id, idLigne = l.Id }, new AjaxOptions
+						   {
+							   InsertionMode = InsertionMode.Replace,
+							   UpdateTargetId = "InfoLigne",
+							   HttpMethod = "Post"
+						   }, new { @class = "btn btn-block btn-3" })
+						}
+					</div>
+				}
+			</div>	
+			<div class="col-lg-6 table-bordered">
+				<div id="InfoLigne">
+					@{
+						Html.RenderAction("InformationLigneDeFraisSelection");
+					}
+				</div>
+			</div>
+			<div class="col-lg-3 table-bordered">
+				TODO
+			</div>
+			
+		</div>
+	</div>
+</div>
+

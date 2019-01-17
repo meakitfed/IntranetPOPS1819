@@ -10,8 +10,8 @@
 <div>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-3 table-bordered">
-				<h2>Historique Notes de Frais</h2>
+			<div class="col-lg-3 table-bordered">
+				<p><h3 class="text-center">Historique<br />Notes de Frais</h3></p>
 				@{
 					int a = Model._Collaborateur.NotesDeFrais.Count - 1;
 					int d = DateTime.Now.Year;
@@ -41,15 +41,14 @@
 					}
 				}
 			</div>
-			<div class="col-md-6">
-				<h1>Notes de Frais : TODO Date Dynamique</h1>
+			<div class="col-lg-6 table-bordered">
 				<div id="InfoLigneActive">
 					@{
 						Html.RenderAction("InformationLigneDeFrais");
 					}
 				</div>
 			</div>
-			<div class="col-md-3">
+			<div class="col-lg-3 table-bordered">
 				@using (Html.BeginForm())
 				{
 					<div>

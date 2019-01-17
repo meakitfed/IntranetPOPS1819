@@ -31,11 +31,7 @@ namespace IntranetPOPS1819.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
-				System.Diagnostics.Debug.WriteLine("nbr key " + dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).NotesDeFrais.Count);
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				Dal d = new Dal();
-				
-				//System.Diagnostics.Debug.WriteLine("nbr key " + d.ObtenirCollaborateur(HttpContext.User.Identity.Name).NotesDeFrais.Keys.Count);
 			}
 			return View(vm);
 		}
@@ -55,11 +51,17 @@ namespace IntranetPOPS1819.Controllers
 					if(n.Id == vm._IdNoteDeFrais)
 					{
 						dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
+						if(vm._Frais.Complete)
+						{
+							dal.EnvoiLigneDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
+							System.Diagnostics.Debug.WriteLine("Nombre de lignes :" + vm._Collaborateur.Service.LigneDeFrais.Count);
+							System.Diagnostics.Debug.WriteLine("Collaborateur de la ligne : " + vm._Frais.Note.Collaborateur.Nom);
+							IDal d = new Dal();
+							System.Diagnostics.Debug.WriteLine("Collaborateur de la ligne test : " + d.ObtenirCollaborateur(vm._Collaborateur.Id).Service.LigneDeFrais[0].Note.Collaborateur.Nom);
+						}
 						return View(vm);
 					}
 				}
-
-				
 				return View(vm);
 			}
 			return View();

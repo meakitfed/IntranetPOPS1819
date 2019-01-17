@@ -14,7 +14,8 @@ namespace IntranetPOPS1819.Models
 		public DateTime Date { get; set; }
 		public bool Actif { get; set; } = false;
 		public virtual List<LigneDeFrais> LignesDeFrais { get; set; } = new List<LigneDeFrais>();
-    }
+		public virtual Collaborateur Collaborateur { get; set; }
+	}
 
     public enum StatutNote
     {

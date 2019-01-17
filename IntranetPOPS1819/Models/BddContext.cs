@@ -12,20 +12,10 @@ namespace IntranetPOPS1819.Models
         public DbSet<Service> Services { get; set; }
         public DbSet<Collaborateur> Collaborateurs { get; set; }
 		public DbSet<NoteDeFrais> NotesDeFrais { get; set; }
+		public DbSet<LigneDeFrais> LigneDeFrais { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			/*modelBuilder.Entity<Service>()
-						.HasRequired(m => m.)
-						.WithMany()
-						.HasForeignKey(m => m.HomeTeamId)
-						.WillCascadeOnDelete(false);
-
-			modelBuilder.Entity<Collaborateur>()
-						.HasRequired(m => m.GuestTeam)
-						.WithMany()
-						.HasForeignKey(m => m.GuestTeamId)
-						.WillCascadeOnDelete(false);*/
 		}
 
 	}

@@ -36,13 +36,28 @@ namespace IntranetPOPS1819.Models
         {
             return bdd.Services.ToList();
         }
+
 		public void MiseAJourNotesDeFrais(string idString)
 		{
 			int id;
 			if (int.TryParse(idString, out id))
 				MiseAJourNotesDeFrais(id);
 		}
-
+		public Service ObtenirServiceDeType(TypeService type)
+		{
+			return bdd.Services.FirstOrDefault(t => t.Type == type);
+		}
+		public void EnvoiLigneDeFraisChefService(int idService, int idCollab, int idLigne)
+		{
+			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
+			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
+			LigneDeFrais l = bdd.LigneDeFrais.FirstOrDefault(ligne => ligne.Id == idLigne);
+			if(c != null && s != null && l != null)
+			{
+				s.LigneDeFrais.Add(l);
+				bdd.SaveChanges();
+			}
+		}
 		public void MiseAJourNotesDeFrais(int IdCollaborateur)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == IdCollaborateur);
@@ -85,16 +100,21 @@ namespace IntranetPOPS1819.Models
 			Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true };
             Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true };
 
-            Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier } };
-            Service rh = new Service { Nom = "RH" };
-            
+			Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier } , Type = TypeService.Comptabilité };
+            Service rh = new Service { Nom = "RH", Type = TypeService.RessourcesHumaines };
+			Service marketing = new Service { Nom = "Marketing", Type = TypeService.ServiceLambda };
+
 			didier.Service = compta;
 			isabelle.Service = rh;
+			nathan.Service = marketing;
+			brian.Service = marketing;
+			brian.Chef = true;
 
 			List<Service> services = new List<Service>
 			{
 				compta,
-				rh
+				rh,
+				marketing
 			};
 			List<Collaborateur> collabos = new List<Collaborateur>
             {
@@ -121,14 +141,14 @@ namespace IntranetPOPS1819.Models
 				{
 					int rand = r.Next(0, labelsLigne.Length);
 					int rand2 = r.Next(0, Missions.Count);
-					LigneDeFrais ligne = new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) };
-					n.LignesDeFrais.Add(ligne);
+					AjoutLigneDeFrais(nathan.Id, n.Id, new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) });
 				}
 			}
 
 			foreach(Mission m in Missions)
 			{
 				nathan.Missions.Add(m);
+				brian.Missions.Add(m);
 				bdd.Missions.Add(m);
 			}
 
@@ -143,7 +163,7 @@ namespace IntranetPOPS1819.Models
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
 			if (c != null)
 			{
-				c.NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false });
+				c.NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false, Collaborateur = c });
 				bdd.SaveChanges();
 			}
 		}
@@ -155,6 +175,8 @@ namespace IntranetPOPS1819.Models
 				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
 				if(note != null)
 				{
+					ligne.Note = note;
+					bdd.LigneDeFrais.Add(ligne);
 					note.LignesDeFrais.Add(ligne);
 					System.Diagnostics.Debug.WriteLine("Création ligne de frais dans la BDD");
 					bdd.SaveChanges();

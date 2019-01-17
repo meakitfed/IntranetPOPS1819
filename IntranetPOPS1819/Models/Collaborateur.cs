@@ -26,6 +26,7 @@ namespace IntranetPOPS1819.Models
 		public string Nom { get; set; }
         public string Prenom { get; set; }
 		public int CongésRestants { get; set; } = 0;
+
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
@@ -38,7 +39,7 @@ namespace IntranetPOPS1819.Models
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
 
 		public DateTime LastUpdate { get; set; }
-		public int LastUpdateNoteDeFrais { get; set; }
+		//public int LastUpdateNoteDeFrais { get; set; }
 
 		/*[ForeignKey("Service")]
 		public int ServiceRefId { get; set; }*/
@@ -85,6 +86,19 @@ namespace IntranetPOPS1819.Models
 				return nb;
 			}
 			return 0;
+		}
+		public List<LigneDeFrais> GetLigneDeFraisAValider()
+		{
+			List<LigneDeFrais> liste = new List<LigneDeFrais>();
+
+			for(int i = 0; i < Service.LigneDeFrais.Count; i++)
+			{
+				if (Service.LigneDeFrais[i].Note.Collaborateur.Id == Id)
+				{
+					liste.Add(Service.LigneDeFrais[i]);
+				}
+			}
+			return liste;
 		}
 	}
 }
