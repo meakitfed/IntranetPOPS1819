@@ -45,5 +45,16 @@ namespace IntranetPOPS1819.Controllers
 			}
 			return PartialView(null);
 		}
+		public bool ValiderLigneDeFrais(int idCollab = default(int), int idLigne = default(int))
+		{
+			System.Diagnostics.Debug.WriteLine("Validation ligne de frais !");
+			if (idCollab != default(int) && idLigne != default(int))
+			{
+				LigneDeFrais ligne = dal.ObtenirCollaborateur(idCollab).GetLigneDeFraisAValider().FirstOrDefault(l => idLigne == l.Id);
+				dal.ChangerStatutLigneDeFrais(idLigne, StatutLigneDeFrais.Validée);
+				System.Diagnostics.Debug.WriteLine("Passage dans Get InformationLigneDeFraisSelection, ligne : " + ligne);
+			}
+			return true;
+		}
 	}
 }

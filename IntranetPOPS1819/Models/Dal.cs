@@ -36,7 +36,13 @@ namespace IntranetPOPS1819.Models
         {
             return bdd.Services.ToList();
         }
-
+		public void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut)
+		{
+			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(l => l.Id == idLigne);
+			ligne.Statut = statut;
+			ligne.Note.Collaborateur.Service.LigneDeFrais.Remove(ligne);
+			bdd.SaveChanges();
+		}
 		public void MiseAJourNotesDeFrais(string idString)
 		{
 			int id;
@@ -151,7 +157,7 @@ namespace IntranetPOPS1819.Models
 			foreach(Mission m in Missions)
 			{
 				nathan.Missions.Add(m);
-				brian.Missions.Add(m);
+				//brian.Missions.Add(m);
 				bdd.Missions.Add(m);
 			}
 
@@ -179,8 +185,9 @@ namespace IntranetPOPS1819.Models
 				if(note != null)
 				{
 					ligne.Note = note;
-					bdd.LigneDeFrais.Add(ligne);
+					
 					note.LignesDeFrais.Add(ligne);
+					bdd.LigneDeFrais.Add(ligne);
 					System.Diagnostics.Debug.WriteLine("Création ligne de frais dans la BDD");
 					bdd.SaveChanges();
 				}

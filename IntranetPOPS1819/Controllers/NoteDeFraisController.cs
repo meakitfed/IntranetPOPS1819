@@ -51,13 +51,14 @@ namespace IntranetPOPS1819.Controllers
 					if(n.Id == vm._IdNoteDeFrais)
 					{
 						dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
-						if(vm._Frais.Complete)
+						//System.Diagnostics.Debug.WriteLine(vm._Collaborateur.NotesDeFrais.);
+						if (vm._Frais.Complete)
 						{
 							dal.EnvoiLigneDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
-							System.Diagnostics.Debug.WriteLine("Nombre de lignes :" + vm._Collaborateur.Service.LigneDeFrais.Count);
-							System.Diagnostics.Debug.WriteLine("Collaborateur de la ligne : " + vm._Frais.Note.Collaborateur.Nom);
-							IDal d = new Dal();
-							System.Diagnostics.Debug.WriteLine("Collaborateur de la ligne test : " + d.ObtenirCollaborateur(vm._Collaborateur.Id).Service.LigneDeFrais[0].Note.Collaborateur.Nom);
+							string txt = "Cliquez pour consulter";
+							Message notif = new Message { Titre = "Demande de validation ligne de frais", Date = DateTime.Now, Contenu = txt };
+							dal.AjoutNotif(dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Chef().Id, notif);
+							
 						}
 						return View(vm);
 					}
