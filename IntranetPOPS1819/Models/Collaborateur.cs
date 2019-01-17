@@ -9,7 +9,7 @@ namespace IntranetPOPS1819.Models
 		public Collaborateur()
 		{
 			LastUpdate = DateTime.Now;
-			foreach (StatutCongé s in Enum.GetValues(typeof(StatutCongé)))
+			foreach (StatutConge s in Enum.GetValues(typeof(StatutConge)))
 			{
 				Congés[s] = new List<Conges>();
 			}
@@ -33,7 +33,7 @@ namespace IntranetPOPS1819.Models
 		public string Telephone { get; set; } = "Pas de numéro";
 
 		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
-		public virtual Dictionary<StatutCongé, List<Conges>> Congés { get; set; } = new Dictionary<StatutCongé, List<Conges>>();
+		public virtual Dictionary<StatutConge, List<Conges>> Congés { get; set; } = new Dictionary<StatutConge, List<Conges>>();
 		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
@@ -48,9 +48,9 @@ namespace IntranetPOPS1819.Models
 		public int GetNombreCongesPrisCetteAnnee()
 		{
 			int nb = 0;
-			if(Congés[StatutCongé.Validé] != null)
+			if(Congés[StatutConge.Validé] != null)
 			{
-				foreach (Conges c in Congés[StatutCongé.Validé])
+				foreach (Conges c in Congés[StatutConge.Validé])
 				{
                     if (c.Debut.Year == DateTime.Now.Year) nb += c.Fin.Subtract(c.Debut).Days;
 				}
@@ -62,9 +62,9 @@ namespace IntranetPOPS1819.Models
 		public int GetNombreCongesEnAttente()
 		{
 			int nb = 0;
-			if (Congés[StatutCongé.EnCours] != null)
+			if (Congés[StatutConge.EnCours] != null)
 			{
-				foreach (Conges c in Congés[StatutCongé.EnCours])
+				foreach (Conges c in Congés[StatutConge.EnCours])
 				{
 					nb += c.Fin.Subtract(c.Debut).Days;
 				}
@@ -77,9 +77,9 @@ namespace IntranetPOPS1819.Models
 		public int GetNombreCongesValidesFuturs()
 		{
 			int nb = 0;
-			if (Congés[StatutCongé.Validé] != null)
+			if (Congés[StatutConge.Validé] != null)
 			{
-				foreach (Conges c in Congés[StatutCongé.Validé])
+				foreach (Conges c in Congés[StatutConge.Validé])
 				{
 					if (c.Debut.CompareTo(DateTime.Now) > 0) nb += c.Fin.Subtract(c.Debut).Days;
 				}

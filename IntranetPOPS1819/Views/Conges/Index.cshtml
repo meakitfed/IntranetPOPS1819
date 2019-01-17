@@ -1,4 +1,4 @@
-﻿@model IntranetPOPS1819.Models.Conges
+﻿@model IntranetPOPS1819.ViewModel.CongesViewModel
 @{
     Layout = null;
 }
@@ -14,21 +14,36 @@
     @using (Html.BeginForm())
     {
         <div>
-            @Html.LabelFor(Model => Model.Debut)
-            @Html.TextBoxFor(Model => Model.Debut)
-            @Html.ValidationMessageFor(Model => Model.Debut)
+            @Html.LabelFor(Model => Model._Conge.Debut)
+            @Html.TextBoxFor(Model => Model._Conge.Debut)
+            @Html.ValidationMessageFor(Model => Model._Conge.Debut)
         </div>
         <div>
-            @Html.LabelFor(Model => Model.Fin)
-            @Html.TextBoxFor(Model => Model.Fin)
-            @Html.ValidationMessageFor(Model => Model.Fin)
+            @Html.LabelFor(Model => Model._Conge.Fin)
+            @Html.TextBoxFor(Model => Model._Conge.Fin)
+            @Html.ValidationMessageFor(Model => Model._Conge.Fin)
         </div>
         <div>
-            @Html.LabelFor(Model => Model.Type)
-            @Html.TextBoxFor(Model => Model.Type)
-            @Html.ValidationMessageFor(Model => Model.Type)
+            @Html.LabelFor(Model => Model._Conge.Type)
+            @Html.TextBoxFor(Model => Model._Conge.Type)
+            @Html.ValidationMessageFor(Model => Model._Conge.Type)
         </div>
         <input type="submit" value="Demnader congé" />
     }
+    @try
+    {
+        foreach (var c in Model._Collaborateur.Congés.Values.First())
+        {
+            <ul>
+                <li>@c.Debut</li>
+            </ul>
+        }
+    } catch(System.NullReferenceException e)
+    {
+        <p>@e.Source</p>
+        <p>Aucune demande pour le moment</p>
+    }
+
+
 </body>
 </html>
