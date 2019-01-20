@@ -1,27 +1,33 @@
 ﻿@model IntranetPOPS1819.ViewModel.CollaborateurViewModel
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (!Model._Authentifie)
+@if (!@User.Identity.IsAuthenticated)
 {
-    <p>
-        Veuillez vous authentifier :
-    </p>
-    using (Html.BeginForm())
-    {
-        <div>
-            @Html.LabelFor(m => m._Collaborateur.Mail)
-            @Html.TextBoxFor(m => m._Collaborateur.Mail)
-            @Html.ValidationMessageFor(m => m._Collaborateur.Mail)
-        </div>
-        <div>
-            @Html.LabelFor(m => m._Collaborateur.MotDePasse)
-            @Html.PasswordFor(m => m._Collaborateur.MotDePasse)
-            @Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
-        </div>
-        <input type="submit" value="Se connecter" />
-    }
+	<div id="inner">
+		<p>Veuillez vous authentifier :</p>
+	</div>
+	using (Html.BeginForm())
+	{
+		<div id="inner">
+			<p>
+				Identifiant : &nbsp;&nbsp;&nbsp;&nbsp;
+				@Html.TextBoxFor(m => m._Collaborateur.Mail)
+				@Html.ValidationMessageFor(m => m._Collaborateur.Mail)
+			</p>
+		</div>
+		<div id="inner">
+			<p>
+				Mot de passe :
+				@Html.PasswordFor(m => m._Collaborateur.MotDePasse)
+				@Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
+			</p>
+		</div>
+		<div id="inner">
+			<input type="submit" value="Se connecter" />
+		</div>
+	}
 }
 

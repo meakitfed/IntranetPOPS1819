@@ -15,7 +15,9 @@ namespace IntranetPOPS1819.Models
         public string Nom { get; set; }
 		public virtual List<Mission> Missions { get; set; }
 		public virtual List<Collaborateur> Collaborateurs { get; set; }
+		public TypeService Type { get; set; } = TypeService.ServiceLambda;
 
+		public virtual List<LigneDeFrais> LigneDeFrais { get; set; } = new List<LigneDeFrais>();
 		/*public int ChefRefId { get; set; }
 		[ForeignKey("ChefRefId")]
 		public virtual Collaborateur Chef { get; set; }*/
@@ -34,4 +36,12 @@ namespace IntranetPOPS1819.Models
             return null;
         }
     }
+
+	public enum TypeService
+	{
+		Comptabilité,
+		RessourcesHumaines,
+		Direction,
+		ServiceLambda
+	}
 }

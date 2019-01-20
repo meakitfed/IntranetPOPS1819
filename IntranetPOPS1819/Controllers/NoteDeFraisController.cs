@@ -31,11 +31,7 @@ namespace IntranetPOPS1819.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
-				System.Diagnostics.Debug.WriteLine("nbr key " + dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).NotesDeFrais.Count);
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				Dal d = new Dal();
-				
-				//System.Diagnostics.Debug.WriteLine("nbr key " + d.ObtenirCollaborateur(HttpContext.User.Identity.Name).NotesDeFrais.Keys.Count);
 			}
 			return View(vm);
 		}
@@ -55,11 +51,18 @@ namespace IntranetPOPS1819.Controllers
 					if(n.Id == vm._IdNoteDeFrais)
 					{
 						dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
+						//System.Diagnostics.Debug.WriteLine(vm._Collaborateur.NotesDeFrais.);
+						if (vm._Frais.Complete)
+						{
+							dal.EnvoiLigneDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
+							string txt = "Cliquez pour consulter";
+							Message notif = new Message { Titre = "Demande de validation ligne de frais", Date = DateTime.Now, Contenu = txt };
+							dal.AjoutNotif(dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Chef().Id, notif);
+							
+						}
 						return View(vm);
 					}
 				}
-
-				
 				return View(vm);
 			}
 			return View();

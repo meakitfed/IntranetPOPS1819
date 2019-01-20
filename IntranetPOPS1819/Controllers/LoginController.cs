@@ -77,7 +77,7 @@ namespace IntranetPOPS1819.Controllers
 		public ActionResult Deconnexion()
 		{
 			FormsAuthentication.SignOut();
-			return View("Deconnexion");
-		}
+            return Redirect("/Login/Index");
+        }
 	}
 }
