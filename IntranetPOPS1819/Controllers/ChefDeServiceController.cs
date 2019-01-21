@@ -56,5 +56,11 @@ namespace IntranetPOPS1819.Controllers
 			}
 			return true;
 		}
+
+        public void ValiderConges(int idConge)
+        {
+            // TODO
+            //Conge c = 
+        }
 	}
 }

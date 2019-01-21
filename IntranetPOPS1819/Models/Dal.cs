@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -99,73 +100,91 @@ namespace IntranetPOPS1819.Models
 		}
 		public void InitializeBdd()
 		{
-            Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp") };
-			nathan.LastUpdate = new DateTime(2018, 1, 1);
-			Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
-			brian.LastUpdate = new DateTime(2017, 1, 1);
-			Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true };
-            Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true };
+            
+            try
+            {
+                Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp") };
+                nathan.LastUpdate = new DateTime(2018, 1, 1);
+                Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
+                brian.LastUpdate = new DateTime(2017, 1, 1);
+                Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true };
+                Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true };
 
-			Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier } , Type = TypeService.Comptabilité };
-            Service rh = new Service { Nom = "RH", Type = TypeService.RessourcesHumaines };
-			Service marketing = new Service { Nom = "Marketing", Type = TypeService.ServiceLambda };
+                Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier }, Type = TypeService.Comptabilité };
+                Service rh = new Service { Nom = "RH", Type = TypeService.RessourcesHumaines };
+                Service marketing = new Service { Nom = "Marketing", Type = TypeService.ServiceLambda };
 
-			didier.Service = compta;
-			isabelle.Service = rh;
-			nathan.Service = marketing;
-			brian.Service = marketing;
-			brian.Chef = true;
+                didier.Service = compta;
+                isabelle.Service = rh;
+                nathan.Service = marketing;
+                brian.Service = marketing;
+                brian.Chef = true;
 
-            Conge conge = new Conge { Debut = new DateTime(1999, 9, 9), Fin = new DateTime(9991, 1, 1), Statut = StatutConge.EnCours };
-            didier.Conges.Add(conge);
-
-			List<Service> services = new List<Service>
-			{
-				compta,
-				rh,
-				marketing
-			};
-			List<Collaborateur> collabos = new List<Collaborateur>
+                List<Service> services = new List<Service>
+            {
+                compta,
+                rh,
+                marketing
+            };
+                List<Collaborateur> collabos = new List<Collaborateur>
             {
                 nathan,
                 brian,
                 didier,
                 isabelle
             };
-			
 
-			Random r = new Random();
-			List<Mission> Missions = new List<Mission>();
-			string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
-			for (int j = 0; j < labelsMission.Length; j++)
-			{
-				int rand = r.Next(0, labelsMission.Length);
-				Missions.Add(new Mission { Nom = labelsMission[rand], Service = compta, Statut = StatutMission.EnCours});
-			}
 
-			string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
-			foreach (NoteDeFrais n in nathan.NotesDeFrais)
-			{
-				for (int j = 0; j < 5; j++)
-				{
-					int rand = r.Next(0, labelsLigne.Length);
-					int rand2 = r.Next(0, Missions.Count);
-					AjoutLigneDeFrais(nathan.Id, n.Id, new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) });
-				}
-			}
+                Random r = new Random();
+                List<Mission> Missions = new List<Mission>();
+                string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
+                for (int j = 0; j < labelsMission.Length; j++)
+                {
+                    int rand = r.Next(0, labelsMission.Length);
+                    Missions.Add(new Mission { Nom = labelsMission[rand], Service = compta, Statut = StatutMission.EnCours });
+                }
 
-			foreach(Mission m in Missions)
-			{
-				nathan.Missions.Add(m);
-				//brian.Missions.Add(m);
-				bdd.Missions.Add(m);
-			}
+                string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
+                foreach (NoteDeFrais n in nathan.NotesDeFrais)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        int rand = r.Next(0, labelsLigne.Length);
+                        int rand2 = r.Next(0, Missions.Count);
+                        AjoutLigneDeFrais(nathan.Id, n.Id, new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) });
+                    }
+                }
 
-            foreach(Service s in services)
-                bdd.Services.Add(s);
-            foreach(Collaborateur c in collabos)
-                bdd.Collaborateurs.Add(c);
-            bdd.SaveChanges();
+                foreach (Mission m in Missions)
+                {
+                    nathan.Missions.Add(m);
+                    //brian.Missions.Add(m);
+                    bdd.Missions.Add(m);
+                }
+
+                foreach (Service s in services)
+                    bdd.Services.Add(s);
+                foreach (Collaborateur c in collabos)
+                    bdd.Collaborateurs.Add(c);
+
+                bdd.SaveChanges();
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    System.Diagnostics.Debug.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        System.Diagnostics.Debug.WriteLine("- Property: \"{0}\", Value: \"{1}\", Error: \"{2}\"",
+                            ve.PropertyName,
+                            eve.Entry.CurrentValues.GetValue<object>(ve.PropertyName),
+                            ve.ErrorMessage);
+                    }
+                }
+                //throw;
+            }
         }
 		public void AjoutNoteDeFrais(int year, int idCollab, int month)
 		{
@@ -198,10 +217,20 @@ namespace IntranetPOPS1819.Models
         {
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.SaveChanges();
-            System.Diagnostics.Debug.WriteLine("Création congé dans la BDD");
-            foreach (var con in bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges)
+        }
+
+        public void EnvoiCongeChef(int idService, int idCollab, int idConge)
+        {
+            Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
+            Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
+            Conge l = bdd.Conges.FirstOrDefault(conge => conge.Id == idConge);
+            
+            if (c != null && s != null && l != null)
             {
-                System.Diagnostics.Debug.WriteLine(con);
+                List<Conge> liste = bdd.Services.FirstOrDefault(serv => serv.Id == idService).Conges;
+                liste.Add(l);
+                bdd.Services.FirstOrDefault(serv => serv.Id == idService).Conges.Add(l);
+                bdd.SaveChanges();
             }
         }
 

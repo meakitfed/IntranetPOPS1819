@@ -2,8 +2,6 @@
 using IntranetPOPS1819.ViewModel;
 using System;
 using System.Web.Mvc;
-using System.Web.Security;
-
 namespace IntranetPOPS1819.Controllers
 {
     public class CongesController : Controller
@@ -25,16 +23,17 @@ namespace IntranetPOPS1819.Controllers
         public ActionResult Index(CongesViewModel vm)
         {
             IDal dal = new Dal();
-            vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            Collaborateur col = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            vm._Collaborateur = col;
             System.Diagnostics.Debug.WriteLine(vm._Collaborateur.Nom);
             string txt = "Service : " + vm._Collaborateur.Service.Nom + "\n";
             Message notif = new Message { Titre = "Demande de validation congé", Date = DateTime.Now, Contenu = txt};
 
-            
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                dal.AjoutNotif(dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Chef().Id, notif);
-                dal.AjoutConge(dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Id, vm._Conge);
+                dal.AjoutNotif(col.Service.Chef().Id, notif);
+                dal.AjoutConge(col.Id, vm._Conge);
+                dal.EnvoiCongeChef(col.Service.Id, col.Id, vm._Conge.Id);
             }
             return View(vm);
         }

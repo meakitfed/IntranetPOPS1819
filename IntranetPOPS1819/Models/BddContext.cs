@@ -10,8 +10,9 @@ namespace IntranetPOPS1819.Models
         public DbSet<Collaborateur> Collaborateurs { get; set; }
 		public DbSet<NoteDeFrais> NotesDeFrais { get; set; }
 		public DbSet<LigneDeFrais> LigneDeFrais { get; set; }
+        public DbSet<Conge> Conges { get; set; }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 		}
 

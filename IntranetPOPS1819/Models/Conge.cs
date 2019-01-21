@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data.SqlTypes;
+using System.ComponentModel.DataAnnotations;
 
 namespace IntranetPOPS1819.Models
 {
@@ -7,20 +7,27 @@ namespace IntranetPOPS1819.Models
     {
 		public int Id { get; set; }
         public StatutConge Statut { get; set; }
-        public TypeCongé Type { get; set; }
+        [Required]
+        public TypeConge Type { get; set; }
+        [Required]
+        [Display(Name = "Date de début")]
         public DateTime Debut { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Date de fin")]
         public DateTime Fin { get; set; }
+
     }
 }
 
 public enum StatutConge
 {
 	EnCours,
-	Validé,
-	Refusé
+	Valide,
+	Refuse
 }
 
-public enum TypeCongé
+public enum TypeConge
 {
 	RTT,
 	SansSolde,

@@ -26,5 +26,6 @@ namespace IntranetPOPS1819.Models
 		Service ObtenirServiceDeType(TypeService type);
 		void EnvoiLigneDeFraisChefService(int idService, int idCollab, int idLigne);
 		void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut);
+        void EnvoiCongeChef(int idService, int idCollab, int idConge);
 	}
 }

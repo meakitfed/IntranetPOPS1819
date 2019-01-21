@@ -1,11 +1,6 @@
 ﻿using IntranetPOPS1819.Models;
 using IntranetPOPS1819.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace IntranetPOPS1819.Controllers
 {
@@ -35,13 +30,12 @@ namespace IntranetPOPS1819.Controllers
         {
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				//TODO ajouter check form valide ?
-				int id = dal.AjoutCollaborateur(vm._Collaborateur.Nom, vm._Collaborateur.Prenom, vm._Collaborateur.Mail, vm._Collaborateur.MotDePasse).Id;
+				int id = dal.AjoutCollaborateur(vm.Nom, vm.Prenom, vm.Mail, vm.Nom).Id;
 				foreach (Collaborateur col in dal.ObtenirTousLesCollaborateurs())
 					System.Diagnostics.Debug.WriteLine(col.Nom);
 
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				return View(vm._Collaborateur);
+				return View(vm);
 			}
 			return View();
         }
@@ -65,8 +59,7 @@ namespace IntranetPOPS1819.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				//TODO ajouter check form valide ?
-				int id = dal.AjoutService(vm._Collaborateur.Nom).Id;
+				dal.AjoutService(vm.Nom);
 				foreach (Service ser in dal.ObtenirTousLesServices())
 					System.Diagnostics.Debug.WriteLine(ser.Nom);
 				return View(vm);

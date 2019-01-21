@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.ModelBinding;
 
 namespace IntranetPOPS1819.Models
 {
@@ -14,7 +15,7 @@ namespace IntranetPOPS1819.Models
 		//variables
 		public int Id { get; set; }
 		[Required]
-		[Display(Name = "Mail")]
+		[RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage="Format incorrect")]
 		public string Mail { get; set; }
 		[Required]
 		[Display(Name = "Mot de passe")]
@@ -25,7 +26,8 @@ namespace IntranetPOPS1819.Models
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
-		public string Telephone { get; set; } = "Pas de numéro";
+        [RegularExpression(@"^0[0-9]{9}$")]
+		public string Telephone { get; set; }
 
 		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
 		public virtual List<Conge> Conges { get; set; } = new List<Conge>();
@@ -83,5 +85,19 @@ namespace IntranetPOPS1819.Models
 			}*/
 			return 0;
 		}
-	}
+
+        public List<LigneDeFrais> GetLigneDeFraisAValider()
+        {
+            List<LigneDeFrais> liste = new List<LigneDeFrais>();
+
+            for (int i = 0; i < Service.LigneDeFrais.Count; i++)
+            {
+                if (Service.LigneDeFrais[i].Note.Collaborateur.Id == Id)
+                {
+                    liste.Add(Service.LigneDeFrais[i]);
+                }
+            }
+            return liste;
+        }
+    }
 }

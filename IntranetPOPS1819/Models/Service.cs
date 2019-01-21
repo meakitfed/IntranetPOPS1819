@@ -18,13 +18,14 @@ namespace IntranetPOPS1819.Models
 		public TypeService Type { get; set; } = TypeService.ServiceLambda;
 
 		public virtual List<LigneDeFrais> LigneDeFrais { get; set; } = new List<LigneDeFrais>();
-		/*public int ChefRefId { get; set; }
+        public virtual List<Conge> Conges { get; set; } = new List<Conge>();
+        /*public int ChefRefId { get; set; }
 		[ForeignKey("ChefRefId")]
 		public virtual Collaborateur Chef { get; set; }*/
-		
 
-		//Garder ? TODO
-		public int NbAbsents { get; set; }
+
+        //Garder ? TODO
+        public int NbAbsents { get; set; }
 
         public Collaborateur Chef()
         {

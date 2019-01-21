@@ -10,9 +10,9 @@
 	@using (Html.BeginForm())
 	{
 		<div>
-			@Html.LabelFor(Model => Model._Service.Nom)
-			@Html.TextBoxFor(Model => Model._Service.Nom)
-			@Html.ValidationMessageFor(Model => Model._Service.Nom)
+			@Html.LabelFor(Model => Model.Nom)
+			@Html.TextBoxFor(Model => Model.Nom)
+			@Html.ValidationMessageFor(Model => Model.Nom)
 		</div>
 		<input type="submit" value="Ajouter service" />
 	}

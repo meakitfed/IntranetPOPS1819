@@ -33,7 +33,7 @@
         <input type="submit" value="Demnader congé" />
     }
     <p>Liste des demandes : </p>
-    @try
+    @if(Model._Collaborateur.Conges.Count > 0)
     {
         foreach (var c in Model._Collaborateur.Conges)
         {
@@ -42,9 +42,8 @@
             </ul>
         }
     }
-    catch (System.NullReferenceException e)
+    else
     {
-        <p>@e.Source</p>
         <p>Aucune demande pour le moment</p>
     }
 
