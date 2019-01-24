@@ -20,6 +20,7 @@ namespace IntranetPOPS1819.Models
 		void MiseAJourNotesDeFrais(int IdCollaborateur);
 		void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
         void AjoutConge(int idCollab, Conge c);
+        void ChangerStatutConge(int id, StatutConge s);
         void AjoutNotif(int idCollab, Message m);
         void AssignerService(int idService, int idCollaborateur);
 		void InitializeBdd();
