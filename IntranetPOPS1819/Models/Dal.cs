@@ -267,6 +267,11 @@ namespace IntranetPOPS1819.Models
 			return s;
 		}
 
+        public void ChangerStatutConge(int id, StatutConge s)
+        {
+            bdd.Conges.FirstOrDefault(u => u.Id == id).Statut = s;
+        }
+
 		public Mission AjoutMission(string nom, int serviceId)
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == serviceId);
@@ -299,10 +304,9 @@ namespace IntranetPOPS1819.Models
 
 		public Collaborateur ObtenirCollaborateur(string idString)
 		{
-			int id;
-			if (int.TryParse(idString, out id))
-				return ObtenirCollaborateur(id);
-			return null;
+            if (int.TryParse(idString, out int id))
+                return ObtenirCollaborateur(id);
+            return null;
 		}
 
 		public Collaborateur Authentifier(string mail, string motDePasse)

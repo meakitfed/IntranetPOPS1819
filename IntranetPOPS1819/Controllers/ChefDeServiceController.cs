@@ -45,6 +45,7 @@ namespace IntranetPOPS1819.Controllers
 			}
 			return PartialView(null);
 		}
+
 		public bool ValiderLigneDeFrais(int idCollab = default(int), int idLigne = default(int))
 		{
 			System.Diagnostics.Debug.WriteLine("Validation ligne de frais !");
@@ -59,8 +60,7 @@ namespace IntranetPOPS1819.Controllers
 
         public void ValiderConges(int idConge)
         {
-            // TODO
-            //Conge c = 
+            dal.ChangerStatutConge(idConge, StatutConge.Valide);
         }
 	}
 }
