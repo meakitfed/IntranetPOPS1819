@@ -6,9 +6,14 @@
 
 @if (!@User.Identity.IsAuthenticated)
 {
-	<div id="inner">
-		<p>Veuillez vous authentifier :</p>
-	</div>
+<div id="inner">
+	<p>Veuillez vous authentifier :</p>
+	@Html.React("Welcome",
+new
+{
+	name = "Germain"
+})
+</div>
 	using (Html.BeginForm())
 	{
 		<div id="inner">
