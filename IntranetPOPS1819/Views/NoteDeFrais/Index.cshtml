@@ -1,84 +1,85 @@
 ﻿@using IntranetPOPS1819.Models
 @model IntranetPOPS1819.ViewModel.OngletNoteDeFraisViewModel
 @{
-	ViewBag.Title = "Note De Frais";
+    ViewBag.Title = "Note De Frais";
 
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @Html.Partial("../Shared/Navbar")
 <div>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-lg-3 table-bordered">
-				<p><h3 class="text-center">Historique<br />Notes de Frais</h3></p>
-				@{
-					int a = Model._Collaborateur.NotesDeFrais.Count - 1;
-					int d = DateTime.Now.Year;
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 table-bordered">
+                <p><h3 class="text-center">Historique<br />Notes de Frais</h3></p>
+                @{
+                    int a = Model._Collaborateur.NotesDeFrais.Count - 1;
+                    int d = DateTime.Now.Year;
 
-					while (d >= Model._Collaborateur.NotesDeFrais[0].Date.Year && a >= 0)
-					{
-						<button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
-						<div id=@(("Année" + d)) style="display:none;">
-							@while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
-							{
-								<button class="btn btn-block btn-2" href="" onclick="javascript:toggleVisibility(('Note' + @Model._Collaborateur.NotesDeFrais[a].Id)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM") @(@Model._Collaborateur.NotesDeFrais[a].Actif ? " - Actif" : "")</button>
-								<div id=@("Note" + Model._Collaborateur.NotesDeFrais[a].Id) style="display:none;">
-									@for (int k = 0; k < Model._Collaborateur.NotesDeFrais[a].LignesDeFrais.Count; k++)
-									{
-										@Ajax.ActionLink(Model._Collaborateur.NotesDeFrais[a].LignesDeFrais[k].Nom, "InformationLigneDeFrais", new { idNote = Model._Collaborateur.NotesDeFrais[a].Id, idLigne = Model._Collaborateur.NotesDeFrais[a].LignesDeFrais[k].Id }, new AjaxOptions
-									   {
-										   InsertionMode = InsertionMode.Replace,
-										   UpdateTargetId = "InfoLigneActive",
-										   HttpMethod = "Post"
-									   }, new { @class = "btn btn-block btn-3" })
-									}
-								</div>
-								a--;
-							}
-						</div>
-						d--;
-					}
-				}
-			</div>
-			<div class="col-lg-6 table-bordered">
-				<div id="InfoLigneActive">
-					@{
-						Html.RenderAction("InformationLigneDeFrais");
-					}
-				</div>
-			</div>
-			<div class="col-lg-3 table-bordered">
-				@using (Html.BeginForm())
-				{
-					<div>
-						@Html.LabelFor(Model => Model._Collaborateur.NotesDeFrais)
-						@Html.DropDownListFor(Model => Model._IdNoteDeFrais, new SelectList(Model._Collaborateur.NotesDeFrais, "Id", "Date"))
-						@Html.ValidationMessageFor(Model => Model._Collaborateur.NotesDeFrais)
-					</div>
-					<div>
-						@Html.LabelFor(Model => Model._Frais.Nom)
-						@Html.TextBoxFor(Model => Model._Frais.Nom)
-						@Html.ValidationMessageFor(Model => Model._Frais.Nom)
-					</div>
-					<div>
-						@Html.LabelFor(Model => Model._Frais.Mission)
-						@Html.DropDownListFor(Model => Model._IdMission, new SelectList(Model._Collaborateur.Missions, "Id", "Nom"))
-						@Html.ValidationMessageFor(Model => Model._Frais.Mission)
-					</div>
-					<div>
-						@Html.LabelFor(Model => Model._Frais.Somme)
-						@Html.TextBoxFor(Model => Model._Frais.Somme)
-						@Html.ValidationMessageFor(Model => Model._Frais.Somme)
-					</div>
-					<div>
-						@Html.CheckBoxFor(Model => Model._Frais.Complete)
-						@Html.LabelFor(Model => Model._Frais.Complete)
-						@Html.ValidationMessageFor(Model => Model._Frais.Complete)
-					</div>
-					<input type="submit" value="Ajouter la dépense" />
-				}
-			</div>
-		</div>
-	</div>
+                    while (d >= Model._Collaborateur.NotesDeFrais[0].Date.Year && a >= 0)
+                    {
+                        <button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
+                        <div id=@(("Année" + d)) style="display:none;">
+                            @while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
+                            {
+                                <button class="btn btn-block btn-2" href="" onclick="javascript:toggleVisibility(('Note' + @Model._Collaborateur.NotesDeFrais[a].Id)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM") @(@Model._Collaborateur.NotesDeFrais[a].Actif ? " - Actif" : "")</button>
+                                <div id=@("Note" + Model._Collaborateur.NotesDeFrais[a].Id) style="display:none;">
+                                    @for (int k = 0; k < Model._Collaborateur.NotesDeFrais[a].LignesDeFrais.Count; k++)
+                                    {
+                                        @Ajax.ActionLink(Model._Collaborateur.NotesDeFrais[a].LignesDeFrais[k].Nom, "InformationLigneDeFrais", new { idNote = Model._Collaborateur.NotesDeFrais[a].Id, idLigne = Model._Collaborateur.NotesDeFrais[a].LignesDeFrais[k].Id }, new AjaxOptions
+                                       {
+                                           InsertionMode = InsertionMode.Replace,
+                                           UpdateTargetId = "InfoLigneActive",
+                                           HttpMethod = "Post"
+                                       }, new { @class = "btn btn-block btn-3" })
+                                    }
+                                </div>
+                                a--;
+                            }
+                        </div>
+                        d--;
+                    }
+                }
+            </div>
+            <div class="col-lg-6 table-bordered">
+                <div id="InfoLigneActive">
+                    @{
+                        Html.RenderAction("InformationLigneDeFrais");
+                    }
+                </div>
+            </div>
+            <div class="col-lg-3 table-bordered">
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        @Html.LabelFor(Model => Model._Collaborateur.NotesDeFrais)
+                        @Html.DropDownListFor(Model => Model._IdNoteDeFrais, new SelectList(Model._Collaborateur.NotesDeFrais, "Id", "Date"))
+                        @Html.ValidationMessageFor(Model => Model._Collaborateur.NotesDeFrais)
+                    </div>
+                    <div>
+                        @Html.LabelFor(Model => Model._Frais.Nom)
+                        @Html.TextBoxFor(Model => Model._Frais.Nom)
+                        @Html.ValidationMessageFor(Model => Model._Frais.Nom)
+                    </div>
+                    <div>
+                        @Html.LabelFor(Model => Model._Frais.Mission)
+                        @Html.DropDownListFor(Model => Model._IdMission, new SelectList(Model._Collaborateur.Missions, "Id", "Nom"))
+                        @Html.ValidationMessageFor(Model => Model._Frais.Mission)
+                    </div>
+                    <div>
+                        @Html.LabelFor(Model => Model._Frais.Somme)
+                        @Html.TextBoxFor(Model => Model._Frais.Somme)
+                        @Html.ValidationMessageFor(Model => Model._Frais.Somme)
+                    </div>
+                    <div>
+                        @Html.CheckBoxFor(Model => Model._Frais.Complete)
+                        @Html.LabelFor(Model => Model._Frais.Complete)
+                        @Html.ValidationMessageFor(Model => Model._Frais.Complete)
+                    </div>
+                    <input type="submit" value="Ajouter la dépense" />
+                }
+            </div>
+        </div>
+    </div>
 </div>
+

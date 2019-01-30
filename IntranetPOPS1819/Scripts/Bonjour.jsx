@@ -1,16 +1,25 @@
-﻿class CommentList extends React.Component {
+﻿const data = [
+    { Id: 1, Author: 'Nathan Bonnard', Text: 'Je  *pete* regulierement sur les gens!' },
+    { Id: 2, Author: 'Brian', Text: 'Je suis Brian et je suis musclé' },
+    { Id: 3, Author: 'Mahitas', Text: "Salut j'ai fait une faute à mon propre nom" },
+];
+
+
+
+
+
+
+
+class CommentList extends React.Component {
     render() {
-        return (
-            <div className="commentList">
-                <Comment author="Nathan Bonnard">
-                    Je  *pete* regulierement sur les gens
-                </Comment>
-                <Comment author="Brian ">Je suis Brian et je suis musclé</Comment>
-                <Comment author="Mahitas">
-                    Salut j'ai fait une faute à mon propre nom
-                </Comment>
-            </div>
-        );
+
+        const commentNodes = this.props.data.map(comment => (
+            <Comment author={comment.Author} key={comment.Id}>
+                {comment.Text}
+            </Comment>
+        ));
+
+        return <div className="commentList">{commentNodes}</div>;
     }
 }
 
@@ -24,30 +33,36 @@ class Comment extends React.Component {
    
         return (
             <div className="comment">
-                <h2 className="commentAuthor">{this.props.author}</h2>
+                <h3 className="commentAuthor">{this.props.author}</h3>
                 <span dangerouslySetInnerHTML={this.rawMarkup()} />
             </div>
         );
     }
 }
 
-class CommentForm extends React.Component {
+class LoginForm extends React.Component {
     render() {
         return (
-            <div className="commentForm">Hello, world! I am a CommentForm.</div>
+            <form className="loginForm">
+                <p>Ceci est un login form en react mais pas encore fonctionnel c'est juste pour voir</p>
+                <input type="text" placeholder="Identifiant" />
+                <input type="text" placeholder="Mot de passe" />
+                <input type="submit" value="Post" />
+            </form>
         );
     }
 }
+
 class CommentBox extends React.Component {
     render() {
         return (
             <div className="commentBox">
                 <h1>Comments</h1>
-                <CommentList />
-                <CommentForm />
+                <CommentList data={this.props.data} />
+                <LoginForm />
             </div>
         );
     }
 }
 
-ReactDOM.render(<CommentBox />, document.getElementById('content'));
+ReactDOM.render(<CommentBox data={data} />, document.getElementById('content'));

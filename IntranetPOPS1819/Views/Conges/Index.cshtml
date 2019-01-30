@@ -33,7 +33,7 @@
         <input type="submit" value="Demnader congé" />
     }
     <p>Liste des demandes : </p>
-    @if(Model._Collaborateur.Conges.Count > 0)
+    @if (Model._Collaborateur.Conges.Count > 0)
     {
         foreach (var c in Model._Collaborateur.Conges)
         {
@@ -47,6 +47,11 @@
         <p>Aucune demande pour le moment</p>
     }
 
+    <div id="content"></div>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+    <script src="@Url.Content("~/Scripts/Calendrier.jsx")"></script>
 
 </body>
 </html>
