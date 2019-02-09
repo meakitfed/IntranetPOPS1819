@@ -41,13 +41,15 @@
                     }
                 }
             </div>
-            <div class="col-lg-6 table-bordered">
-                <div id="InfoLigneActive">
-                    @{
-                        Html.RenderAction("InformationLigneDeFrais");
-                    }
-                </div>
-            </div>
+			<div class="col-lg-6 table-bordered">
+				<div id="InfoLigneActive">
+					@{
+						Html.RenderAction("InformationLigneDeFrais");
+					}
+				</div>
+				<div id="ListeNoteDeFrais"></div>
+				<script src="~/Scripts/react/NotesDeFraisEdit.jsx"></script>
+			</div>
             <div class="col-lg-3 table-bordered">
                 @using (Html.BeginForm())
                 {

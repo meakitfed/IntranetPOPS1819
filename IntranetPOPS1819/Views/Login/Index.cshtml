@@ -1,43 +1,36 @@
 ﻿@model IntranetPOPS1819.ViewModel.CollaborateurViewModel
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @if (!@User.Identity.IsAuthenticated)
 {
 
 
+	using (Html.BeginForm())
+	{
+		<div id="inner">
+			<p>
+				Identifiant : &nbsp;&nbsp;&nbsp;&nbsp;
+				@Html.TextBoxFor(m => m._Collaborateur.Mail)
+				@Html.ValidationMessageFor(m => m._Collaborateur.Mail)
+			</p>
+		</div>
+		<div id="inner">
+			<p>
+				Mot de passe :
+				@Html.PasswordFor(m => m._Collaborateur.MotDePasse)
+				@Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
+			</p>
+		</div>
+		<div id="inner">
+			<input type="submit" value="Se connecter" />
+		</div>
+		
+	}
 
-    using (Html.BeginForm())
-    {
-        <div id="inner">
-            <p>
-                Identifiant : &nbsp;&nbsp;&nbsp;&nbsp;
-                @Html.TextBoxFor(m => m._Collaborateur.Mail)
-                @Html.ValidationMessageFor(m => m._Collaborateur.Mail)
-            </p>
-        </div>
-        <div id="inner">
-            <p>
-                Mot de passe :
-                @Html.PasswordFor(m => m._Collaborateur.MotDePasse)
-                @Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
-            </p>
-        </div>
-        <div id="inner">
-            <input type="submit" value="Se connecter" />
-        </div>
 
-
-
-    }
-
-    <div id="content"></div>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
-    <script src="@Url.Content("~/Scripts/Bonjour.jsx")"></script>
 
 }
 

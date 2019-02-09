@@ -28,6 +28,7 @@ namespace IntranetPOPS1819
 			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
 			JsEngineSwitcher.Current.EngineFactories.AddV8();
 			ReactSiteConfiguration.Configuration.AddScript("~/Scripts/react/Tutorial.jsx");
+			ReactSiteConfiguration.Configuration.AddScript("~/Scripts/react/NotesDeFraisEdit.jsx");
 		}
 	}
 }

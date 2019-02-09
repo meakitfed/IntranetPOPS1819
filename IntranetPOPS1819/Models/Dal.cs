@@ -41,7 +41,7 @@ namespace IntranetPOPS1819.Models
 		{
 			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(l => l.Id == idLigne);
 			ligne.Statut = statut;
-			ligne.Note.Collaborateur.Service.LigneDeFrais.Remove(ligne);
+			//ligne.Note.Collaborateur.Service.LigneDeFrais.Remove(ligne);
 			bdd.SaveChanges();
 		}
 		public void MiseAJourNotesDeFrais(string idString)
@@ -121,18 +121,18 @@ namespace IntranetPOPS1819.Models
                 brian.Chef = true;
 
                 List<Service> services = new List<Service>
-            {
-                compta,
-                rh,
-                marketing
-            };
+				{
+					compta,
+					rh,
+					marketing
+				};
                 List<Collaborateur> collabos = new List<Collaborateur>
-            {
-                nathan,
-                brian,
-                didier,
-                isabelle
-            };
+				{
+					nathan,
+					brian,
+					didier,
+					isabelle
+				};
 
 
                 Random r = new Random();
@@ -144,16 +144,7 @@ namespace IntranetPOPS1819.Models
                     Missions.Add(new Mission { Nom = labelsMission[rand], Service = compta, Statut = StatutMission.EnCours });
                 }
 
-                string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
-                foreach (NoteDeFrais n in nathan.NotesDeFrais)
-                {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        int rand = r.Next(0, labelsLigne.Length);
-                        int rand2 = r.Next(0, Missions.Count);
-                        AjoutLigneDeFrais(nathan.Id, n.Id, new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) });
-                    }
-                }
+                
 
                 foreach (Mission m in Missions)
                 {
@@ -168,7 +159,20 @@ namespace IntranetPOPS1819.Models
                     bdd.Collaborateurs.Add(c);
 
                 bdd.SaveChanges();
-            }
+
+				MiseAJourNotesDeFrais(nathan.Id);
+				string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
+				foreach (NoteDeFrais n in nathan.NotesDeFrais)
+				{
+					for (int j = 0; j < 5; j++)
+					{
+						int rand = r.Next(0, labelsLigne.Length);
+						int rand2 = r.Next(0, Missions.Count);
+						AjoutLigneDeFrais(nathan.Id, n.Id, new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) });
+					}
+				}
+
+			}
             catch (DbEntityValidationException e)
             {
                 foreach (var eve in e.EntityValidationErrors)
@@ -191,7 +195,7 @@ namespace IntranetPOPS1819.Models
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
 			if (c != null)
 			{
-				c.NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false, Collaborateur = c });
+				c.NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false/*, Collaborateur = c */});
 				bdd.SaveChanges();
 			}
 		}
@@ -203,7 +207,7 @@ namespace IntranetPOPS1819.Models
 				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
 				if(note != null)
 				{
-					ligne.Note = note;
+					//ligne.Note = note;
 					
 					note.LignesDeFrais.Add(ligne);
 					bdd.LigneDeFrais.Add(ligne);

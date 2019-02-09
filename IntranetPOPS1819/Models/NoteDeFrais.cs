@@ -10,7 +10,17 @@ namespace IntranetPOPS1819.Models
 		public DateTime Date { get; set; }
 		public bool Actif { get; set; } = false;
 		public virtual List<LigneDeFrais> LignesDeFrais { get; set; } = new List<LigneDeFrais>();
-		public virtual Collaborateur Collaborateur { get; set; }
+		//public virtual Collaborateur Collaborateur { get; set; }
+
+		public NoteDeFrais GetJSON()
+		{
+			NoteDeFrais n = new NoteDeFrais();
+			foreach(LigneDeFrais l in this.LignesDeFrais)
+			{
+				n.LignesDeFrais.Add(new LigneDeFrais { Nom = l.Nom });
+			}
+			return n;
+		}
 	}
 
     public enum StatutNote

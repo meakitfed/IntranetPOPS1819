@@ -92,10 +92,10 @@ namespace IntranetPOPS1819.Models
 
             for (int i = 0; i < Service.LigneDeFrais.Count; i++)
             {
-                if (Service.LigneDeFrais[i].Note.Collaborateur.Id == Id)
+                /*if (Service.LigneDeFrais[i].Note.Collaborateur.Id == Id)
                 {
                     liste.Add(Service.LigneDeFrais[i]);
-                }
+                }*/
             }
             return liste;
         }
