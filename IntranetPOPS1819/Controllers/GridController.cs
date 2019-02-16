@@ -16,124 +16,83 @@ namespace IntranetPOPS1819.Controllers
     {
         private BddContext db = new BddContext();
 
-        public ActionResult Index()
+        public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request)
         {
-            return View();
-        }
-
-        public ActionResult Collaborateurs_Read([DataSourceRequest]DataSourceRequest request)
-        {
-            IQueryable<Collaborateur> collaborateurs = db.Collaborateurs;
-            DataSourceResult result = collaborateurs.ToDataSourceResult(request, collaborateur => new {
-                Id = collaborateur.Id,
-                Mail = collaborateur.Mail,
-                MotDePasse = collaborateur.MotDePasse,
-                Nom = collaborateur.Nom,
-                Prenom = collaborateur.Prenom,
-                CongésRestants = collaborateur.CongésRestants,
-                Admin = collaborateur.Admin,
-                Chef = collaborateur.Chef,
-                Telephone = collaborateur.Telephone,
-                LastUpdate = collaborateur.LastUpdate,
-                LastUpdateNoteDeFrais = collaborateur.LastUpdateNoteDeFrais
+            IQueryable<LigneDeFrais> lignedefrais = db.LigneDeFrais;
+            DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
+                Id = ligneDeFrais.Id,
+                Nom = ligneDeFrais.Nom,
+                Somme = ligneDeFrais.Somme,
+                Complete = ligneDeFrais.Complete,
+                Statut = ligneDeFrais.Statut
             });
 
             return Json(result);
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Collaborateurs_Create([DataSourceRequest]DataSourceRequest request, Collaborateur collaborateur)
+        public ActionResult LigneDeFrais_Create([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
         {
             if (ModelState.IsValid)
             {
-                var entity = new Collaborateur
+                var entity = new LigneDeFrais
                 {
-                    Mail = collaborateur.Mail,
-                    MotDePasse = collaborateur.MotDePasse,
-                    Nom = collaborateur.Nom,
-                    Prenom = collaborateur.Prenom,
-                    CongésRestants = collaborateur.CongésRestants,
-                    Admin = collaborateur.Admin,
-                    Chef = collaborateur.Chef,
-                    Telephone = collaborateur.Telephone,
-                    LastUpdate = collaborateur.LastUpdate,
-                    LastUpdateNoteDeFrais = collaborateur.LastUpdateNoteDeFrais
+                    Nom = ligneDeFrais.Nom,
+                    Somme = ligneDeFrais.Somme,
+                    Complete = ligneDeFrais.Complete,
+                    Statut = ligneDeFrais.Statut
                 };
 
-                db.Collaborateurs.Add(entity);
+                db.LigneDeFrais.Add(entity);
                 db.SaveChanges();
-                collaborateur.Id = entity.Id;
+                ligneDeFrais.Id = entity.Id;
             }
 
-            return Json(new[] { collaborateur }.ToDataSourceResult(request, ModelState));
+            return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Collaborateurs_Update([DataSourceRequest]DataSourceRequest request, Collaborateur collaborateur)
+        public ActionResult LigneDeFrais_Update([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
         {
-			System.Diagnostics.Debug.WriteLine("Passage dans Collaborateurs_Update pour " + collaborateur.Nom);
-			System.Diagnostics.Debug.WriteLine(collaborateur.LastUpdate);
-			if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var entity = new Collaborateur
+                var entity = new LigneDeFrais
                 {
-                    Id = collaborateur.Id,
-                    Mail = collaborateur.Mail,
-                    MotDePasse = collaborateur.MotDePasse,
-                    Nom = collaborateur.Nom,
-                    Prenom = collaborateur.Prenom,
-                    CongésRestants = collaborateur.CongésRestants,
-                    Admin = collaborateur.Admin,
-                    Chef = collaborateur.Chef,
-                    Telephone = collaborateur.Telephone,
-                    LastUpdate = collaborateur.LastUpdate,
-                    LastUpdateNoteDeFrais = collaborateur.LastUpdateNoteDeFrais
+                    Id = ligneDeFrais.Id,
+                    Nom = ligneDeFrais.Nom,
+                    Somme = ligneDeFrais.Somme,
+                    Complete = ligneDeFrais.Complete,
+                    Statut = ligneDeFrais.Statut
                 };
 
-                db.Collaborateurs.Attach(entity);
+                db.LigneDeFrais.Attach(entity);
                 db.Entry(entity).State = EntityState.Modified;
                 db.SaveChanges();
-				System.Diagnostics.Debug.WriteLine("Chnagement effectué pour " + collaborateur.Nom);
-			}
-			else
-			{
-				var errors = ModelState.Select(x => x.Value.Errors)
-									   .Where(y => y.Count > 0)
-									   .ToList();
-				System.Diagnostics.Debug.WriteLine("Model State isn't valid : ");
-				System.Diagnostics.Debug.WriteLine(errors);
-				
-			}
+            }
 
-			return Json(new[] { collaborateur }.ToDataSourceResult(request, ModelState));
+            return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Collaborateurs_Destroy([DataSourceRequest]DataSourceRequest request, Collaborateur collaborateur)
+        public ActionResult LigneDeFrais_Destroy([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
         {
             if (ModelState.IsValid)
             {
-                var entity = new Collaborateur
+                var entity = new LigneDeFrais
                 {
-                    Id = collaborateur.Id,
-                    Mail = collaborateur.Mail,
-                    MotDePasse = collaborateur.MotDePasse,
-                    Nom = collaborateur.Nom,
-                    Prenom = collaborateur.Prenom,
-                    CongésRestants = collaborateur.CongésRestants,
-                    Admin = collaborateur.Admin,
-                    Chef = collaborateur.Chef,
-                    Telephone = collaborateur.Telephone,
-                    LastUpdate = collaborateur.LastUpdate,
-                    LastUpdateNoteDeFrais = collaborateur.LastUpdateNoteDeFrais
+                    Id = ligneDeFrais.Id,
+                    Nom = ligneDeFrais.Nom,
+                    Somme = ligneDeFrais.Somme,
+                    Complete = ligneDeFrais.Complete,
+                    Statut = ligneDeFrais.Statut
                 };
 
-                db.Collaborateurs.Attach(entity);
-                db.Collaborateurs.Remove(entity);
+                db.LigneDeFrais.Attach(entity);
+                db.LigneDeFrais.Remove(entity);
                 db.SaveChanges();
             }
 
-            return Json(new[] { collaborateur }.ToDataSourceResult(request, ModelState));
+            return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
         }
 
         protected override void Dispose(bool disposing)
