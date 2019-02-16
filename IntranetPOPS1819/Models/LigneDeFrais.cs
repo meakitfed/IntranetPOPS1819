@@ -26,8 +26,9 @@ namespace IntranetPOPS1819.Models
 		public bool Complete { get; set; }
 
 		//public DateTime Date { get; set; }
+		[UIHint("StatutLigneDeFrais")]
 		public StatutLigneDeFrais Statut { get; set; } = StatutLigneDeFrais.EnAttente;
-
+	
 		public DateTime Date;
 
 		//public virtual NoteDeFrais Note { get; set; }

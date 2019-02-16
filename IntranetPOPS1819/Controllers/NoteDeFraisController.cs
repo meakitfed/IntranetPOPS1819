@@ -27,14 +27,14 @@ namespace IntranetPOPS1819.Controllers
 			dal = dalIoc;
 		}
 
-		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request)
+		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int IdNote)
 		{
 			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Read");
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				IQueryable<LigneDeFrais> lignedefrais = c.NotesDeFrais[0].LignesDeFrais.AsQueryable();
+				IQueryable<LigneDeFrais> lignedefrais = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();
 				DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
@@ -166,10 +166,20 @@ namespace IntranetPOPS1819.Controllers
 
 		}
 
-		public ActionResult InformationLigneDeFrais()
+		public ActionResult InformationLigneDeFrais(int IdNote)
 		{
+			List<SelectListItem> list = new List<SelectListItem>();
+			foreach (var value in Enum.GetValues(typeof(StatutLigneDeFrais)))
+			{
+				list.Add(new SelectListItem()
+				{
+					Text = value.ToString(),
+					Value = ((int)value).ToString()
+				});
+			}
+			ViewData["StatutLigne"] = list;
 			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur");
-			return PartialView();
+			return PartialView(IdNote);
 		}
 	}
 }

@@ -100,7 +100,6 @@ namespace IntranetPOPS1819.Models
 		}
 		public void InitializeBdd()
 		{
-            
             try
             {
                 Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp") };

@@ -1,61 +1,62 @@
 ﻿@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
-		  .Name("grid")
-		  .Columns(columns =>
-		  {
-			  columns.Bound(c => c.Nom);
-			  columns.Bound(c => c.Somme);
-			  columns.Bound(c => c.Complete);
-			  columns.Bound(c => c.Statut);
-			  columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
-		  })
-		  .ToolBar(toolbar =>
-		  {
-			  toolbar.Create();
-		  })
-		  .Editable(editable => editable.Mode(GridEditMode.InLine))
-		  .Sortable(sortable =>
-		  {
-			  sortable.SortMode(GridSortMode.SingleColumn);
-		  })
-		  .Scrollable()
-		  .Events(events =>
-		  {
-			  events.Save("onSave");
-			  events.SaveChanges("onSaveChanges");
-			  events.Edit("onEdit");
-			  events.DataBound("onDataBound");
-			  events.DataBinding("onDataBinding");
-		  })
-		  .DataSource(dataSource => dataSource
-			  .Ajax()
-			  .Model(model => model.Id(p => p.Id))
-			  .Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais"))
-			  .Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais"))
-			  .Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
-			  .Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
-		  )
+			  .Name("grid")
+			  .HtmlAttributes(new { style = "height: 500px" })
+			  .Columns(columns =>
+			  {
+				  columns.Bound(c => c.Nom);
+				  columns.Bound(c => c.Somme);
+				  columns.Bound(c => c.Complete);
+				  columns.Bound(c => c.Statut);
+				  columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+			  })
+			  .ToolBar(toolbar =>
+			  {
+				  toolbar.Create();
+			  })
+			  .Editable(editable => editable.Mode(GridEditMode.InLine))
+			  .Sortable(sortable =>
+			  {
+				  sortable.SortMode(GridSortMode.SingleColumn);
+			  })
+			  .Scrollable()
+			  .Events(events =>
+			  {
+				  events.Save("onSave");
+				  events.SaveChanges("onSaveChanges");
+				  events.Edit("onEdit");
+				  events.DataBound("onDataBound");
+				  events.DataBinding("onDataBinding");
+			  })
+			  .DataSource(dataSource => dataSource
+				  .Ajax()
+				  .Model(model => model.Id(p => p.Id))
+				  .Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { IdNote = Model }))
+				  .Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais"))
+				  .Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
+				  .Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
+			  )
 )
 
 <script>
 
-    function onSave(e){
-        //Implement the event handler for Save
-    }
+	function onSave(e) {
+		//Implement the event handler for Save
+	}
 
-    function onSaveChanges(e){
-        //Implement the event handler for SaveChanges
-    }
+	function onSaveChanges(e) {
+		//Implement the event handler for SaveChanges
+	}
 
-    function onEdit(e){
-        //Implement the event handler for Edit
-    }
+	function onEdit(e) {
+		//Implement the event handler for Edit
+	}
 
-    function onDataBound(e){
-        //Implement the event handler for DataBound
-    }
+	function onDataBound(e) {
+		//Implement the event handler for DataBound
+	}
 
-    function onDataBinding(e){
-        //Implement the event handler for DataBinding
-    }
+	function onDataBinding(e) {
+		//Implement the event handler for DataBinding
+	}
 
 </script>

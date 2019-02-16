@@ -9,9 +9,6 @@ namespace IntranetPOPS1819.Tests
     [TestClass]
     public class DalTest
     {
-        [TestClass]
-        public class DalTests
-        {
 			private IDal dal;
 
 			[TestInitialize]
@@ -70,5 +67,4 @@ namespace IntranetPOPS1819.Tests
 				Assert.AreEqual(compta, dal.ObtenirTousLesCollaborateurs()[0].Service);
 			}
 		}
-    }
 }
