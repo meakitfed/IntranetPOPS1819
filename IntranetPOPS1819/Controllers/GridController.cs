@@ -71,7 +71,9 @@ namespace IntranetPOPS1819.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Collaborateurs_Update([DataSourceRequest]DataSourceRequest request, Collaborateur collaborateur)
         {
-            if (ModelState.IsValid)
+			System.Diagnostics.Debug.WriteLine("Passage dans Collaborateurs_Update pour " + collaborateur.Nom);
+			System.Diagnostics.Debug.WriteLine(collaborateur.LastUpdate);
+			if (ModelState.IsValid)
             {
                 var entity = new Collaborateur
                 {
@@ -91,9 +93,19 @@ namespace IntranetPOPS1819.Controllers
                 db.Collaborateurs.Attach(entity);
                 db.Entry(entity).State = EntityState.Modified;
                 db.SaveChanges();
-            }
+				System.Diagnostics.Debug.WriteLine("Chnagement effectué pour " + collaborateur.Nom);
+			}
+			else
+			{
+				var errors = ModelState.Select(x => x.Value.Errors)
+									   .Where(y => y.Count > 0)
+									   .ToList();
+				System.Diagnostics.Debug.WriteLine("Model State isn't valid : ");
+				System.Diagnostics.Debug.WriteLine(errors);
+				
+			}
 
-            return Json(new[] { collaborateur }.ToDataSourceResult(request, ModelState));
+			return Json(new[] { collaborateur }.ToDataSourceResult(request, ModelState));
         }
 
         [AcceptVerbs(HttpVerbs.Post)]

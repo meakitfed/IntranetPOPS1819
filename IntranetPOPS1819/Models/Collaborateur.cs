@@ -26,7 +26,7 @@ namespace IntranetPOPS1819.Models
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
-        [RegularExpression(@"^0[0-9]{9}$")]
+        //[RegularExpression(@"^0[0-9]{9}$")]
 		public string Telephone { get; set; }
 
 		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
@@ -35,6 +35,7 @@ namespace IntranetPOPS1819.Models
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
 
+		[DataType(DataType.Date)]
 		public DateTime LastUpdate { get; set; }
 		public int LastUpdateNoteDeFrais { get; set; }
 
