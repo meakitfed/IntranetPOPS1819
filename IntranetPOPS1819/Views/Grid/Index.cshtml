@@ -1,0 +1,52 @@
+﻿
+@(Html.Kendo().Grid<IntranetPOPS1819.Models.Collaborateur>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.Mail);
+        columns.Bound(c => c.MotDePasse);
+        columns.Bound(c => c.Nom);
+        columns.Bound(c => c.Prenom);
+        columns.Bound(c => c.CongésRestants);
+        columns.Bound(c => c.Admin);
+        columns.Bound(c => c.Chef);
+        columns.Bound(c => c.Telephone);
+        columns.Bound(c => c.LastUpdate);
+        columns.Bound(c => c.LastUpdateNoteDeFrais);
+        columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
+      })
+      .ToolBar(toolbar => {
+            toolbar.Create();
+      })
+      .Editable(editable => editable.Mode(GridEditMode.InLine))
+      .Scrollable()
+      .Events(events => {
+            events.DataBound("onDataBound");
+            events.DataBinding("onDataBinding");
+            events.SaveChanges("onSaveChanges");
+      })
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Model(model => model.Id(p => p.Id))
+          .Read(read => read.Action("Collaborateurs_Read", "Grid"))
+          .Create(create => create.Action("Collaborateurs_Create", "Grid"))
+          .Update(update => update.Action("Collaborateurs_Update", "Grid"))
+          .Destroy(destroy => destroy.Action("Collaborateurs_Destroy", "Grid"))
+      )
+)
+
+<script>
+
+    function onDataBound(e){
+        //Implement the event handler for DataBound
+    }
+
+    function onDataBinding(e){
+        //Implement the event handler for DataBinding
+    }
+
+    function onSaveChanges(e){
+        //Implement the event handler for SaveChanges
+    }
+
+</script>
