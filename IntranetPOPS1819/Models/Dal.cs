@@ -106,7 +106,7 @@ namespace IntranetPOPS1819.Models
                 nathan.LastUpdate = new DateTime(2018, 1, 1);
                 Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
                 brian.LastUpdate = new DateTime(2017, 1, 1);
-                Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true };
+                Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true, CongesRestants = 12 };
                 Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true };
 
                 Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier }, Type = TypeService.Comptabilité };
@@ -171,7 +171,9 @@ namespace IntranetPOPS1819.Models
 					}
 				}
 
-			}
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+
+            }
             catch (DbEntityValidationException e)
             {
                 foreach (var eve in e.EntityValidationErrors)
@@ -219,6 +221,7 @@ namespace IntranetPOPS1819.Models
         public void AjoutConge(int idCollab, Conge c)
         {
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
+            bdd.Conges.Add(c);
             bdd.SaveChanges();
         }
 
@@ -269,12 +272,7 @@ namespace IntranetPOPS1819.Models
 			bdd.SaveChanges();
 			return s;
 		}
-
-        public void ChangerStatutConge(int id, StatutConge s)
-        {
-            bdd.Conges.FirstOrDefault(u => u.Id == id).Statut = s;
-        }
-
+        
 		public Mission AjoutMission(string nom, int serviceId)
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == serviceId);
@@ -297,7 +295,41 @@ namespace IntranetPOPS1819.Models
 			return bdd.Collaborateurs.FirstOrDefault(u => u.Id == id);
 		}
 
-		public void AssignerService(int idService, int idCollaborateur)
+        public Conge ObtenirConge(int id)
+        {
+            return bdd.Conges.First(c => c.Id == id);
+        }
+
+        public void ChangerStatut(int id, StatutConge s)
+        {
+            System.Diagnostics.Debug.WriteLine("Changement de statut");
+            bdd.Conges.FirstOrDefault(u => u.Id == id).Statut = s;
+            System.Diagnostics.Debug.WriteLine(bdd.Conges.FirstOrDefault(u => u.Id == id).Statut);
+            System.Diagnostics.Debug.WriteLine(bdd.Collaborateurs.Find(3).Conges.First(con => con.Id == id).Statut);
+            bdd.SaveChanges();
+        }
+
+        public void ChangerStatut(int id, StatutMission s)
+        {
+            bdd.Missions.FirstOrDefault(m => m.Id == id).Statut = s;
+            bdd.SaveChanges();
+        }
+
+        public void ValiderConge(int idCollab, int idConge)
+        {
+            Conge conge = bdd.Collaborateurs.First(col => col.Id == idCollab).Conges.FirstOrDefault(con => con.Id == idConge);
+            ChangerStatut(conge.Id, StatutConge.Valide);
+            int duree = (conge.Fin - conge.Debut).Days;
+            ModifierCongesRestant(idCollab, duree);
+            bdd.SaveChanges();
+        }
+
+        public void ModifierCongesRestant(int id, int jours)
+        {
+            bdd.Collaborateurs.First(c => c.Id == id).CongesRestants -= jours;
+        }
+
+        public void AssignerService(int idService, int idCollaborateur)
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollaborateur);
@@ -305,7 +337,15 @@ namespace IntranetPOPS1819.Models
 			bdd.SaveChanges();
 		}
 
-		public Collaborateur ObtenirCollaborateur(string idString)
+        public void AssignerMission(int idMission, int idCollaborateur)
+        {
+            Mission m = bdd.Missions.FirstOrDefault(miss => miss.Id == idMission);
+            Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollaborateur);
+            c.Missions.Add(m);
+            bdd.SaveChanges();
+        }
+
+        public Collaborateur ObtenirCollaborateur(string idString)
 		{
             if (int.TryParse(idString, out int id))
                 return ObtenirCollaborateur(id);
