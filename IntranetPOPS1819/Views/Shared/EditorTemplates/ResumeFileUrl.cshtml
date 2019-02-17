@@ -1,0 +1,19 @@
+﻿@model string
+@(Html.Kendo().Upload()
+	.Name("ResumeFileUrl")
+	.Events(events =>
+	{
+		events.Select("onSelectResumeFile");
+		events.Success("onUploadSuccessResumeFile");
+	})
+	.Messages(messages =>
+	 {
+		 messages.Select("Upload");
+	 })
+	.Async(async =>
+	 {
+		 async.Save("SaveResumeFile", "NoteDeFrais");
+		 async.Remove("DeleteResumeFile", "Home");
+		 async.AutoUpload(true);
+	 })
+	.Multiple(false))

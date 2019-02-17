@@ -1,0 +1,5 @@
+﻿@(Html.Kendo().DropDownList()
+			.Name("Type") // The name of the widget should be the same as the name of the property.
+			.DataValueField("Value")
+			.DataTextField("Text")
+			.BindTo((System.Collections.IEnumerable)ViewData["TypeLigne"]))

@@ -12,15 +12,20 @@ namespace IntranetPOPS1819.Models
 		public int Id { get; set; }
 
 		[Required(ErrorMessage = "Le nom de la dépense doit être saisi")]
-		[Display(Name = "Nom de la Dépense")]
+		[Display(Name = "Nom")]
 		public string Nom { get; set; }
 
-		[Display(Name = "Mission Associée")]
+		[Display(Name = "Mission")]
 		public virtual Mission Mission { get; set; }
 
 		[Required(ErrorMessage = "La somme de la dépense doit être saisi")]
-		[Display(Name = "Somme")]
+		[Display(Name = "Montant")]
 		public int Somme { get; set; }
+
+		[Required(ErrorMessage = "La type de frais doit être saisi")]
+		[Display(Name = "Type de Frais")]
+		[UIHint("TypeLigneDeFrais")]
+		public TypeLigneDeFrais Type { get; set; } = TypeLigneDeFrais.Autre;
 
 		[Display(Name = "Note Complète")]
 		public bool Complete { get; set; }
@@ -28,13 +33,16 @@ namespace IntranetPOPS1819.Models
 		//public DateTime Date { get; set; }
 		[UIHint("StatutLigneDeFrais")]
 		public StatutLigneDeFrais Statut { get; set; } = StatutLigneDeFrais.EnAttente;
-	
-		public DateTime Date;
+
+		[UIHint("DateTemplate")]
+		public DateTime? Date { get; set; }
 
 		//public virtual NoteDeFrais Note { get; set; }
-        //TODO rajouter qlq chose pour les Files
-        //Maybe un id + nom de Ligne de Frais qui irait chercher sur le serveur le doc ? 
-    }
+		//TODO rajouter qlq chose pour les Files
+		public string ResumeFileUrl { set; get; }
+
+		public string Filename { set; get; }
+	}
 
     public enum StatutLigneDeFrais
     {
@@ -42,4 +50,12 @@ namespace IntranetPOPS1819.Models
 		Refusée,
 		EnAttente
     }
+
+	public enum TypeLigneDeFrais
+	{
+		Transports,
+		Restauration,
+		Hôtel,
+		Autre
+	}
 }

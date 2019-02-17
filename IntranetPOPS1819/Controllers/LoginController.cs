@@ -24,32 +24,6 @@ namespace IntranetPOPS1819.Controllers
 			dal = dalIoc;
 		}
 
-		[OutputCache(Location = OutputCacheLocation.None)]
-		public ActionResult GetNoteDeFrais()
-		{
-			if (HttpContext.User.Identity.IsAuthenticated)
-			{
-				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				return Json
-				(
-					c.NotesDeFrais[0]
-				, JsonRequestBehavior.AllowGet);
-			}
-			return null;
-			/*return Json
-			(
-				new NoteDeFrais
-				{
-					LignesDeFrais = new List<LigneDeFrais>
-					{
-						new LigneDeFrais { Nom = "SUper note 1"},
-						new LigneDeFrais { Nom = "SUper note2"},
-						new LigneDeFrais { Nom = "SUper note 4"},
-						new LigneDeFrais { Nom = "mauvaise note 1"},
-					}
-				}
-			, JsonRequestBehavior.AllowGet);*/
-		}
 		public ActionResult Index()
 		{
 			bool connected = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
