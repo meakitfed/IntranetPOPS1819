@@ -2845,6 +2845,7 @@
     <Content Include="Views\NoteDeFrais\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Grid\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\StatutLigneDeFrais.cshtml" />
+    <Content Include="Views\ChefDeService\Conges.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
