@@ -171,7 +171,9 @@ namespace IntranetPOPS1819.Models
 					}
 				}
 
-			}
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+
+            }
             catch (DbEntityValidationException e)
             {
                 foreach (var eve in e.EntityValidationErrors)
@@ -219,6 +221,7 @@ namespace IntranetPOPS1819.Models
         public void AjoutConge(int idCollab, Conge c)
         {
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
+            bdd.Conges.Add(c);
             bdd.SaveChanges();
         }
 
@@ -269,12 +272,7 @@ namespace IntranetPOPS1819.Models
 			bdd.SaveChanges();
 			return s;
 		}
-
-        public void ChangerStatutConge(int id, StatutConge s)
-        {
-            bdd.Conges.FirstOrDefault(u => u.Id == id).Statut = s;
-        }
-
+        
 		public Mission AjoutMission(string nom, int serviceId)
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == serviceId);
@@ -297,14 +295,24 @@ namespace IntranetPOPS1819.Models
 			return bdd.Collaborateurs.FirstOrDefault(u => u.Id == id);
 		}
 
+        public Conge ObtenirConge(int id)
+        {
+            return bdd.Conges.First(c => c.Id == id);
+        }
+
         public void ChangerStatut(int id, StatutConge s)
         {
+            System.Diagnostics.Debug.WriteLine("Changement de statut");
             bdd.Conges.FirstOrDefault(u => u.Id == id).Statut = s;
+            System.Diagnostics.Debug.WriteLine(bdd.Conges.FirstOrDefault(u => u.Id == id).Statut);
+            System.Diagnostics.Debug.WriteLine(bdd.Collaborateurs.Find(3).Conges.First(con => con.Id == id).Statut);
+            bdd.SaveChanges();
         }
 
         public void ChangerStatut(int id, StatutMission s)
         {
             bdd.Missions.FirstOrDefault(m => m.Id == id).Statut = s;
+            bdd.SaveChanges();
         }
 
         public void ValiderConge(int idCollab, int idConge)

@@ -41,6 +41,7 @@ namespace IntranetPOPS1819.Models
         void EnvoiCongeChef(int idService, int idCollab, int idConge);
         void ValiderConge(int idCollab, int idConge);                                   // Testé
         void ModifierCongesRestant(int id, int jours);                                  // Testé
+        Conge ObtenirConge(int id);
 
         // Notifications
         void AjoutNotif(int idCollab, Message m);
