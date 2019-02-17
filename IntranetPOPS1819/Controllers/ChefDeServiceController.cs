@@ -60,7 +60,7 @@ namespace IntranetPOPS1819.Controllers
 
         public void ValiderConges(int idConge)
         {
-            dal.ChangerStatutConge(idConge, StatutConge.Valide);
+            dal.ChangerStatut(idConge, StatutConge.Valide);
         }
 	}
 }

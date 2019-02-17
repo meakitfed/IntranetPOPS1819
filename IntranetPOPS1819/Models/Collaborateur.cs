@@ -22,7 +22,7 @@ namespace IntranetPOPS1819.Models
 		public string MotDePasse { get; set; }
 		public string Nom { get; set; }
         public string Prenom { get; set; }
-		public int CongésRestants { get; set; } = 0;
+		public int CongesRestants { get; set; } = 0;
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
