@@ -5,6 +5,9 @@
 				  {
 					  columns.Bound(c => c.Nom);
 					  columns.Bound(c => c.Somme);
+					  columns.Bound(c => c.Mission).ClientTemplate(
+							"#= Mission.Nom #"
+						);
 					  columns.Bound(c => c.Complete);
 					  columns.Bound(c => c.Statut).ClientTemplate(
 						"# if (Statut == 2){ #" +
@@ -19,11 +22,15 @@
 					  columns.Bound(c => c.Type);
 					  columns.Bound(c => c.Date).Format("{0:dd/MM/yyyy}");
 					  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
-					  columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
-				  })
+					  columns.Command(command => command.Custom("ViewDetails").Click("Valider")).Width(100);
+					  columns.Command(command => { command.Edit();}).Width(100);
+					  columns.Command(command => { command.Destroy(); }).Width(100);
+					})
 						.ToolBar(toolbar =>
 						{
 							toolbar.Create();
+							toolbar.Custom().Text("Envoyer la note").HtmlAttributes(new { id = "customCommand" });
+
 						})
 						.Editable(editable => editable.Mode(GridEditMode.InLine))
 						.Sortable(sortable =>
@@ -48,6 +55,17 @@
 							.Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
 						)
 )
+
+<script type="text/javascript">
+	function Valider() {
+		console.log("Hey");
+		$.ajax({
+			url: 'Test',
+		}).done(function () {
+			alert('Added');
+		});
+	}
+</script>
 
 <script>
 

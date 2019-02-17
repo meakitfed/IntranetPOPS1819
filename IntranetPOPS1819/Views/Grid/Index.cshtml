@@ -1,52 +1,41 @@
 ﻿
-@(Html.Kendo().Grid<IntranetPOPS1819.Models.Collaborateur>()
-	  .Name("grid")
-	  .Columns(columns =>
-	  {
-		  columns.Bound(c => c.Mail);
-		  columns.Bound(c => c.MotDePasse);
-		  columns.Bound(c => c.Nom);
-		  columns.Bound(c => c.Prenom);
-		  columns.Bound(c => c.CongesRestants);
-		  columns.Bound(c => c.Admin);
-		  columns.Bound(c => c.Chef);
-		  columns.Bound(c => c.Telephone);
-		  columns.Bound(c => c.LastUpdate).Format("{0:dd/MM/yyyy}");
-		  columns.Bound(c => c.LastUpdateNoteDeFrais);
-		  columns.Command(command => { command.Edit(); command.Destroy(); }).Width(180);
-	  })
-	  .ToolBar(toolbar => {
-		  toolbar.Create();
-	  })
-	  .Editable(editable => editable.Mode(GridEditMode.InLine))
-	  .Scrollable()
-	  .Events(events => {
-		  events.DataBound("onDataBound");
-		  events.DataBinding("onDataBinding");
-		  events.SaveChanges("onSaveChanges");
-	  })
-	  .DataSource(dataSource => dataSource
-		  .Ajax()
-		  .Model(model => model.Id(p => p.Id))
-		  .Read(read => read.Action("Collaborateurs_Read", "Grid"))
-		  .Create(create => create.Action("Collaborateurs_Create", "Grid"))
-		  .Update(update => update.Action("Collaborateurs_Update", "Grid"))
-		  .Destroy(destroy => destroy.Action("Collaborateurs_Destroy", "Grid"))
-	  )
+@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.Nom);
+        columns.Bound(c => c.Somme);
+        columns.Bound(c => c.Type);
+        columns.Bound(c => c.Complete);
+        columns.Bound(c => c.Statut);
+        columns.Bound(c => c.Date);
+        columns.Bound(c => c.ResumeFileUrl);
+        columns.Bound(c => c.Filename);
+      })
+      .Scrollable()
+      .Events(events => {
+            events.Save("onSave");
+            events.SaveChanges("onSaveChanges");
+            events.DataBinding("onDataBinding");
+      })
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("LigneDeFrais_Read", "Grid"))
+      )
 )
 
 <script>
-	kendo.culture("br-FR");
-    function onDataBound(e){
-        //Implement the event handler for DataBound
-    }
 
-    function onDataBinding(e){
-        //Implement the event handler for DataBinding
+    function onSave(e){
+        //Implement the event handler for Save
     }
 
     function onSaveChanges(e){
         //Implement the event handler for SaveChanges
+    }
+
+    function onDataBinding(e){
+        //Implement the event handler for DataBinding
     }
 
 </script>

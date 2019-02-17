@@ -16,6 +16,7 @@ namespace IntranetPOPS1819.Models
 		public string Nom { get; set; }
 
 		[Display(Name = "Mission")]
+		[UIHint("MissionTemplate")]
 		public virtual Mission Mission { get; set; }
 
 		[Required(ErrorMessage = "La somme de la dépense doit être saisi")]

@@ -16,6 +16,11 @@ namespace IntranetPOPS1819.Controllers
     {
         private BddContext db = new BddContext();
 
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request)
         {
             IQueryable<LigneDeFrais> lignedefrais = db.LigneDeFrais;
@@ -23,76 +28,15 @@ namespace IntranetPOPS1819.Controllers
                 Id = ligneDeFrais.Id,
                 Nom = ligneDeFrais.Nom,
                 Somme = ligneDeFrais.Somme,
+                Type = ligneDeFrais.Type,
                 Complete = ligneDeFrais.Complete,
-                Statut = ligneDeFrais.Statut
+                Statut = ligneDeFrais.Statut,
+                Date = ligneDeFrais.Date,
+                ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
+                Filename = ligneDeFrais.Filename
             });
 
             return Json(result);
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult LigneDeFrais_Create([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
-        {
-            if (ModelState.IsValid)
-            {
-                var entity = new LigneDeFrais
-                {
-                    Nom = ligneDeFrais.Nom,
-                    Somme = ligneDeFrais.Somme,
-                    Complete = ligneDeFrais.Complete,
-                    Statut = ligneDeFrais.Statut
-                };
-
-                db.LigneDeFrais.Add(entity);
-                db.SaveChanges();
-                ligneDeFrais.Id = entity.Id;
-            }
-
-            return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult LigneDeFrais_Update([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
-        {
-            if (ModelState.IsValid)
-            {
-                var entity = new LigneDeFrais
-                {
-                    Id = ligneDeFrais.Id,
-                    Nom = ligneDeFrais.Nom,
-                    Somme = ligneDeFrais.Somme,
-                    Complete = ligneDeFrais.Complete,
-                    Statut = ligneDeFrais.Statut
-                };
-
-                db.LigneDeFrais.Attach(entity);
-                db.Entry(entity).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-
-            return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult LigneDeFrais_Destroy([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
-        {
-            if (ModelState.IsValid)
-            {
-                var entity = new LigneDeFrais
-                {
-                    Id = ligneDeFrais.Id,
-                    Nom = ligneDeFrais.Nom,
-                    Somme = ligneDeFrais.Somme,
-                    Complete = ligneDeFrais.Complete,
-                    Statut = ligneDeFrais.Statut
-                };
-
-                db.LigneDeFrais.Attach(entity);
-                db.LigneDeFrais.Remove(entity);
-                db.SaveChanges();
-            }
-
-            return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
         }
 
         protected override void Dispose(bool disposing)

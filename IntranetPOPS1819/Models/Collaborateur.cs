@@ -30,6 +30,7 @@ namespace IntranetPOPS1819.Models
 		public string Telephone { get; set; }
 
 		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
+		public virtual List<Mission> AnciennesMissions { get; set; } = new List<Mission>();
 		public virtual List<Conge> Conges { get; set; } = new List<Conge>();
 		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
 		public virtual List<Message> Messages { get; set; } = new List<Message>();

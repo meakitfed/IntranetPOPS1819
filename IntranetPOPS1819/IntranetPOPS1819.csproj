@@ -2846,6 +2846,10 @@
     <Content Include="Views\Grid\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\StatutLigneDeFrais.cshtml" />
     <Content Include="Views\ChefDeService\Conges.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTemplate.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ResumeFileUrl.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\TypeLigneDeFrais.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MissionTemplate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

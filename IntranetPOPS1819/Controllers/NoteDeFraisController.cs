@@ -27,6 +27,11 @@ namespace IntranetPOPS1819.Controllers
 		{
 			dal = dalIoc;
 		}
+		public ActionResult Test()
+		{
+			System.Diagnostics.Debug.WriteLine("Passage dans tets");
+			return View();
+		}
 
 		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int IdNote)
 		{
@@ -46,6 +51,7 @@ namespace IntranetPOPS1819.Controllers
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
+					Mission = ligneDeFrais.Mission,
 				});
 
 				return Json(result);
@@ -74,11 +80,9 @@ namespace IntranetPOPS1819.Controllers
 						Filename = ligneDeFrais.Filename,
 						Date = ligneDeFrais.Date,
 						Type = ligneDeFrais.Type,
+						Mission = ligneDeFrais.Mission,
 					};
-
-					db.LigneDeFrais.Add(entity);
-					c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.Add(entity);
-					db.SaveChanges();
+					dal.AjoutLigneDeFrais(c.Id, IdNote, entity);
 					ligneDeFrais.Id = entity.Id;
 				}
 				else
@@ -114,6 +118,7 @@ namespace IntranetPOPS1819.Controllers
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
+					Mission = ligneDeFrais.Mission,
 				};
 
 				db.LigneDeFrais.Attach(entity);
@@ -151,6 +156,7 @@ namespace IntranetPOPS1819.Controllers
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
+					Mission = ligneDeFrais.Mission,
 				};
 
 				db.LigneDeFrais.Attach(entity);
@@ -215,29 +221,53 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult InformationLigneDeFrais(int IdNote)
 		{
-			List<SelectListItem> list = new List<SelectListItem>();
-			foreach (var value in Enum.GetValues(typeof(StatutLigneDeFrais)))
+			if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				list.Add(new SelectListItem()
+				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				List<SelectListItem> list = new List<SelectListItem>();
+				foreach (var value in Enum.GetValues(typeof(StatutLigneDeFrais)))
 				{
-					Text = value.ToString(),
-					Value = ((int)value).ToString()
-				});
-			}
-			ViewData["StatutLigne"] = list;
+					list.Add(new SelectListItem()
+					{
+						Text = value.ToString(),
+						Value = ((int)value).ToString()
+					});
+				}
+				ViewData["StatutLigne"] = list;
 
-			List<SelectListItem> listType = new List<SelectListItem>();
-			foreach (var value in Enum.GetValues(typeof(TypeLigneDeFrais)))
-			{
-				listType.Add(new SelectListItem()
+				List<SelectListItem> listType = new List<SelectListItem>();
+				foreach (var value in Enum.GetValues(typeof(StatutLigneDeFrais)))
 				{
-					Text = value.ToString(),
-					Value = ((int)value).ToString()
-				});
-			}
-			ViewData["TypeLigne"] = listType;
+					listType.Add(new SelectListItem()
+					{
+						Text = value.ToString(),
+						Value = ((int)value).ToString()
+					});
+				}
+				ViewData["TypeLigne"] = listType;
 
-			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur");
+				List<SelectListItem> listMission = new List<SelectListItem>();
+				foreach (var m in c.Missions)
+				{
+					listMission.Add(new SelectListItem()
+					{
+						Text = m.Nom,
+						Value = ((int)m.Id).ToString()
+					});
+				}
+				//TODO prendre que certaines missions ici
+				foreach (var m in c.AnciennesMissions)
+				{
+					listMission.Add(new SelectListItem()
+					{
+						Text = m.Nom,
+						Value = ((int)m.Id).ToString()
+					});
+				}
+				ViewData["ListMission"] = listMission;
+
+				System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur");
+			}
 			return PartialView(IdNote);
 		}
 
