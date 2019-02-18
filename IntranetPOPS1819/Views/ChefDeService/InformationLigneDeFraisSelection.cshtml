@@ -1,15 +1,72 @@
-﻿@using IntranetPOPS1819.Models
-@using IntranetPOPS1819.Controllers
-@model IntranetPOPS1819.Models.LigneDeFrais
+﻿
+		@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
+								  .Name("LigneDeFrais")
+								  .HtmlAttributes(new { style = "height: 500px" })
+								  .Columns(columns =>
+								  {
+									  columns.Bound(c => c.Nom);
+									  columns.Bound(c => c.Somme);
+									  columns.Bound(c => c.Statut).ClientTemplate(
+									"# if (Statut == 3){ #" +
+										"<font color=\"DarkOrange\">En Attente</font>" +
+									"# }else if(Statut == 0){ #" +
+										"<font color=\"ForestGreen\">Validée par le chef</font>" +
+									"# }else if(Statut == 1){ #" +
+										"<font color=\"ForestGreen\">Validée</font>" +
+									"# }else{ #" +
+										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 
+									);
+									  columns.Bound(c => c.Date);
+									  columns.Bound(c => c.Mission).ClientTemplate(
+									"#= Mission.Nom #"
+								);
+									  columns.Bound(c => c.Type);
+									  columns.Command(command => command.Custom("Valider").Click("Valider")).Width(100);
+									  columns.Command(command => command.Custom("Refuser").Click("Refuser")).Width(100);
+								  })
+										.Sortable(sortable =>
+										{
+											sortable.SortMode(GridSortMode.SingleColumn);
+										})
+										.Scrollable(scrollable => scrollable.Height("auto"))
+										.DataSource(dataSource => dataSource
+											.Ajax()
+											.Model(model => model.Id(p => p.Id))
+											.Read(read => read.Action("LigneDeFrais_Read", "ChefDeService"))
+										)
+		)
 
-@if (Model != null)
-{
-	<h3 class="text-center table-bordered">Ligne @Model.Nom</h3>
-	<button class="text-center" type="button" onclick="@(((ChefDeServiceController)this.ViewContext.Controller).ValiderLigneDeFrais(Model.Note.Collaborateur.Id, Model.Id));">Valider la ligne</button>
-}
-else
-{
-	<p>Sélectionnez une ligne de frais</p>
-}
+<script type="text/javascript">
+	function Valider(e) {
+		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+		console.log(dataItem);
+		$.ajax({
+			url: 'ValiderLigne',
+			data: { id: dataItem.Id }
+		})
+	}
+	function Refuser(e) {
+		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+		console.log(dataItem);
+		$.ajax({
+			url: 'RefuserLigne',
+			data: { id: dataItem.Id }
+		})
+	}
+</script>
+<script>
 
+	function onSave(e) {
+		//Implement the event handler for Save
+	}
+
+	function onSaveChanges(e) {
+		//Implement the event handler for SaveChanges
+	}
+
+	function onDataBinding(e) {
+		//Implement the event handler for DataBinding
+	}
+
+</script>

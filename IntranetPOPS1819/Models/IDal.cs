@@ -32,7 +32,7 @@ namespace IntranetPOPS1819.Models
         void MiseAJourNotesDeFrais(string idString);
         void MiseAJourNotesDeFrais(int IdCollaborateur);
         void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
-        void EnvoiLigneDeFraisChefService(int idService, int idCollab, int idLigne);
+        void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote);
         void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut);
 
         // Congés

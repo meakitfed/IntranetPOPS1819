@@ -13,18 +13,62 @@ namespace IntranetPOPS1819.Controllers
 {
     public class ChefDeServiceController : Controller
     {
-		private IDal dal;
+		private Dal dal;
 
 		public ChefDeServiceController() : this(new Dal())
 		{
 
 		}
 
-		private ChefDeServiceController(IDal dalIoc)
+		private ChefDeServiceController(Dal dalIoc)
 		{
 			dal = dalIoc;
 		}
 
+		public ActionResult ValiderLigne(int Id)
+		{
+			System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
+			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
+			return Json(null, JsonRequestBehavior.AllowGet);
+		}
+
+		public ActionResult RefuserLigne(int Id)
+		{
+			System.Diagnostics.Debug.WriteLine("Refuser La ligne" + Id);
+			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Refusée);
+			return Json(null, JsonRequestBehavior.AllowGet);
+		}
+		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request/*, int IdNote*/)
+		{
+			List<LigneDeFrais> l = new List<LigneDeFrais>();
+			foreach(NoteDeFrais n in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais)
+			{
+				l.AddRange(n.LignesDeFrais);
+			}
+			IQueryable<LigneDeFrais> lignedefrais = l.AsQueryable();
+			/*IQueryable<LigneDeFrais> lignedefrais = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();           /*foreach(LigneDeFrais l in lignedefrais)*/
+			/*System.Diagnostics.Debug.WriteLine(l.Mission.Nom);*/
+			DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
+				Id = ligneDeFrais.Id,
+				Nom = ligneDeFrais.Nom,
+				Somme = ligneDeFrais.Somme,
+				Type = ligneDeFrais.Type,
+				Complete = ligneDeFrais.Complete,
+				Statut = ligneDeFrais.Statut,
+				Date = ligneDeFrais.Date,
+				ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
+				Filename = ligneDeFrais.Filename,
+				Mission = ligneDeFrais.Mission
+			});
+
+			return Json(result);
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			dal.bdd.Dispose();
+			base.Dispose(disposing);
+		}
 		// GET: ChefDeService
 		public ActionResult Index(ChefDeServiceViewModel vm)
         {
@@ -36,29 +80,9 @@ namespace IntranetPOPS1819.Controllers
 			return View();
         }
 
-		public ActionResult InformationLigneDeFraisSelection(int idCollab = default(int), int idLigne = default(int))
+		public ActionResult InformationLigneDeFraisSelection(/*int idNote = default(int)*/)
 		{
-			
-			Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-			if (idCollab != default(int) && idLigne != default(int))
-			{
-				LigneDeFrais ligne = dal.ObtenirCollaborateur(idCollab).GetLigneDeFraisAValider().FirstOrDefault(l => idLigne == l.Id);
-				System.Diagnostics.Debug.WriteLine("Passage dans Get InformationLigneDeFraisSelection, ligne : " + ligne);
-				return PartialView(ligne);
-			}
-			return PartialView(null);
-		}
-
-		public bool ValiderLigneDeFrais(int idCollab = default(int), int idLigne = default(int))
-		{
-			System.Diagnostics.Debug.WriteLine("Validation ligne de frais !");
-			if (idCollab != default(int) && idLigne != default(int))
-			{
-				LigneDeFrais ligne = dal.ObtenirCollaborateur(idCollab).GetLigneDeFraisAValider().FirstOrDefault(l => idLigne == l.Id);
-				dal.ChangerStatutLigneDeFrais(idLigne, StatutLigneDeFrais.Validée);
-				System.Diagnostics.Debug.WriteLine("Passage dans Get InformationLigneDeFraisSelection, ligne : " + ligne);
-			}
-			return true;
+			return PartialView(/*idNote*/);
 		}
 
         public void ValiderConges(int idConge)

@@ -11,7 +11,7 @@ namespace IntranetPOPS1819.Models
 {
     public class Dal : IDal
     {
-        private BddContext bdd;
+        public BddContext bdd;
 
         public Dal()
         {
@@ -54,14 +54,14 @@ namespace IntranetPOPS1819.Models
 		{
 			return bdd.Services.FirstOrDefault(t => t.Type == type);
 		}
-		public void EnvoiLigneDeFraisChefService(int idService, int idCollab, int idLigne)
+		public void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
-			LigneDeFrais l = bdd.LigneDeFrais.FirstOrDefault(ligne => ligne.Id == idLigne);
-			if(c != null && s != null && l != null)
+			NoteDeFrais n = bdd.NotesDeFrais.FirstOrDefault(note => note.Id == idNote);
+			if(c != null && s != null && n != null)
 			{
-				s.LigneDeFrais.Add(l);
+				s.NotesDeFrais.Add(n);
 				bdd.SaveChanges();
 			}
 		}

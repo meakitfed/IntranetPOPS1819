@@ -1,6 +1,18 @@
-﻿@(Html.Kendo().DropDownList()
-		.Name("Statut") // The name of the widget should be the same as the name of the property.
-		.DataValueField("Value")
-		.DataTextField("Text")
-		.BindTo((System.Collections.IEnumerable)ViewData["StatutLigne"]))
-	
+﻿@{
+	if (Model == IntranetPOPS1819.Models.StatutLigneDeFrais.EnAttente)
+	{
+		<font color="DarkOrange">En Attente</font>
+	}
+	else if (Model == IntranetPOPS1819.Models.StatutLigneDeFrais.Validée)
+	{
+		<font color="ForestGreen">Validée</font>
+	}
+	else if (Model == IntranetPOPS1819.Models.StatutLigneDeFrais.ValidéeChef)
+	{
+		<font color="ForestGreen">Validée par le chef</font>
+	}
+	else
+	{
+		<font color="FireBrick">Refusée</font>
+	}
+}

@@ -9,6 +9,7 @@ namespace IntranetPOPS1819.Models
 {
     public class LigneDeFrais
     {
+		[ScaffoldColumn(false)]
 		public int Id { get; set; }
 
 		[Required(ErrorMessage = "Le nom de la dépense doit être saisi")]
@@ -33,9 +34,10 @@ namespace IntranetPOPS1819.Models
 
 		//public DateTime Date { get; set; }
 		[UIHint("StatutLigneDeFrais")]
-		public StatutLigneDeFrais Statut { get; set; } = StatutLigneDeFrais.EnAttente;
+		public StatutLigneDeFrais Statut { get; set; }
 
 		[UIHint("DateTemplate")]
+		[DataType(DataType.Date)]
 		public DateTime? Date { get; set; }
 
 		//public virtual NoteDeFrais Note { get; set; }
@@ -47,6 +49,7 @@ namespace IntranetPOPS1819.Models
 
     public enum StatutLigneDeFrais
     {
+		ValidéeChef,
 		Validée,
 		Refusée,
 		EnAttente

@@ -15,22 +15,29 @@ namespace IntranetPOPS1819.Controllers
 {
     public class NoteDeFraisController : Controller
     {
-		private IDal dal;
-		private BddContext db = new BddContext();
+		private Dal dal;
 
 		public NoteDeFraisController() : this(new Dal())
 		{
 
 		}
 
-		private NoteDeFraisController(IDal dalIoc)
+		private NoteDeFraisController(Dal dalIoc)
 		{
 			dal = dalIoc;
 		}
-		public ActionResult Test()
+
+		public bool EnvoyerNote(int IdNote)
 		{
-			System.Diagnostics.Debug.WriteLine("Passage dans tets");
-			return View();
+			if (HttpContext.User.Identity.IsAuthenticated)
+			{
+				System.Diagnostics.Debug.WriteLine("Passage dans EnvoyerNote" + IdNote);
+				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				dal.EnvoiNoteDeFraisChefService(c.Service.Id, c.Id, IdNote);
+				System.Diagnostics.Debug.WriteLine(c.GetNotesDeFraisAValider().Count);
+				return true;
+			}
+			return false;
 		}
 
 		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int IdNote)
@@ -120,10 +127,11 @@ namespace IntranetPOPS1819.Controllers
 					Type = ligneDeFrais.Type,
 					Mission = ligneDeFrais.Mission,
 				};
-
-				db.LigneDeFrais.Attach(entity);
-				db.Entry(entity).State = EntityState.Modified;
-				db.SaveChanges();
+				System.Diagnostics.Debug.WriteLine("Date : " + ligneDeFrais.Date);
+				dal.bdd.LigneDeFrais.Attach(entity);
+				dal.bdd.Entry(entity).State = EntityState.Modified;
+				System.Diagnostics.Debug.WriteLine("Date : " + entity.Date);
+				dal.bdd.SaveChanges();
 			}
 			else
 			{
@@ -133,7 +141,7 @@ namespace IntranetPOPS1819.Controllers
 				System.Diagnostics.Debug.WriteLine("Errors : ModelState isn't valid : ");
 				foreach(var v in errors)
 				{
-					System.Diagnostics.Debug.WriteLine("\t- " + v.ToString());
+					System.Diagnostics.Debug.WriteLine(v);
 				}
 			}
 
@@ -159,9 +167,9 @@ namespace IntranetPOPS1819.Controllers
 					Mission = ligneDeFrais.Mission,
 				};
 
-				db.LigneDeFrais.Attach(entity);
-				db.LigneDeFrais.Remove(entity);
-				db.SaveChanges();
+				dal.bdd.LigneDeFrais.Attach(entity);
+				dal.bdd.LigneDeFrais.Remove(entity);
+				dal.bdd.SaveChanges();
 			}
 
 			return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
@@ -169,7 +177,7 @@ namespace IntranetPOPS1819.Controllers
 
 		protected override void Dispose(bool disposing)
 		{
-			db.Dispose();
+			dal.bdd.Dispose();
 			base.Dispose(disposing);
 		}
 
@@ -201,10 +209,9 @@ namespace IntranetPOPS1819.Controllers
 					if(n.Id == vm._IdNoteDeFrais)
 					{
 						dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
-						//System.Diagnostics.Debug.WriteLine(vm._Collaborateur.NotesDeFrais.);
 						if (vm._Frais.Complete)
 						{
-							dal.EnvoiLigneDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
+							dal.EnvoiNoteDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
 							string txt = "Cliquez pour consulter";
 							Message notif = new Message { Titre = "Demande de validation ligne de frais", Date = DateTime.Now, Contenu = txt };
 							dal.AjoutNotif(dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Chef().Id, notif);
@@ -236,7 +243,7 @@ namespace IntranetPOPS1819.Controllers
 				ViewData["StatutLigne"] = list;
 
 				List<SelectListItem> listType = new List<SelectListItem>();
-				foreach (var value in Enum.GetValues(typeof(StatutLigneDeFrais)))
+				foreach (var value in Enum.GetValues(typeof(TypeLigneDeFrais)))
 				{
 					listType.Add(new SelectListItem()
 					{
