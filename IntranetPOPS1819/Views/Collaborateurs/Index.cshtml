@@ -1,0 +1,96 @@
+﻿@using IntranetPOPS1819.Models
+
+
+@(Html.Kendo().Grid<IntranetPOPS1819.Models.Collaborateur>()
+                              .Name("ListeCollaborateurs")
+                              .Columns(columns =>
+                              {
+                                  columns.Bound(c => c.Nom);
+                                  columns.Bound(c => c.Prenom);
+                                  columns.Bound(c => c.Mail);
+                                  columns.Bound(c => c.Missions).Template(@<text>@foreach (Mission m in item.Missions){<span>@m.Nom <br /></span>}</text>);
+                            //columns.Template(@<text>Unused</text>).Title("SomeTitle").ClientTemplate("#=Missions[0].Nom#");
+                            //columns.Template(@<text>Unesud</text>).Title("Shit").ClientTemplate("#= myFunction #");
+                            //columns.Bound(c => c.Service).ClientTemplate("<text>bite </text>").Title("Service");
+                            /*columns.Bound(c => c.Service).Template(@<text>@item.Service.Nom @if (item.Chef) { <span>(chef)</span> }</text>);
+                            columns
+                            columns.Command(command => { command.Custom("Assigner").Click("assignerMission(this)"); });*/
+                                        columns.Command(command => { command.Custom("Assigner").Click("assignerMission"); });
+                                    })
+                                    .DataSource(dataSource => dataSource
+                                      .Ajax()
+                                      .Model(model => model.Id(p => p.Id))
+                                      .Read(read => read.Action("Index_Read", "Collaborateurs"))
+                                    )
+                                    .Scrollable()
+                                    .Pageable() //Enable the paging.
+                                    .Sortable() //Enable the sorting.
+)
+
+
+@(Html.Kendo().Window().Name("Details")
+                        .Title("Customer Details")
+                        .Visible(false)
+                        .Modal(true)
+                        .Draggable(true)
+                        .Width(300)
+)
+
+<script type="text/x-kendo-template" id="template">
+    <div id="details-container">
+        <h2></h2>
+        <em>#= Missions #</em>
+    </div>
+</script>
+
+<script>
+    var detailsTemplate = kendo.template($("#template").html());
+
+    function onSave(e) {
+        //Implement the event handler for Save
+    }
+
+    function onSaveChanges(e) {
+        //Implement the event handler for SaveChanges
+    }
+
+    function onDataBinding(e) {
+        //Implement the event handler for DataBinding
+    }
+
+    function getMissions() {
+
+    }
+
+    function assignerMission(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        console.log(dataItem.Missions[0].Nom);
+        var i = dataItem.Id;
+        var wnd = $("#Details").data("kendoWindow");
+        wnd.content("<em>$dataItem.Missions[0].Nom</em>");
+        //wnd.content(detailsTemplate(dataItem.Missions));
+        wnd.center().open();
+    }
+
+</script>
+
+<style type="text/css">
+    #details-container {
+        padding: 10px;
+    }
+
+        #details-container h2 {
+            margin: 0;
+        }
+
+        #details-container em {
+            color: #8c8c8c;
+        }
+
+        #details-container dt {
+            margin: 0;
+            display: inline;
+        }
+</style>

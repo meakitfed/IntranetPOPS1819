@@ -45,7 +45,6 @@ namespace IntranetPOPS1819.Models
 		public int ServiceRefId { get; set; }*/
 		[Display(Name = "Service")]
 		public virtual Service Service { get; set; }
-
         
 		public int GetNombreCongesPrisCetteAnnee()
 		{
@@ -63,17 +62,16 @@ namespace IntranetPOPS1819.Models
 
 		public int GetNombreCongesEnAttente()
 		{
-			/*int nb = 0;
+			int nb = 0;
 			if (Conges != null)
 			{
 				foreach (Conge c in Conges)
 				{
-					nb += c.Fin.Subtract(c.Debut).Days;
-				}
+                    if (c.Statut == StatutConge.EnCours) nb += c.Fin.Subtract(c.Debut).Days;
+                }
 				return nb;
-			}*/
+			}
 			return 0;
-			
 		}
 
 		public int GetNombreCongesValidesFuturs()
