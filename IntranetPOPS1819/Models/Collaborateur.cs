@@ -73,7 +73,25 @@ namespace IntranetPOPS1819.Models
 			return 0;
 		}
 
-		public int GetNombreCongesValidesFuturs()
+
+        public List<DateTime> GetTousJoursCongesEnAttente()
+        {
+            List<DateTime> allDates = new List<DateTime>();
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Statut == StatutConge.EnCours)
+                        for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
+                            allDates.Add(date);
+                }
+                return allDates;
+            }
+            return allDates;
+        }
+
+
+        public int GetNombreCongesValidesFuturs()
 		{
 			int nb = 0;
 			if (Conges != null)

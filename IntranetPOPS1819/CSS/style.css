@@ -1,6 +1,4 @@
-﻿body {
-}
-.btn-1 {
+﻿.btn-1 {
 	background-color: #000000;
 	color: white;
 }
@@ -31,4 +29,10 @@
     border: none;
     width: 500px;
     margin: 0px auto;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
 }
