@@ -17,57 +17,13 @@
     <div class="row">
         <div class="col-lg-2 table-bordered">
             <h3><font size="4">Récapitulatif Congés</font></h3>
-            <h4><font size="2">(bientot en 1/1 journées !)</font></h4>
             <br />
 
-            @*
-        @using (Html.BeginForm())
-        {
-            <div>
-                @Html.LabelFor(Model => Model._Conge.Debut)
-                @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
-                @Html.ValidationMessageFor(Model => Model._Conge.Debut)
-            </div>
-            <div>
-                @Html.LabelFor(Model => Model._Conge.Fin)
-                @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
-                @Html.ValidationMessageFor(Model => Model._Conge.Fin)
-            </div>
-            <div>
-                @Html.LabelFor(Model => Model._Conge.Type)
-                @Html.TextBoxFor(Model => Model._Conge.Type)
-                @Html.ValidationMessageFor(Model => Model._Conge.Type)
-            </div>
-            <input type="submit" value="Demander congé" />
-        }
+            <p>Déjà pris cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</p>
+         
 
-            *@
+            <p>A prendre : @Model._Collaborateur.CongesRestants</p>
 
-            @*
-
-        <h4>Liste des demandes : </h4>
-        @if (Model._Collaborateur.Conges.Count > 0)
-        {
-        <p></p>
-            <div style="height:100px;overflow:auto;scrollbar-base-color:gold;font-family:sans-serif;padding:10px;">
-                <ul>
-                @foreach (var c in Model._Collaborateur.Conges)
-                {
-                    if (c.Statut == StatutConge.EnCours)
-                    {
-                        <li>@c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut</li>
-                    }
-                }
-                </ul>
-            </div>
-
-        }
-        else
-        {
-            <p>Aucune demande en attente pour le moment</p>
-        }
-
-            *@
 
             <div class="listbox-area">
                 <div class="left-area">
@@ -138,6 +94,9 @@
             <br />
 
             <button type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
+
+
+
         </div>
         <div class="col-lg-8 table-bordered text-center">
             <div class="demo-section k-content" style="text-align: center;">
@@ -163,12 +122,32 @@
                     .WeekNumber("<a class='italic'>#= data.weekNumber #</a>"))
                 )
 
-                )
+                
             </div>
             <br />
 
             
             <button type="button" class="btn btn-primary">Je veux ce congé !</button>
+            <br />
+        @using (Html.BeginForm())
+        {
+            <div>
+                @Html.LabelFor(Model => Model._Conge.Debut)
+                @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model._Conge.Debut)
+            </div>
+            <div>
+                @Html.LabelFor(Model => Model._Conge.Fin)
+                @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model._Conge.Fin)
+            </div>
+            <div>
+                @Html.LabelFor(Model => Model._Conge.Type)
+                @Html.TextBoxFor(Model => Model._Conge.Type)
+                @Html.ValidationMessageFor(Model => Model._Conge.Type)
+            </div>
+            <input type="submit" value="Demander congé" />
+        }
             
         </div>
         <div class="col-lg-2 table-bordered">
