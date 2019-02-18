@@ -69,9 +69,9 @@ namespace IntranetPOPS1819.Controllers
         public ActionResult Conges_Read([DataSourceRequest]DataSourceRequest request)
         {
             System.Diagnostics.Debug.WriteLine("Passage dans Conges_Read");
+
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
                 Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
                 IQueryable<Conge> conges = c.Conges.AsQueryable();
                 DataSourceResult result = conges.ToDataSourceResult(request, conge => new {
@@ -86,12 +86,26 @@ namespace IntranetPOPS1819.Controllers
             return null;
 
         }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Conges_Validation([DataSourceRequest]DataSourceRequest request, Conge conge)
+        public ActionResult Conges_Validation(string nb, bool accepter)
         {
             System.Diagnostics.Debug.WriteLine("Passage dans la fonction de validation");
-            //System.Diagnostics.Debug.WriteLine(nb);
+            System.Diagnostics.Debug.WriteLine(accepter);
+
+            if (accepter)
+                dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.ValideChef);
+            else
+                dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
+
+            System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
+
+            return View();
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Conges_Validation([DataSourceRequest]DataSourceRequest request, Conge conge, int contractId)
+        {
+            System.Diagnostics.Debug.WriteLine("Passage dans la fonction de validation");
+            System.Diagnostics.Debug.WriteLine(contractId);
 
             dal.ChangerStatut(conge.Id, StatutConge.Valide);
 

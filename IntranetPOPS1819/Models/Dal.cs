@@ -28,6 +28,11 @@ namespace IntranetPOPS1819.Models
             return bdd.Collaborateurs.ToList();
         }
 
+        public List<Collaborateur> ObtenirCollaborateursService(int id)
+        {
+            return bdd.Services.First(s => s.Id == id).Collaborateurs.ToList();
+        }
+
         public List<Mission> ObtenirToutesLesMissions()
         {
             return bdd.Missions.ToList();
@@ -151,7 +156,7 @@ namespace IntranetPOPS1819.Models
                     //brian.Missions.Add(m);
                     bdd.Missions.Add(m);
                 }
-
+                brian.Missions.Add(nathan.Missions[1]);
                 foreach (Service s in services)
                     bdd.Services.Add(s);
                 foreach (Collaborateur c in collabos)

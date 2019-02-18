@@ -2796,6 +2796,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChefDeServiceController.cs" />
+    <Compile Include="Controllers\CollaborateursController.cs" />
     <Compile Include="Controllers\CongesController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -2818,6 +2819,7 @@
     <Compile Include="Models\Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ChefDeServiceViewModel.cs" />
+    <Compile Include="ViewModel\CollaborateursViewModel.cs" />
     <Compile Include="ViewModel\CongesViewModel.cs" />
     <Compile Include="ViewModel\CollaborateurViewModel.cs" />
     <Compile Include="ViewModel\LignesDeFraisViewModel.cs" />
@@ -2850,6 +2852,7 @@
     <Content Include="Views\Shared\EditorTemplates\ResumeFileUrl.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TypeLigneDeFrais.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MissionTemplate.cshtml" />
+    <Content Include="Views\Collaborateurs\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

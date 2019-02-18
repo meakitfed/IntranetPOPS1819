@@ -10,6 +10,7 @@ namespace IntranetPOPS1819.Models
         [Required]
         public TypeConge Type { get; set; }
         [Required]
+        [DataType(DataType.Date)]
         [Display(Name = "Date de début")]
         public DateTime Debut { get; set; }
         [Required]
@@ -23,6 +24,7 @@ namespace IntranetPOPS1819.Models
 public enum StatutConge
 {
 	EnCours,
+    ValideChef,
 	Valide,
 	Refuse
 }

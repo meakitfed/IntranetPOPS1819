@@ -43,7 +43,6 @@ namespace IntranetPOPS1819.Models
 		/*[ForeignKey("Service")]
 		public int ServiceRefId { get; set; }*/
 		public virtual Service Service { get; set; }
-
         
 		public int GetNombreCongesPrisCetteAnnee()
 		{
