@@ -13,45 +13,102 @@
 </head>
 <body>
     @Html.Partial("../Shared/Navbar")
-    @using (Html.BeginForm())
-    {
-        <div>
-            @Html.LabelFor(Model => Model._Conge.Debut)
-            @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
-            @Html.ValidationMessageFor(Model => Model._Conge.Debut)
-        </div>
-        <div>
-            @Html.LabelFor(Model => Model._Conge.Fin)
-            @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
-            @Html.ValidationMessageFor(Model => Model._Conge.Fin)
-        </div>
-        <div>
-            @Html.LabelFor(Model => Model._Conge.Type)
-            @Html.TextBoxFor(Model => Model._Conge.Type)
-            @Html.ValidationMessageFor(Model => Model._Conge.Type)
-        </div>
-        <input type="submit" value="Demander congé" />
-    }
-    <p>Liste des demandes : </p>
-    @if (Model._Collaborateur.Conges.Count > 0)
-    {
-        foreach (var c in Model._Collaborateur.Conges)
+    <div class="row">
+        <div class="col-lg-2 table-bordered">
+            <h3><font size="4">Récapitulatif Congés</font></h3>
+            <h4><font size="2">(bientot en 1/1 journées !)</font></h4>
+            <br />
+
+            @*
+        @using (Html.BeginForm())
         {
-            <ul>
-                <li>Du @c.Debut au @c.Fin - @c.Type - @c.Statut</li>
-            </ul>
+            <div>
+                @Html.LabelFor(Model => Model._Conge.Debut)
+                @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model._Conge.Debut)
+            </div>
+            <div>
+                @Html.LabelFor(Model => Model._Conge.Fin)
+                @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
+                @Html.ValidationMessageFor(Model => Model._Conge.Fin)
+            </div>
+            <div>
+                @Html.LabelFor(Model => Model._Conge.Type)
+                @Html.TextBoxFor(Model => Model._Conge.Type)
+                @Html.ValidationMessageFor(Model => Model._Conge.Type)
+            </div>
+            <input type="submit" value="Demander congé" />
         }
-    }
-    else
-    {
-        <p>Aucune demande pour le moment</p>
-    }
 
-    <div id="content"></div>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
-    <script src="@Url.Content("~/Scripts/Calendrier.jsx")"></script>
+            *@
+            <h4>Liste des demandes : </h4>
+            @if (Model._Collaborateur.Conges.Count > 0)
+            {
+                <p>Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente()</p>
+                <div style="height:100px;overflow:auto;scrollbar-base-color:gold;font-family:sans-serif;padding:10px;">
+                    @foreach (var c in Model._Collaborateur.Conges)
+                    {
+                    <ul>
+                        <li>@c.Debut.ToString("dd/MM/yyyy") -  - @c.Statut</li>
+                    </ul>
+                    }
+                </div>
+                
+            }
+            else
+            {
+                <p>Aucune demande pour le moment</p>
+            }
+        </div>
+        <div class="col-lg-8 table-bordered">
+            <div class="demo-section k-content" style="text-align: center;">
+                <h2>Faire une demande</h2>
+                @(Html.Kendo().Calendar()
+                                            .Name("calendar")
+                                            .WeekNumber(true)
 
+                )
+            </div>
+        </div>
+        <div class="col-lg-2 table-bordered">
+            <h4>@DateTime.Today.ToString("dd/MM/yyyy")</h4>
+            <h3><font size="4">Informations du service</font></h3>
+
+            <p>Nombre de demandes en attente dans le service : @Model._Collaborateur.Service.GetNombreCongesEnAttente()</p>
+            <p>Nombre de collaborateurs en congés dans le service : </p>
+            <p>Aucune demande pour le moment</p>
+
+
+        </div>
 </body>
+
+<style>
+
+    #calendar,
+    #calendar .k-calendar-view,
+    #calendar .k-content {
+        width: 100%;
+    }
+
+    /* Template Days */
+
+    .exhibition,
+    .party,
+    .cocktail {
+        font-weight: bold;
+    }
+
+    .exhibition {
+        color: #ff9e00;
+    }
+
+    .party {
+        color: #ff4081;
+    }
+
+    .cocktail {
+        color: #00a1e8;
+    }
+</style>
+
 </html>
