@@ -9,6 +9,7 @@ namespace IntranetPOPS1819.Models
         Collaborateur ObtenirCollaborateur(int id);
         Collaborateur ObtenirCollaborateur(string idString);
         List<Collaborateur> ObtenirTousLesCollaborateurs();
+        List<Collaborateur> ObtenirCollaborateursService(int id);
         Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp);
 
         // Services
@@ -32,7 +33,7 @@ namespace IntranetPOPS1819.Models
         void MiseAJourNotesDeFrais(string idString);
         void MiseAJourNotesDeFrais(int IdCollaborateur);
         void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
-        void EnvoiLigneDeFraisChefService(int idService, int idCollab, int idLigne);
+        void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote);
         void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut);
 
         // Congés

@@ -1,72 +1,85 @@
-﻿@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
-				  .Name("grid")
-				  .HtmlAttributes(new { style = "height: 500px" })
-				  .Columns(columns =>
-				  {
-					  columns.Bound(c => c.Nom);
-					  columns.Bound(c => c.Somme);
-					  columns.Bound(c => c.Mission).ClientTemplate(
-							"#= Mission.Nom #"
-						);
-					  columns.Bound(c => c.Complete);
-					  columns.Bound(c => c.Statut).ClientTemplate(
-						"# if (Statut == 2){ #" +
-							"<font color=\"DarkOrange\">En Attente</font>" +
-						"# }else if(Statut == 0){ #" +
+﻿@using IntranetPOPS1819.Controllers
+@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
+							  .Name("grid")
+							  .HtmlAttributes(new { style = "height: 500px" })
+							  .Columns(columns =>
+							  {
+								  columns.Bound(c => c.Nom);
+								  columns.Bound(c => c.Somme);
+								  columns.Bound(c => c.Mission).ClientTemplate(
+										"#= Mission.Nom #"
+									);
+								  columns.Bound(c => c.Complete);
+								  columns.Bound(c => c.Statut).ClientTemplate(
+									"# if (Statut == 3){ #" +
+										"<font color=\"DarkOrange\">En Attente</font>" +
+									"# }else if(Statut == 0){ #" +
+										"<font color=\"ForestGreen\">Validée par le chef</font>" +
+									"# }else if(Statut == 1){ #" +
+										"<font color=\"ForestGreen\">Validée</font>" +
+									"# }else{ #" +
+										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 
-							"<font color=\"ForestGreen\">Validée</font>" +
-						"# }else{ #" +
-							"<font color=\"FireBrick\">Refusée</font>" + "# } #"
-
-						);
-					  columns.Bound(c => c.Type);
-					  columns.Bound(c => c.Date).Format("{0:dd/MM/yyyy}");
-					  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
-					  columns.Command(command => command.Custom("ViewDetails").Click("Valider")).Width(100);
-					  columns.Command(command => { command.Edit();}).Width(100);
-					  columns.Command(command => { command.Destroy(); }).Width(100);
-					})
-						.ToolBar(toolbar =>
-						{
-							toolbar.Create();
-							toolbar.Custom().Text("Envoyer la note").HtmlAttributes(new { id = "customCommand" });
-
-						})
-						.Editable(editable => editable.Mode(GridEditMode.InLine))
-						.Sortable(sortable =>
-						{
-							sortable.SortMode(GridSortMode.SingleColumn);
-						})
-						.Scrollable()
-						.Events(events =>
-						{
-							events.Save("onSave");
-							events.SaveChanges("onSaveChanges");
-							events.Edit("onEdit");
-							events.DataBound("onDataBound");
-							events.DataBinding("onDataBinding");
-						})
-						.DataSource(dataSource => dataSource
-							.Ajax()
-							.Model(model => model.Id(p => p.Id))
-							.Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { IdNote = Model }))
-							.Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { IdNote = Model }))
-							.Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
-							.Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
-						)
+									);
+								  columns.Bound(c => c.Type);
+								  columns.Bound(c => c.Date).Format("{0:dd/MM/yyyy}");
+								  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
+								  columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
+								  columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);
+							  })
+									.ToolBar(toolbar =>
+									toolbar.Template(@<text>
+										<div>
+											<a class="k-button k-button-icontext k-grid-add" href="#"><span class="k-icon k-add"></span>Ajouter une Ligne</a>
+											<button class="k-button k-button-icontext"  id="EnvoyerLigne">Valider la ligne</button>
+										</div>
+									</text>)
+										)
+												.Editable(editable => editable.Mode(GridEditMode.PopUp))
+												.Sortable(sortable =>
+												{
+													sortable.SortMode(GridSortMode.SingleColumn);
+												})
+												.Scrollable(scrollable => scrollable.Height("auto"))
+												.Events(events =>
+												{
+													events.Save("onSave");
+													events.SaveChanges("onSaveChanges");
+													events.Edit("onEdit");
+													events.DataBound("onDataBound");
+													events.DataBinding("onDataBinding");
+												})
+												.DataSource(dataSource => dataSource
+													.Ajax()
+													.Model(model =>
+													{
+														model.Field(c => c.Statut).Editable(false);
+														model.Id(p => p.Id);
+													})
+													.Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { IdNote = Model }))
+													.Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { IdNote = Model }))
+													.Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
+													.Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
+												)
 )
-
-<script type="text/javascript">
-	function Valider() {
-		console.log("Hey");
-		$.ajax({
-			url: 'Test',
-		}).done(function () {
-			alert('Added');
-		});
+<style>
+	.editer {
+		background-color: #ffc107;
+		color: white;
 	}
-</script>
 
+		.supprimer {
+			background-color: #dc3545;
+			color: white;
+		}
+</style>
+<script type="text/javascript">
+	$('#EnvoyerLigne').click(function(){
+		$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
+			alert('updated');
+		});
+	});
+</script>
 <script>
 
 	function onSave(e) {
@@ -78,11 +91,24 @@
 	}
 
 	function onEdit(e) {
-		//Implement the event handler for Edit
 	}
 
 	function onDataBound(e) {
-		//Implement the event handler for DataBound
+		var grid = $("#grid").data("kendoGrid");
+		var gridData = grid.dataSource.view();
+		console.log("hey1");
+		for (var i = 0; i < gridData.length; i++) {
+			
+			var currentUid = gridData[i].uid;
+			if (gridData[i].Statut == 1 || gridData[i].Statut == 0) {
+				var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+				var editButton = $(currenRow).find(".k-grid-edit");
+				var deleteButton = $(currenRow).find(".k-grid-delete");
+				
+				editButton.hide();
+				deleteButton.hide();
+			}
+		}
 	}
 
 	function onDataBinding(e) {

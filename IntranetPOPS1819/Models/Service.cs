@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Script.Serialization;
 
 namespace IntranetPOPS1819.Models
 {
@@ -13,12 +14,15 @@ namespace IntranetPOPS1819.Models
 
         public int Id { get; set; }
         public string Nom { get; set; }
+
 		public virtual List<Mission> Missions { get; set; }
+
 		public virtual List<Collaborateur> Collaborateurs { get; set; }
 		public TypeService Type { get; set; } = TypeService.ServiceLambda;
 
-		public virtual List<LigneDeFrais> LigneDeFrais { get; set; } = new List<LigneDeFrais>();
-        public virtual List<Conge> Conges { get; set; } = new List<Conge>();
+		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
+
+		public virtual List<Conge> Conges { get; set; } = new List<Conge>();
         /*public int ChefRefId { get; set; }
 		[ForeignKey("ChefRefId")]
 		public virtual Collaborateur Chef { get; set; }*/

@@ -10,7 +10,7 @@ namespace IntranetPOPS1819.Controllers
         public ActionResult Index()
         {
             IDal dal = new Dal();
-            CongesViewModel vm = new CongesViewModel { _Authentifie = HttpContext.User.Identity.IsAuthenticated };
+            CongesViewModel vm = new CongesViewModel { /*_Authentifie = HttpContext.User.Identity.IsAuthenticated */};
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);

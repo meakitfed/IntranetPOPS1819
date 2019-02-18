@@ -71,6 +71,9 @@
     <Reference Include="JavaScriptEngineSwitcher.V8, Version=3.0.5.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
       <HintPath>..\packages\JavaScriptEngineSwitcher.V8.3.0.5\lib\net45\JavaScriptEngineSwitcher.V8.dll</HintPath>
     </Reference>
+    <Reference Include="Json.Net, Version=1.0.16.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Json.Net.1.0.16\lib\netstandard2.0\Json.Net.dll</HintPath>
+    </Reference>
     <Reference Include="JSPool, Version=4.0.0.0, Culture=neutral, PublicKeyToken=2fc7775f73072640, processorArchitecture=MSIL">
       <HintPath>..\packages\JSPool.4.0.0\lib\net45\JSPool.dll</HintPath>
     </Reference>
@@ -2796,6 +2799,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChefDeServiceController.cs" />
+    <Compile Include="Controllers\CollaborateursController.cs" />
     <Compile Include="Controllers\CongesController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -2818,6 +2822,7 @@
     <Compile Include="Models\Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ChefDeServiceViewModel.cs" />
+    <Compile Include="ViewModel\CollaborateursViewModel.cs" />
     <Compile Include="ViewModel\CongesViewModel.cs" />
     <Compile Include="ViewModel\CollaborateurViewModel.cs" />
     <Compile Include="ViewModel\LignesDeFraisViewModel.cs" />
@@ -2850,6 +2855,7 @@
     <Content Include="Views\Shared\EditorTemplates\ResumeFileUrl.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TypeLigneDeFrais.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MissionTemplate.cshtml" />
+    <Content Include="Views\Collaborateurs\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

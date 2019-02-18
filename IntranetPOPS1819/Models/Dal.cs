@@ -11,7 +11,7 @@ namespace IntranetPOPS1819.Models
 {
     public class Dal : IDal
     {
-        private BddContext bdd;
+        public BddContext bdd;
 
         public Dal()
         {
@@ -26,6 +26,11 @@ namespace IntranetPOPS1819.Models
 		public List<Collaborateur> ObtenirTousLesCollaborateurs()
         {
             return bdd.Collaborateurs.ToList();
+        }
+
+        public List<Collaborateur> ObtenirCollaborateursService(int id)
+        {
+            return bdd.Services.First(s => s.Id == id).Collaborateurs.ToList();
         }
 
         public List<Mission> ObtenirToutesLesMissions()
@@ -54,14 +59,14 @@ namespace IntranetPOPS1819.Models
 		{
 			return bdd.Services.FirstOrDefault(t => t.Type == type);
 		}
-		public void EnvoiLigneDeFraisChefService(int idService, int idCollab, int idLigne)
+		public void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
-			LigneDeFrais l = bdd.LigneDeFrais.FirstOrDefault(ligne => ligne.Id == idLigne);
-			if(c != null && s != null && l != null)
+			NoteDeFrais n = bdd.NotesDeFrais.FirstOrDefault(note => note.Id == idNote);
+			if(c != null && s != null && n != null)
 			{
-				s.LigneDeFrais.Add(l);
+				s.NotesDeFrais.Add(n);
 				bdd.SaveChanges();
 			}
 		}
@@ -151,7 +156,7 @@ namespace IntranetPOPS1819.Models
                     //brian.Missions.Add(m);
                     bdd.Missions.Add(m);
                 }
-
+                brian.Missions.Add(nathan.Missions[1]);
                 foreach (Service s in services)
                     bdd.Services.Add(s);
                 foreach (Collaborateur c in collabos)
@@ -172,7 +177,10 @@ namespace IntranetPOPS1819.Models
 				}
 
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
             }
             catch (DbEntityValidationException e)
             {
@@ -246,6 +254,8 @@ namespace IntranetPOPS1819.Models
             if (c != null)
             {
                 c.Notifications.Add(m);
+                System.Diagnostics.Debug.WriteLine(c.Notifications.Count());
+
                 bdd.SaveChanges();
             }
         }
@@ -302,10 +312,10 @@ namespace IntranetPOPS1819.Models
 
         public void ChangerStatut(int id, StatutConge s)
         {
-            System.Diagnostics.Debug.WriteLine("Changement de statut");
+            //System.Diagnostics.Debug.WriteLine("Changement de statut");
             bdd.Conges.FirstOrDefault(u => u.Id == id).Statut = s;
-            System.Diagnostics.Debug.WriteLine(bdd.Conges.FirstOrDefault(u => u.Id == id).Statut);
-            System.Diagnostics.Debug.WriteLine(bdd.Collaborateurs.Find(3).Conges.First(con => con.Id == id).Statut);
+            //System.Diagnostics.Debug.WriteLine(bdd.Conges.FirstOrDefault(u => u.Id == id).Statut);
+            //System.Diagnostics.Debug.WriteLine(bdd.Collaborateurs.Find(3).Conges.First(con => con.Id == id).Statut);
             bdd.SaveChanges();
         }
 

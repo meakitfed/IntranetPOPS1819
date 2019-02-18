@@ -14,7 +14,7 @@ namespace IntranetPOPS1819
     {
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
+			AreaRegistration.RegisterAllAreas();
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
