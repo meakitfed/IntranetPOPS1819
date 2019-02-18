@@ -8,11 +8,7 @@
         columns.Bound(c => c.Id);
         columns.Bound(c => c.Debut);
         columns.Bound(c => c.Fin);
-        columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); /*command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success"}); command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-danger" });*/ }).Width(180);
-    })
-    .ToolBar(toolbar =>
-    {
-        toolbar.Create();
+        columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); /*command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success"}); command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-danger" });*/ }).Width(220);
     })
     .Editable(editable => editable.Mode(GridEditMode.InLine)
     .DisplayDeleteConfirmation(false))

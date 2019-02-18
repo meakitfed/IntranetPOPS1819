@@ -64,6 +64,20 @@ namespace IntranetPOPS1819.Controllers
         public void ValiderConges(int idConge)
         {
             dal.ChangerStatut(idConge, StatutConge.Valide);
+
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            List<Collaborateur> collabs = dal.ObtenirCollaborateursService(c.Service.Id);
+            int idCollab = 0;
+            foreach(Collaborateur col in collabs)
+            {
+                if (col.Conges.First(con => con.Id == idConge) != null)
+                {
+                    idCollab = col.Id;
+                    break;
+                }
+            }
+
+            dal.AjoutNotif(idCollab, new Message { Titre="Demande de congé", Contenu = "Validé"});
         }
 
         public ActionResult Conges_Read([DataSourceRequest]DataSourceRequest request)
@@ -73,8 +87,22 @@ namespace IntranetPOPS1819.Controllers
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-                IQueryable<Conge> conges = c.Conges.AsQueryable();
-                DataSourceResult result = conges.ToDataSourceResult(request, conge => new {
+                List<Conge> conges = new List<Conge>();
+                foreach(Collaborateur col in dal.ObtenirCollaborateursService(c.Service.Id))
+                {
+                    if(col != c)
+                    {
+                        foreach (Conge con in col.Conges)
+                        {
+                            if (con.Statut == StatutConge.EnCours)
+                            {
+                                conges.Add(con);
+                            }
+                        }
+                    }
+                }
+                IQueryable<Conge> demandes = conges.AsQueryable();
+                DataSourceResult result = demandes.ToDataSourceResult(request, conge => new {
                     conge.Id,
                     conge.Debut,
                     conge.Fin,
@@ -95,6 +123,25 @@ namespace IntranetPOPS1819.Controllers
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.ValideChef);
             else
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
+
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            List<Collaborateur> collabs = dal.ObtenirCollaborateursService(c.Service.Id);
+            int idCollab = 0;
+            foreach (Collaborateur col in collabs)
+            {
+                foreach(Conge con in col.Conges)
+                {
+                    if(con.Id == Convert.ToInt32(nb))
+                    {
+                        System.Diagnostics.Debug.WriteLine(col.Id);
+                        idCollab = col.Id;
+                        break;
+                    }
+                } 
+            }
+            System.Diagnostics.Debug.WriteLine(dal.ObtenirCollaborateur(2).Nom);
+
+            dal.AjoutNotif(idCollab, new Message { Titre = "Demande de congé", Date = DateTime.Now, Contenu = "Validé" });
 
             System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
 
