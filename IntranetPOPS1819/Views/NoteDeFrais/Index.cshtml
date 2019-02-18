@@ -22,7 +22,7 @@
                         <div id=@(("Année" + d)) style="display:none;">
                             @while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
                             {
-                                @Ajax.ActionLink(("Année" + d), "InformationLigneDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[a].Id }, new AjaxOptions
+                                @Ajax.ActionLink(@Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM"), "InformationLigneDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[a].Id }, new AjaxOptions
                                 {
                                      InsertionMode = InsertionMode.Replace,
                                      UpdateTargetId = "InfoNoteActive",

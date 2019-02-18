@@ -43,7 +43,7 @@ namespace IntranetPOPS1819.Controllers
 			List<LigneDeFrais> l = new List<LigneDeFrais>();
 			foreach(NoteDeFrais n in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais)
 			{
-				l.AddRange(n.LignesDeFrais);
+				l.AddRange(n.LignesDeFrais.Where(s => (s.Statut != StatutLigneDeFrais.Validée && s.Statut != StatutLigneDeFrais.ValidéeChef)));
 			}
 			IQueryable<LigneDeFrais> lignedefrais = l.AsQueryable();
 			/*IQueryable<LigneDeFrais> lignedefrais = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();           /*foreach(LigneDeFrais l in lignedefrais)*/
