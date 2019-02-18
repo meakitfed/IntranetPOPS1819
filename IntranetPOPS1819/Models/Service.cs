@@ -36,6 +36,20 @@ namespace IntranetPOPS1819.Models
 
             return null;
         }
+
+        public int GetNombreCongesEnAttente()
+        {
+            int nb = 0;
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Statut == StatutConge.EnCours) nb += c.Fin.Subtract(c.Debut).Days;
+                }
+                return nb;
+            }
+            return 0;
+        }
     }
 
 	public enum TypeService
