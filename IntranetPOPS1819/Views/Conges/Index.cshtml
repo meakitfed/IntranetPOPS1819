@@ -44,20 +44,46 @@
             <h4>Liste des demandes : </h4>
             @if (Model._Collaborateur.Conges.Count > 0)
             {
-                <p>Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente()</p>
+            <p>Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente()</p>
                 <div style="height:100px;overflow:auto;scrollbar-base-color:gold;font-family:sans-serif;padding:10px;">
+                    <ul>
                     @foreach (var c in Model._Collaborateur.Conges)
                     {
-                    <ul>
-                        <li>@c.Debut.ToString("dd/MM/yyyy") -  - @c.Statut</li>
-                    </ul>
+                        if (c.Statut == StatutConge.EnCours)
+                        {
+                            <li>@c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut</li>
+                        }
                     }
+                    </ul>
                 </div>
-                
+
             }
             else
             {
-                <p>Aucune demande pour le moment</p>
+                <p>Aucune demande en attente pour le moment</p>
+            }
+
+            <br />
+
+            @if (Model._Collaborateur.Conges.Count > 0)
+            {
+                <p>Demandes validées : @Model._Collaborateur.GetNombreCongesValidesFuturs()</p>
+                <div style="height:100px;overflow:auto;scrollbar-base-color:gold;font-family:sans-serif;padding:10px;">
+                    <ul>
+                    @foreach (var c in Model._Collaborateur.Conges)
+                    {
+                        if(c.Statut == StatutConge.Valide)
+                        {
+                            <li>@c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut</li>
+                        }
+                    }
+                    </ul>
+                </div>
+
+            }
+            else
+            {
+                <p>Aucune demande en attente pour le moment</p>
             }
         </div>
         <div class="col-lg-8 table-bordered">
@@ -73,10 +99,12 @@
         <div class="col-lg-2 table-bordered">
             <h4>@DateTime.Today.ToString("dd/MM/yyyy")</h4>
             <h3><font size="4">Informations du service</font></h3>
+            <br />
 
             <p>Nombre de demandes en attente dans le service : @Model._Collaborateur.Service.GetNombreCongesEnAttente()</p>
-            <p>Nombre de collaborateurs en congés dans le service : </p>
-            <p>Aucune demande pour le moment</p>
+            <br />
+            <p>Nombre de collaborateurs en congés dans le service : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count (@(@Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count)%)</p>
+
 
 
         </div>

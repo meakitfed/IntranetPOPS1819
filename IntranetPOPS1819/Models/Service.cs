@@ -50,6 +50,27 @@ namespace IntranetPOPS1819.Models
             }
             return 0;
         }
+
+        public int GetNombreCollaborateursEnConges(System.DateTime date)
+        {
+            int NbAbsents = 0;
+
+            if (Collaborateurs != null)
+            {
+                foreach(Collaborateur c in Collaborateurs)
+                {
+                    if (c.isEnConge(date)) NbAbsents++;
+                }
+
+                return NbAbsents;
+            }
+            else return 0;
+        }
+
+        public int GetNombreCollaborateursEnConges()
+        {
+            return GetNombreCollaborateursEnConges(System.DateTime.Today);
+        }
     }
 
 	public enum TypeService

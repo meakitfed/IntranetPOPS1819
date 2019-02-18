@@ -75,15 +75,15 @@ namespace IntranetPOPS1819.Models
 
 		public int GetNombreCongesValidesFuturs()
 		{
-			/*int nb = 0;
-			if (Conges[StatutCongé.Validé] != null)
+			int nb = 0;
+			if (Conges != null)
 			{
-				foreach (Conges c in Conges[StatutCongé.Validé])
+				foreach (Conge c in Conges)
 				{
-					if (c.Debut.CompareTo(DateTime.Now) > 0) nb += c.Fin.Subtract(c.Debut).Days;
+                    if (c.Statut == StatutConge.Valide) nb++;
 				}
 				return nb;
-			}*/
+			}
 			return 0;
 		}
 
@@ -99,6 +99,24 @@ namespace IntranetPOPS1819.Models
                 }*/
             }
             return liste;
+        }
+
+        public bool isEnConge(System.DateTime date)
+        {
+            if (Conges != null)
+            {
+                foreach(Conge c in Conges)
+                {
+                    if (date.Date >= c.Debut.Date && date.Date <= c.Fin.Date) return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool isEnConge()
+        {
+            return isEnConge(DateTime.Today);
         }
     }
 }

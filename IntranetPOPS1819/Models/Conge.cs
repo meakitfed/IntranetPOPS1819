@@ -21,6 +21,12 @@ namespace IntranetPOPS1819.Models
         [Display(Name = "Date de fin")]
         public DateTime Fin { get; set; }
 
+
+        public int GetDuree()
+        {
+            return (Fin - Debut).Days;
+        }
+
     }
 }
 
