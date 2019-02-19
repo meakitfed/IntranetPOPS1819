@@ -106,20 +106,21 @@
                                         .Selectable("multiple")
                                         .DisableDates(DayOfWeek.Saturday, DayOfWeek.Sunday)
                                         .Culture("fr-FR")
+                                        @*.MonthTemplate(month => month.Content(   "# if($.inArray(+data.date, enAttente) != -1){ #" +
+                                                                                    "<div class='enattente'>#= data.value #</div>"
+                                                                                +"#} elseif($.inArray(+data.date, refusee) != -1){#"
+                                                                                    +"<div class='refusee'>#= data.value #</div> "
+                                                                                +"#} elseif($.inArray(+data.date, validee) != -1){#"
+                                                                                    +"<div class='validee'>#= data.value #</div> "
+                                                                                +"#else {#"
+                                                                                    +"#= data.value #"
+                                                                                +"# } #")*@
                                         .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
-                                        "<div class='" +
-                                    "# if (data.value < 10) { #" +
-                                        "refuse" +
-                                    "# } else if ( data.value < 20 ) { #" +
-                                        "enattente" +
-                                    "# } else { #" +
-                                        "valide" +
-                                    "# } #" +
-                                "'>#= data.value #</div>" +
-                            "# } else { #" +
-                            "#= data.value #" +
-                            "# } #")
-                    .WeekNumber("<a class='italic'>#= data.weekNumber #</a>"))
+                                        "<div class=\"enattente\">copnge ate</div>" +
+                                        "# } #" +
+                                        "#= data.value #")
+                        
+                                      )
                 )
 
                 
@@ -166,21 +167,27 @@
 
 <script>
     
-    var today = new Date(), enAttente = [
-        +new Date(today.getFullYear(), today.getMonth(), 8),
-        +new Date(today.getFullYear(), today.getMonth(), 12),
-        +new Date(today.getFullYear(), today.getMonth(), 24),
-        +new Date(today.getFullYear(), today.getMonth() + 1, 6),
-        +new Date(today.getFullYear(), today.getMonth() + 1, 7),
-        +new Date(today.getFullYear(), today.getMonth() + 1, 25),
-        +new Date(today.getFullYear(), today.getMonth() + 1, 27),
-        +new Date(today.getFullYear(), today.getMonth() - 1, 3),
-        +new Date(today.getFullYear(), today.getMonth() - 1, 5),
-        +new Date(today.getFullYear(), today.getMonth() - 2, 22),
-        +new Date(today.getFullYear(), today.getMonth() - 2, 27)
-    ];
 
-    @*var enAttente = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesEnAttente()));*@
+    var raw = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesEnAttente() ));
+    var enAttente = raw.map(x => parseInt(x.substring(6, 19)))
+    var refusee = []
+    var validee = []
+
+    @*
+    var temp = @Html.Raw(Json.Encode(Model._Collaborateur.GetJSONTousJoursCongesEnAttente() ));
+    var ouu = temp.map(x => [parseInt(x.substring(1, 5)), parseInt(x.substring(6, 8)), parseInt(x.substring(9, 11))])
+    var enAttente = ouu.map(x => +new Date(x[0], x[1], x[2]))
+    *@
+
+    console.log(raw)
+    console.log(enAttente)
+
+    @*
+    //console.log(babu)
+    console.log(temp)
+    console.log(ouu)
+    //console.log(ouuu)*@
+    
 
     
 
@@ -209,7 +216,15 @@
         color: #4cff00;
     }
 
-   
+    .birthday {
+        background: transparent url('@Url.Content("~/Content/images/badpage.jpg")') no-repeat 0 50%;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 3px;
+    }
+
 </style>
 
 </html>

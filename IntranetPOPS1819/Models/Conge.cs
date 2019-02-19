@@ -25,7 +25,7 @@ namespace IntranetPOPS1819.Models
 
         public int GetDuree()
         {
-            return (Fin - Debut).Days;
+            return (Fin - Debut).Days + 1;
         }
 
     }
