@@ -22,7 +22,7 @@
 									"#= Mission.Nom #"
 								);
 								  columns.Bound(c => c.Type);
-								  columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom("Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); });
+								  columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
 									})
 										.Sortable(sortable =>
 										{

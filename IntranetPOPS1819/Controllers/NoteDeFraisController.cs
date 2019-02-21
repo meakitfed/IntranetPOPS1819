@@ -212,9 +212,8 @@ namespace IntranetPOPS1819.Controllers
 						if (vm._Frais.Complete)
 						{
 							dal.EnvoiNoteDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
-							string txt = "Cliquez pour consulter";
-							Message notif = new Message { Titre = "Demande de validation ligne de frais", Date = DateTime.Now, Contenu = txt };
-							dal.AjoutNotif(dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Chef().Id, notif);
+							Message notif = new Message(TypeMessage.NotifLigneAller, vm._Collaborateur.Prenom + vm._Collaborateur.Nom + " - " + vm._Collaborateur.Service.Nom, vm._Frais);
+                            dal.AjoutNotif(vm._Collaborateur.Service.Chef().Id, notif);
 							
 						}
 						return View(vm);

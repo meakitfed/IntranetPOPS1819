@@ -2,13 +2,13 @@
 
 @(Html.Kendo().Grid<IntranetPOPS1819.Models.Conge>
     ()
-    .Name("grid")
+    .Name("ValiderConges")
     .Columns(columns =>
     {
         columns.Bound(c => c.Id);
         columns.Bound(c => c.Debut);
         columns.Bound(c => c.Fin);
-        columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); /*command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success"}); command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-danger" });*/ }).Width(220);
+        columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("ValiderC"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("RefuserC"); /*command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success"}); command.Destroy().Text(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-danger" });*/ }).Width(220);
     })
     .Editable(editable => editable.Mode(GridEditMode.InLine)
     .DisplayDeleteConfirmation(false))
@@ -45,7 +45,7 @@
     </script>
 
     <script type="text/javascript">
-        function Valider(e) {
+        function ValiderC(e) {
             var grid = this;
             var row = $(e.currentTarget).closest("tr");
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -63,7 +63,7 @@
             });
         }
 
-        function Refuser(e) {
+        function RefuserC(e) {
             var grid = this;
             var row = $(e.currentTarget).closest("tr");
             var dataItem = this.dataItem($(e.currentTarget).closest("tr"));

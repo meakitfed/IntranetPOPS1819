@@ -6,9 +6,9 @@
 							  {
 								  columns.Bound(c => c.Nom);
 								  columns.Bound(c => c.Somme);
-								  columns.Bound(c => c.Mission).ClientTemplate(
+								  /*columns.Bound(c => c.Mission).ClientTemplate(
 										"#= Mission.Nom #"
-									);
+									);*/
 								  columns.Bound(c => c.Complete);
 								  columns.Bound(c => c.Statut).ClientTemplate(
 									"# if (Statut == 3){ #" +

@@ -27,7 +27,7 @@ namespace IntranetPOPS1819.Controllers
             vm._Collaborateur = col;
             System.Diagnostics.Debug.WriteLine(vm._Collaborateur.Nom);
             string txt = "Service : " + vm._Collaborateur.Service.Nom + "\n";
-            Message notif = new Message { Titre = "Demande de validation congé", Date = DateTime.Now, Contenu = txt};
+            Message notif = new Message(TypeMessage.NotifCongeAller, col.Prenom + col.Nom + " - " + col.Service.Nom, vm._Conge);
 
             if (HttpContext.User.Identity.IsAuthenticated)
             {

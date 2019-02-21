@@ -27,8 +27,10 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult ValiderLigne(int Id)
 		{
-			System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
+            //Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
+            //dal.ValiderConge(c.Id, new Message { Titre = "Validation de Note", Date = DateTime.Now, Contenu = "Une Ligne de frais a été validée par le chef de service"})
 			return Json(null, JsonRequestBehavior.AllowGet);
 		}
 
@@ -101,7 +103,11 @@ namespace IntranetPOPS1819.Controllers
                 }
             }
 
-            dal.AjoutNotif(idCollab, new Message { Titre="Demande de congé", Contenu = "Validé"});
+            dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(idConge)));
+            foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+            {
+                dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(idConge)));
+            }
         }
 
         public ActionResult Conges_Read([DataSourceRequest]DataSourceRequest request)
@@ -165,7 +171,11 @@ namespace IntranetPOPS1819.Controllers
             }
             System.Diagnostics.Debug.WriteLine(dal.ObtenirCollaborateur(2).Nom);
 
-            dal.AjoutNotif(idCollab, new Message { Titre = "Demande de congé", Date = DateTime.Now, Contenu = "Validé" });
+            dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+            foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+            {
+                dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+            }
 
             System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
 

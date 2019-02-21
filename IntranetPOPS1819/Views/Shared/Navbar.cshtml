@@ -50,19 +50,21 @@
 				<li class="nav-item">
 					<a class="nav-link" href="#"><i class="fa fa-envelope"></i></a>
 				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i></a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						@foreach (var m in c.Notifications)
-						{
-							<b>@m.Titre</b>
-							<p>
-								@m.Contenu<br />
-								<a href="#"><em>Cliquez pour consulter</em></a>
-							</p>
-						}
-					</div>
-				</li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i>@if(c.Notifications.Count() > 0){<span class="badge badge-notify">@c.Notifications.Count()</span>}</a>
+                    <div class=" dropdown-menu dropdown-menu-right scrollable-menu" aria-labelledby="navbarDropdownMenuLink">
+                        @foreach (var m in c.Notifications)
+                        {
+                            <b>@m.Titre</b>
+                            <p>
+                                <em>@m.Emetteur</em><br />
+                                @m.Contenu<br />
+                                @m.Date<br />
+                                <a href="#"><em>Cliquez pour consulter</em></a>
+                            </p>
+                        }
+                    </div>
+                </li>
 				<li class="nav-item">
 					<a class="nav-link" href="../Login/Deconnexion"><i class="fas fa-sign-out-alt"></i></a>
 				</li>
@@ -70,3 +72,12 @@
 		</div>
 	</nav>
 }
+
+<style>
+    .badge-notify {
+        background: orange;
+        font-size: x-small;
+        position: relative;
+        top: -10px;
+    }
+</style>
