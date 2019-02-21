@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.ModelBinding;
@@ -85,6 +86,24 @@ namespace IntranetPOPS1819.Models
                     if (c.Statut == StatutConge.EnCours)
                         for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
                             allDates.Add(date);
+                }
+                return allDates;
+            }
+            return allDates;
+        }
+
+        public List<String> GetJSONTousJoursCongesEnAttente()
+        {
+            var settings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-dd" };
+
+            List<String> allDates = new List<String>();
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Statut == StatutConge.EnCours)
+                        for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
+                            allDates.Add(JsonConvert.SerializeObject(date));
                 }
                 return allDates;
             }
