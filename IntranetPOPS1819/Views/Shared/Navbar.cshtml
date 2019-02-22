@@ -1,4 +1,16 @@
 ﻿@using IntranetPOPS1819.Models
+
+
+
+<script language="C#" runat="server">
+
+    void LinkButton_Click(Object sender, EventArgs e)
+    {
+       Label1.Text="You clicked the link button";
+    }
+
+</script>
+
 @{
 	IDal d = new Dal();
 	Collaborateur c = d.ObtenirCollaborateur(User.Identity.Name);
@@ -60,7 +72,7 @@
                                 <em>@m.Emetteur</em><br />
                                 @m.Contenu<br />
                                 @m.Date<br />
-                                <a href="#"><em>Cliquez pour consulter</em></a>
+                                <a href=@m.Redirection><em>Cliquez pour consulter</em></a>
                             </p>
                         }
                     </div>

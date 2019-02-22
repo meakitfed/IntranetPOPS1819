@@ -41,7 +41,7 @@ namespace IntranetPOPS1819.Models
         void ChangerStatut(int id, StatutConge s);                                      // Testé
         void EnvoiCongeChef(int idService, int idCollab, int idConge);
         void ValiderConge(int idCollab, int idConge);                                   // Testé
-        void ModifierCongesRestant(int id, int jours);                                  // Testé
+        void ModifierCongesRestant(int id, float jours);                                // Testé
         Conge ObtenirConge(int id);
 
         // Notifications

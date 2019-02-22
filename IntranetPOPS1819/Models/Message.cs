@@ -12,6 +12,7 @@ namespace IntranetPOPS1819.Models
 		public bool Lu { get; set; }
         public TypeMessage Type { get; set; }
         public string Emetteur { get; set; }
+        public string Redirection { get; set; }
 
         public Message()
         {
@@ -29,6 +30,10 @@ namespace IntranetPOPS1819.Models
                 case TypeMessage.NotifCongeAller:
                     Titre = "Demande de congés";
                     Contenu = "\nDu " + ((Conge)o).Debut + " au " + ((Conge)o).Fin;
+                    if (((Conge)o).Statut == StatutConge.EnCours)
+                        Redirection = "/ChefDeService/Index/";
+                    else
+                        Redirection = "#";
                     break;
                 case TypeMessage.NotifCongeRetour:
                     Titre = "Votre demande de congés";

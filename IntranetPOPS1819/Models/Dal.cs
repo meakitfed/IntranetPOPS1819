@@ -107,12 +107,12 @@ namespace IntranetPOPS1819.Models
 		{
             try
             {
-                Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "bonnard", Prenom = "nathan", MotDePasse = EncodeMD5("mdp") };
+                Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "Bonnard", Prenom = "Nathan", MotDePasse = EncodeMD5("mdp"), CongesRestants = 5f, Present = true };
                 nathan.LastUpdate = new DateTime(2018, 1, 1);
-                Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true };
+                Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true, Present = true };
                 brian.LastUpdate = new DateTime(2017, 1, 1);
-                Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true, CongesRestants = 12 };
-                Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true };
+                Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true, CongesRestants = 12f, Present = true };
+                Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true, Present = true };
 
                 Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier }, Type = TypeService.Comptabilité };
                 Service rh = new Service { Nom = "RH", Type = TypeService.RessourcesHumaines };
@@ -334,7 +334,7 @@ namespace IntranetPOPS1819.Models
             bdd.SaveChanges();
         }
 
-        public void ModifierCongesRestant(int id, int jours)
+        public void ModifierCongesRestant(int id, float jours)
         {
             bdd.Collaborateurs.First(c => c.Id == id).CongesRestants -= jours;
         }

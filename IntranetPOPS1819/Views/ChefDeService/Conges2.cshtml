@@ -1,107 +1,61 @@
 ﻿
-
-@(Html.Kendo().Grid<IntranetPOPS1819.Models.Conge>
-                ()
-                .Name("ValiderConges")
-                .Columns(columns =>
-                {
-                    columns.Bound(c => c.Id);
-                    columns.Bound(c => c.Debut);
-                    columns.Bound(c => c.Fin);
-                    columns.Command(command => { command.Custom("Details").Click("showDetails"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("ValiderC"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("RefuserC"); }).Width(240);
-                })
-                .Editable(editable => editable.Mode(GridEditMode.InLine)
-                .DisplayDeleteConfirmation(false))
-                .Scrollable()
-                .Events(events =>
-                {
-                    events.DataBound("onDataBound");
-                    events.DataBinding("onDataBinding");
-                    events.SaveChanges("onSaveChanges");
-                })
-                .DataSource(dataSource => dataSource
-                .Ajax()
+@(Html.Kendo().Grid<IntranetPOPS1819.ViewModel.ValidationCongesViewModel>
+            ()
+            .Name("ValiderConges2")
+            .Columns(columns =>
+            {
+                columns.Bound(c => c.Id);
+                columns.Bound(c => c.Debut);
+                columns.Bound(c => c.Fin);
+                columns.Command(command => { command.Custom("Détails").Click("showDetails2"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("ValiderC2"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("RefuserC2"); }).Width(270);
+            })
+            .Editable(editable => editable.Mode(GridEditMode.InLine)
+            .DisplayDeleteConfirmation(false))
+            .Scrollable()
+            .Events(events =>
+            {
+                events.DataBound("onDataBound");
+                events.DataBinding("onDataBinding");
+                events.SaveChanges("onSaveChanges");
+            })
+            .DataSource(dataSource => dataSource
+            .Ajax()
                 .Model(model => model.Id(p => p.Id))
-                .Read(read => read.Action("Conges_Read", "ChefDeService"))
+                .Read(read => read.Action("Conges_Read2", "ChefDeService"))
                 .Create(create => create.Action("Conges_Create", "ChefDeService"))
-                .Update(update => update.Action("Conges_Validation", "ChefDeService"))
-                .Destroy(destroy => destroy.Action("Conges_Validation", "ChefDeService"))
-                )
-)
-
-@(Html.Kendo().Window().Name("Details")
-            .Title("Customer Details")
-            .Visible(false)
-            .Modal(true)
-            .Draggable(true)
-            .Width(300)
-)
-
-@(Html.Kendo().ResponsivePanel()
-            .Name("sidebar")
-            .Breakpoint(1000)
-            .Orientation("left")
-            .Content(@<text></text>)
+                .Update(update => update.Action("Conges_Validation2", "ChefDeService"))
+                .Destroy(destroy => destroy.Action("Conges_Validation2", "ChefDeService"))
+            )
 )
 
 <div class="container">
     <div class="row">
-        <div class="col-sm">
-            <div class="row">Collaborateur</div>
-            <div class="row">Congés pris cette année : <p id="congesPris"></p></div>
-            <div class="row">Journées restantes : <p id="journeesRestantes"></p></div>
+        <div class="col-sm mx-auto">
+            <p class="text-center">Collaborateur</p>
+            <p id="nom"></p>
+            <p id="congesPris">Congés pris cette année : </p>
+            <p id="journeesRestantes">Journées restantes : &nbsp;</p>
         </div>
-        <div class="col-sm">Service</div>
+        <div class="col-sm">
+            <div class="="row"><p class="text-center">Service @Model._Collaborateur.Service.Nom</p></div>
+        </div>
     </div>
 </div>
 
-<script type="text/x-kendo-template" id="template">
-    <div id="details-container">
-        <h2>Congé</h2>
-        <em>#= Id #</em>
-        <dl>
-            <dt>#= Debut #</dt>
-            <dt>#= Fin #</dt>
-        </dl>
-    </div>
-</script>
-
 <script type="text/javascript">
-    var detailsTemplate = kendo.template($("#template").html());
-    
-    function showDetails(e) {
+
+    function showDetails2(e) {
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        var wnd = $("#Details").data("kendoWindow");
 
-        var pan = $("#sidebar").data("kendoResponsivePanel");
-        console.log(pan);
-        console.log(wnd);
-        //pan.content(detailsTemplate(dataItem));
-        wnd.content(detailsTemplate(dataItem));
-
-        document.getElementById("congesPris").innerHTML = dataItem.Debut;
-        console.log(dataItem.Debut);
-        //wnd.center().open();
+        document.getElementById("nom").innerHTML += dataItem.Nom;
+        document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
     }
 </script>
 
 <script type="text/javascript">
-
-    /*function showDetails(e) {
-        var grid = this;
-        var row = $(e.currentTarget).closest("tr");
-        console.log(row.closest(".k-button"));
-        console.log(row.closest(".k-button").attr("id"));
-        grid.removeRow(row);
-
-    }*/
-
-</script>
-
-<script type="text/javascript">
-    function ValiderC(e) {
+    function ValiderC2(e) {
         var grid = this;
         var row = $(e.currentTarget).closest("tr");
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -119,7 +73,7 @@
         });
     }
 
-    function RefuserC(e) {
+    function RefuserC2(e) {
         var grid = this;
         var row = $(e.currentTarget).closest("tr");
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
@@ -152,6 +106,7 @@
         //Implement the event handler for SaveChanges
     }
 </script>
+
 
 <style>
 

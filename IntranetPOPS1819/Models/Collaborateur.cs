@@ -24,7 +24,7 @@ namespace IntranetPOPS1819.Models
 		public string MotDePasse { get; set; }
 		public string Nom { get; set; }
         public string Prenom { get; set; }
-		public int CongesRestants { get; set; } = 0;
+		public float CongesRestants { get; set; } = 0;
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
@@ -46,6 +46,8 @@ namespace IntranetPOPS1819.Models
 		public int ServiceRefId { get; set; }*/
 		[Display(Name = "Service")]
 		public virtual Service Service { get; set; }
+
+        public bool Present { get; set; }
         
 		public int GetNombreCongesPrisCetteAnnee()
 		{
@@ -74,7 +76,6 @@ namespace IntranetPOPS1819.Models
 			}
 			return 0;
 		}
-
 
         public List<DateTime> GetTousJoursCongesEnAttente()
         {
@@ -154,6 +155,14 @@ namespace IntranetPOPS1819.Models
         public bool isEnConge()
         {
             return isEnConge(DateTime.Today);
+        }
+
+        public int CountNotificationsNonLues()
+        {
+            int nb = 0;
+            foreach(Message m in Notifications) if (!m.Lu) nb++;
+
+            return nb;
         }
     }
 }

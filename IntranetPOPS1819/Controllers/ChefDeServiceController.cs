@@ -182,7 +182,79 @@ namespace IntranetPOPS1819.Controllers
             return View();
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Conges_Read2([DataSourceRequest]DataSourceRequest request)
+        {
+            System.Diagnostics.Debug.WriteLine("Passage dans Conges_Read");
+
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+                List<ValidationCongesViewModel> vm = new List<ValidationCongesViewModel>();
+                foreach (Collaborateur col in dal.ObtenirCollaborateursService(c.Service.Id))
+                {
+                    if (col != c)
+                    {
+                        foreach (Conge con in col.Conges)
+                        {
+                            if (con.Statut == StatutConge.EnCours)
+                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin});
+                        }
+                    }
+                }
+                IQueryable<ValidationCongesViewModel> demandes = vm.AsQueryable();
+                DataSourceResult result = demandes.ToDataSourceResult(request, data => new {
+                    data.Id,
+                    data.Debut,
+                    data.Fin,
+                    data.Nom,
+                    data.Service,
+                    data.CongesRestants
+                });
+
+                return Json(result);
+            }
+            return null;
+
+        }
+        public ActionResult Conges_Validation2(string nb, bool accepter)
+        {
+            System.Diagnostics.Debug.WriteLine("Passage dans la fonction de validation");
+            System.Diagnostics.Debug.WriteLine(accepter);
+
+            if (accepter)
+                dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.ValideChef);
+            else
+                dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
+
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            List<Collaborateur> collabs = dal.ObtenirCollaborateursService(c.Service.Id);
+            int idCollab = 0;
+            foreach (Collaborateur col in collabs)
+            {
+                foreach (Conge con in col.Conges)
+                {
+                    if (con.Id == Convert.ToInt32(nb))
+                    {
+                        System.Diagnostics.Debug.WriteLine(col.Id);
+                        idCollab = col.Id;
+                        break;
+                    }
+                }
+            }
+            System.Diagnostics.Debug.WriteLine(dal.ObtenirCollaborateur(2).Nom);
+
+            dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+            foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+            {
+                dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+            }
+
+            System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
+
+            return View();
+        }
+
+        /*[AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Conges_Validation([DataSourceRequest]DataSourceRequest request, Conge conge, int contractId)
         {
             System.Diagnostics.Debug.WriteLine("Passage dans la fonction de validation");
@@ -193,6 +265,6 @@ namespace IntranetPOPS1819.Controllers
             System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(conge.Id).Statut);
 
             return Json(new[] { dal.ObtenirConge(conge.Id) }.ToDataSourceResult(request, ModelState));
-        }
+        }*/
     }
 }
