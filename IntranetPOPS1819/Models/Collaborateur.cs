@@ -84,7 +84,7 @@ namespace IntranetPOPS1819.Models
             {
                 foreach (Conge c in Conges)
                 {
-                    if (c.Statut == StatutConge.EnCours)
+                    if (c.Statut == StatutConge.EnCours  ||  c.Statut == StatutConge.ValideChef)
                         for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
                             allDates.Add(date);
                 }

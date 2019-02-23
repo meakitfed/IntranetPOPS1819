@@ -15,40 +15,50 @@
 <body>
     @Html.Partial("../Shared/Navbar")
     <div class="row">
+
+
+
+
+
+
+
+
+
         <div class="col-lg-2 table-bordered">
             <h3><font size="4">Récapitulatif Congés</font></h3>
             <br />
 
-            <p>Déjà pris cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</p>
+            <p>Déjà pris cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee() jours</p>
          
 
-            <p>A prendre : @Model._Collaborateur.CongesRestants</p>
+            <p>A prendre : @Model._Collaborateur.CongesRestants jours</p>
 
 
             <div class="listbox-area">
                 <div class="left-area">
                     <span id="ss_elem">
-                        Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente()
+                        Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente() jours
                     </span>
-                    <ul class=" table-bordered"
+                    <select class=" table-bordered"
                         id="conges_enattente_list"
                         tabindex="0"
                         role="listbox"
-                        aria-labelledby="conges_enattente">
+                        aria-labelledby="conges_enattente"
+                        size="5">
 
                         @foreach (var c in Model._Collaborateur.Conges)
                         {
-                            if (c.Statut == StatutConge.EnCours)
+                            if (c.Statut == StatutConge.EnCours  ||  c.Statut == StatutConge.ValideChef)
                             {
-                                <li id="@c.Id" role="option">
+                                <option id="@c.Id" role="option">
                                     @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut
-                                </li>
+                                </option>
                             }
                         }
 
 
 
-                    </ul>
+                    </select>
                 </div>
             </div>
 
@@ -61,27 +71,28 @@
                 <div class="listbox-area">
                     <div class="left-area">
                         <span id="ss_elem">
-                            Demandes validées : @Model._Collaborateur.GetNombreCongesValidesFuturs()
+                            Demandes validées : @Model._Collaborateur.GetNombreCongesValidesFuturs() jours
                         </span>
-                        <ul class="table-bordered"
+                        <select class="table-bordered"
                             id="conges_valides_list"
                             tabindex="0"
                             role="listbox"
-                            aria-labelledby="conges_valides">
+                            aria-labelledby="conges_valides"
+                            size="5">
 
                             @foreach (var c in Model._Collaborateur.Conges)
                             {
                                 if (c.Statut == StatutConge.Valide)
                                 {
-                                    <li id="@c.Id" role="option">
+                                    <option id="@c.Id" role="option">
                                         @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut
-                                    </li>
+                                    </option>
                                 }
                             }
 
 
 
-                        </ul>
+                        </select>
                     </div>
                 </div>
 
@@ -98,65 +109,106 @@
 
 
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="col-lg-8 table-bordered text-center">
             <div class="demo-section k-content" style="text-align: center;">
                 <h4>Faire une demande</h4>
                 @(Html.Kendo().Calendar()
-                                        .Name("calendar")
-                                        .Selectable("multiple")
-                                        .DisableDates(DayOfWeek.Saturday, DayOfWeek.Sunday)
-                                        .Culture("fr-FR")
-                                        @*.MonthTemplate(month => month.Content(   "# if($.inArray(+data.date, enAttente) != -1){ #" +
-                                                                                    "<div class='enattente'>#= data.value #</div>"
-                                                                                +"#} elseif($.inArray(+data.date, refusee) != -1){#"
-                                                                                    +"<div class='refusee'>#= data.value #</div> "
-                                                                                +"#} elseif($.inArray(+data.date, validee) != -1){#"
-                                                                                    +"<div class='validee'>#= data.value #</div> "
-                                                                                +"#else {#"
-                                                                                    +"#= data.value #"
-                                                                                +"# } #")*@
-                                        .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
-                                        "<div class=\"enattente\">copnge ate</div>" +
-                                        "# } #" +
-                                        "#= data.value #")
-                        
-                                      )
+                    .Name("calendar")
+                    .Selectable("multiple")
+                    // .DisableDates(DayOfWeek.Saturday, DayOfWeek.Sunday)
+                    .Culture("fr-FR")
+                    .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
+                    "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
+                    "# } #" +
+                    "#= data.value #")
+
+                    )
                 )
 
-                
+
             </div>
+            @*.MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
+        "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
+        "# } #" +
+        "#= data.value #")*@
+
+
+            @*.MonthTemplate(month => month.Content(   "# if($.inArray(+data.date, enAttente) != -1){ #" +
+            "<div class='enattente'>#= data.value #</div>"
+        +"#} elseif($.inArray(+data.date, refusee) != -1){#"
+            +"<div class='refusee'>#= data.value #</div> "
+        +"#} elseif($.inArray(+data.date, validee) != -1){#"
+            +"<div class='validee'>#= data.value #</div> "
+        +"#else {#"
+            +"#= data.value #"
+        +"# } #")*@
             <br />
 
-            
+
             <button type="button" class="btn btn-primary">Je veux ce congé !</button>
             <br />
-        @using (Html.BeginForm())
-        {
-            <div>
-                @Html.LabelFor(Model => Model._Conge.Debut)
-                @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
-                @Html.ValidationMessageFor(Model => Model._Conge.Debut)
-            </div>
-            <div>
-                @Html.LabelFor(Model => Model._Conge.Fin)
-                @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
-                @Html.ValidationMessageFor(Model => Model._Conge.Fin)
-            </div>
-            <div>
-                @Html.LabelFor(Model => Model._Conge.Type)
-                @Html.TextBoxFor(Model => Model._Conge.Type)
-                @Html.ValidationMessageFor(Model => Model._Conge.Type)
-            </div>
-            <input type="submit" value="Demander congé" />
-        }
-            
+            @using (Html.BeginForm())
+            {
+                <div>
+                    @Html.LabelFor(Model => Model._Conge.Debut)
+                    @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(Model => Model._Conge.Debut)
+                </div>
+                <div>
+                    @Html.LabelFor(Model => Model._Conge.Fin)
+                    @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(Model => Model._Conge.Fin)
+                </div>
+                <div>
+                    @Html.LabelFor(Model => Model._Conge.Type)
+                    @Html.TextBoxFor(Model => Model._Conge.Type)
+                    @Html.ValidationMessageFor(Model => Model._Conge.Type)
+                </div>
+                <input type="submit" value="Demander congé" />
+            }
+
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="col-lg-2 table-bordered">
             <h4>@DateTime.Today.ToString("dd/MM/yyyy")</h4>
             <h3><font size="4">Informations du service</font></h3>
             <br />
 
-            <p>Nombre de demandes en attente dans le service : @Model._Collaborateur.Service.GetNombreCongesEnAttente()</p>
+            <p>Nombre de demandes en attente dans le service : @Model._Collaborateur.Service.GetNombreCongesEnAttente() </p>
             <br />
             <p>Nombre de collaborateurs en congés dans le service : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count (@(@Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count)%)</p>
 
@@ -210,6 +262,7 @@
     .enattente {
         font-weight: bold;
         color: #f9d71c;
+       @* font-size: "1";*@
     }
     .valide {
         font-weight: bold;
