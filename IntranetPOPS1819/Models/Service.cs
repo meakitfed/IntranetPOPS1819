@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Web.Script.Serialization;
+using System;
 
 namespace IntranetPOPS1819.Models
 {
@@ -55,7 +54,7 @@ namespace IntranetPOPS1819.Models
             return 0;
         }
 
-        public int GetNombreCollaborateursEnConges(System.DateTime date)
+        public int GetNombreCollaborateursEnConges(DateTime date)
         {
             int NbAbsents = 0;
 
@@ -73,7 +72,7 @@ namespace IntranetPOPS1819.Models
 
         public int GetNombreCollaborateursEnConges()
         {
-            return GetNombreCollaborateursEnConges(System.DateTime.Today);
+            return GetNombreCollaborateursEnConges(DateTime.Today);
         }
     }
 

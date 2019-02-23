@@ -370,13 +370,5 @@ namespace IntranetPOPS1819.Models
 			string motDePasseSel = "Encodage123" + motDePasse + "IntranetPOPS";
 			return BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(ASCIIEncoding.Default.GetBytes(motDePasseSel)));
 		}
-
-        public int Absents(DateTime? date)
-        {
-            int nb = 0;
-
-
-            return nb;
-        }
 	}
 }

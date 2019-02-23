@@ -5,7 +5,6 @@ using Kendo.Mvc.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace IntranetPOPS1819.Controllers
@@ -15,6 +14,13 @@ namespace IntranetPOPS1819.Controllers
         // GET: RH
         public ActionResult Index()
         {
+            IDal dal = new Dal();
+
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                ChefDeServiceViewModel vm = new ChefDeServiceViewModel { _Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name)};
+                return View(vm);
+            }
             return View();
         }
 

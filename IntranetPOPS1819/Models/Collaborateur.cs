@@ -145,7 +145,7 @@ namespace IntranetPOPS1819.Models
             {
                 foreach(Conge c in Conges)
                 {
-                    if (date.Date >= c.Debut.Date && date.Date <= c.Fin.Date) return true;
+                    if (c.Statut == StatutConge.Valide && date.Date >= c.Debut.Date && date.Date <= c.Fin.Date) return true;
                 }
             }
 

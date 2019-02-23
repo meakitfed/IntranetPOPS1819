@@ -38,15 +38,15 @@
     <tbody>
         <tr>
             <td scope="row" id="nom">Nom : &nbsp;</td>
-            <td></td>
+            <td><!-- TODO : DatePicker --></td>
         </tr>
         <tr>
             <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
-            <td></td>
+            <td>Collaborateurs Absents : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges()</td>
         </tr>
         <tr>
             <td scope="row" id="journeesRestantes">Journées restantes : &nbsp;</td>
-            <td></td>
+            <td>Proportion dans le service : <!-- TODO --></td>
         </tr>
     </tbody>
 </table>
@@ -54,62 +54,62 @@
 <script type="text/javascript">
 
     function showDetailsRH(e) {
-        e.preventDefault();
+                    e.preventDefault();
 
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
-        document.getElementById("nom").innerHTML += dataItem.Nom;
-        document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
-    }
+                    document.getElementById("nom").innerHTML += dataItem.Nom;
+                    document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
+                }
 </script>
 
 <script type="text/javascript">
     function ValiderCRH(e) {
-        var grid = this;
-        var row = $(e.currentTarget).closest("tr");
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        grid.removeRow(row);
+                    var grid = this;
+                    var row = $(e.currentTarget).closest("tr");
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    grid.removeRow(row);
         $.ajax({
-            url: 'Conges_ValidationRH',
+                    url: 'Conges_ValidationRH',
             data: {
-                nb: dataItem.Id,
+                        nb: dataItem.Id,
                 accepter: true
             }
-        }).done(function () {
-            alert('Added');
-        });
-    }
+                    }).done(function () {
+                        alert('Added');
+                    });
+                }
 
-    function RefuserCRH(e) {
-        var grid = this;
-        var row = $(e.currentTarget).closest("tr");
-        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        grid.removeRow(row);
-        console.log(dataItem);
+                function RefuserCRH(e) {
+                    var grid = this;
+                    var row = $(e.currentTarget).closest("tr");
+                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                    grid.removeRow(row);
+                    console.log(dataItem);
         $.ajax({
-            url: 'Conges_ValidationRH',
+                    url: 'Conges_ValidationRH',
             data: {
-                nb: dataItem.Id,
+                        nb: dataItem.Id,
                 accepter: false
             }
-        }).done(function () {
-            alert('Added');
-        });
-    }
+                    }).done(function () {
+                        alert('Added');
+                    });
+                }
 </script>
 
 <script>
     kendo.culture("br-FR");
     function onDataBound(e) {
-        //Implement the event handler for DataBound
-    }
+                    //Implement the event handler for DataBound
+                }
 
-    function onDataBinding(e) {
-        //Implement the event handler for DataBinding
+                function onDataBinding(e) {
+                    //Implement the event handler for DataBinding
 
-    }
+                }
 
-    function onSaveChanges(e) {
-        //Implement the event handler for SaveChanges
-    }
+                function onSaveChanges(e) {
+                    //Implement the event handler for SaveChanges
+                }
 </script>
