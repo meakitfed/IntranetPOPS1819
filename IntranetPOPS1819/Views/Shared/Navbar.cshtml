@@ -44,6 +44,12 @@
 						<a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
 					</li>
 				}
+                @if(c.Service.Type == TypeService.RessourcesHumaines)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/RH/Index">Ressources humaines</a>
+                    </li>
+                }
 				@if (c.Admin)
 				{
 					<li class="nav-item dropdown">
@@ -78,12 +84,20 @@
                     </div>
                 </li>
 				<li class="nav-item">
-					<a class="nav-link" href="../Login/Deconnexion"><i class="fas fa-sign-out-alt"></i></a>
+					<a class="nav-link" href="/Login/Deconnexion"><i class="fas fa-sign-out-alt"></i></a>
 				</li>
 			</ul>
 		</div>
 	</nav>
 }
+
+<script type="text/javascript">
+    function lire(e) {
+        console.log("bite");
+        var dataItem = this.dataItem($(e.currentTarget).closest("div"));
+        console.log(dataItem);
+    }
+</script>
 
 <style>
     .badge-notify {

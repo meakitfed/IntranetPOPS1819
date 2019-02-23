@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 
 namespace IntranetPOPS1819.Models
 {
@@ -253,8 +251,7 @@ namespace IntranetPOPS1819.Models
             Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
             if (c != null)
             {
-                c.Notifications.Add(m);
-                System.Diagnostics.Debug.WriteLine(c.Notifications.Count());
+                c.Notifications.Insert(0, m);
 
                 bdd.SaveChanges();
             }
@@ -373,5 +370,13 @@ namespace IntranetPOPS1819.Models
 			string motDePasseSel = "Encodage123" + motDePasse + "IntranetPOPS";
 			return BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(ASCIIEncoding.Default.GetBytes(motDePasseSel)));
 		}
+
+        public int Absents(DateTime? date)
+        {
+            int nb = 0;
+
+
+            return nb;
+        }
 	}
 }

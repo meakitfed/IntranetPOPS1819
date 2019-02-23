@@ -1,31 +1,30 @@
 ﻿
+@{
+    ViewBag.Title = "CongesRH";
+}
+
+<h2>CongesRH</h2>
+
 @(Html.Kendo().Grid<IntranetPOPS1819.ViewModel.ValidationCongesViewModel>
-            ()
-            .Name("ValiderConges2")
-            .Columns(columns =>
-            {
-                columns.Bound(c => c.Nom);
-                columns.Bound(c => c.Debut);
-                columns.Bound(c => c.Fin);
-                columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetails2"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("ValiderC2"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("RefuserC2"); }).Width(300);
-            })
-            .Editable(editable => editable.Mode(GridEditMode.InLine)
-            .DisplayDeleteConfirmation(false))
-            .Scrollable()
-            .Events(events =>
-            {
-                events.DataBound("onDataBound");
-                events.DataBinding("onDataBinding");
-                events.SaveChanges("onSaveChanges");
-            })
-            .DataSource(dataSource => dataSource
-            .Ajax()
-                .Model(model => model.Id(p => p.Id))
-                .Read(read => read.Action("Conges_Read2", "ChefDeService"))
-                .Create(create => create.Action("Conges_Create", "ChefDeService"))
-                .Update(update => update.Action("Conges_Validation2", "ChefDeService"))
-                .Destroy(destroy => destroy.Action("Conges_Validation2", "ChefDeService"))
-            )
+                            ()
+                            .Name("ValiderCongesRH")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(c => c.Id);
+                                columns.Bound(c => c.Debut);
+                                columns.Bound(c => c.Fin);
+                                columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetailsRH"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("ValiderCRH"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("RefuserCRH"); }).Width(300);
+                            })
+                            .Editable(editable => editable.Mode(GridEditMode.InLine)
+                            .DisplayDeleteConfirmation(false))
+                            .Scrollable()
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                                .Model(model => model.Id(p => p.Id))
+                                .Read(read => read.Action("Conges_ReadRH", "RH"))
+                                .Update(update => update.Action("Conges_ValidationRH", "RH"))
+                                .Destroy(destroy => destroy.Action("Conges_ValidationRH", "RH"))
+                            )
 )
 
 <br />
@@ -54,26 +53,24 @@
 
 <script type="text/javascript">
 
-    function showDetails2(e) {
+    function showDetailsRH(e) {
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
-        document.getElementById("nom").innerHTML = 'Nom : &nbsp;' + dataItem.Nom;
-        document.getElementById("journeesRestantes").innerHTML = 'Journées restantes: &nbsp;' + dataItem.CongesRestants + '&nbsp; jours';
+        document.getElementById("nom").innerHTML += dataItem.Nom;
+        document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
     }
 </script>
 
 <script type="text/javascript">
-    function ValiderC2(e) {
+    function ValiderCRH(e) {
         var grid = this;
         var row = $(e.currentTarget).closest("tr");
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         grid.removeRow(row);
-        console.log(this);
-        console.log(dataItem);
         $.ajax({
-            url: 'Conges_Validation2',
+            url: 'Conges_ValidationRH',
             data: {
                 nb: dataItem.Id,
                 accepter: true
@@ -83,14 +80,14 @@
         });
     }
 
-    function RefuserC2(e) {
+    function RefuserCRH(e) {
         var grid = this;
         var row = $(e.currentTarget).closest("tr");
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
         grid.removeRow(row);
         console.log(dataItem);
         $.ajax({
-            url: 'Conges_Validation',
+            url: 'Conges_ValidationRH',
             data: {
                 nb: dataItem.Id,
                 accepter: false

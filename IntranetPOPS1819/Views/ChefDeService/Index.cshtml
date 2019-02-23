@@ -6,6 +6,10 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<head>
+    @Styles.Render("~/Content/css")
+</head>
+
 @Html.Partial("../Shared/Navbar")
 @{
 	int firstNote = -1;

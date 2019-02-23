@@ -17,6 +17,7 @@ namespace IntranetPOPS1819.Models
         List<Service> ObtenirTousLesServices();
         Service AjoutService(string nom);
         void AssignerService(int idService, int idCollaborateur);
+        int Absents(DateTime? date);
 
         // Missions
         Mission GetMission(int idMission);

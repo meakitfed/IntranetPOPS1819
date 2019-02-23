@@ -2803,6 +2803,7 @@
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NoteDeFraisController.cs" />
+    <Compile Include="Controllers\RHController.cs" />
     <Compile Include="Controllers\UserPageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2855,6 +2856,9 @@
     <Content Include="Views\Shared\EditorTemplates\TypeLigneDeFrais.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MissionTemplate.cshtml" />
     <Content Include="Views\ChefDeService\Conges2.cshtml" />
+    <Content Include="Views\RH\Index.cshtml" />
+    <Content Include="Views\RH\CongesRH.cshtml" />
+    <Content Include="Views\Shared\ListeServices.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

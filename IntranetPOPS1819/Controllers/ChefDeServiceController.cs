@@ -109,7 +109,7 @@ namespace IntranetPOPS1819.Controllers
                 dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(idConge)));
             }
         }
-
+        /*
         public ActionResult Conges_Read([DataSourceRequest]DataSourceRequest request)
         {
             System.Diagnostics.Debug.WriteLine("Passage dans Conges_Read");
@@ -180,7 +180,7 @@ namespace IntranetPOPS1819.Controllers
             System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
 
             return View();
-        }
+        }*/
 
         public ActionResult Conges_Read2([DataSourceRequest]DataSourceRequest request)
         {
@@ -213,19 +213,19 @@ namespace IntranetPOPS1819.Controllers
 
                 return Json(result);
             }
-            return null;
 
+            return null;
         }
+
         public ActionResult Conges_Validation2(string nb, bool accepter)
         {
-            System.Diagnostics.Debug.WriteLine("Passage dans la fonction de validation");
-            System.Diagnostics.Debug.WriteLine(accepter);
-
+            // Modification du statut du congé
             if (accepter)
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.ValideChef);
             else
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
 
+            // Recherche du collaborateur concerné
             Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             List<Collaborateur> collabs = dal.ObtenirCollaborateursService(c.Service.Id);
             int idCollab = 0;
@@ -235,36 +235,24 @@ namespace IntranetPOPS1819.Controllers
                 {
                     if (con.Id == Convert.ToInt32(nb))
                     {
-                        System.Diagnostics.Debug.WriteLine(col.Id);
                         idCollab = col.Id;
                         break;
                     }
                 }
             }
-            System.Diagnostics.Debug.WriteLine(dal.ObtenirCollaborateur(2).Nom);
-
-            dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
-            foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
-            {
-                dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
-            }
-
             System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
 
+            // Envois de notifications
+            dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+            if (dal.ObtenirConge(Convert.ToInt32(nb)).Statut == StatutConge.ValideChef)
+            {
+                foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+                {
+                    dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+                }
+            }
             return View();
         }
 
-        /*[AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Conges_Validation([DataSourceRequest]DataSourceRequest request, Conge conge, int contractId)
-        {
-            System.Diagnostics.Debug.WriteLine("Passage dans la fonction de validation");
-            System.Diagnostics.Debug.WriteLine(contractId);
-
-            dal.ChangerStatut(conge.Id, StatutConge.Valide);
-
-            System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(conge.Id).Statut);
-
-            return Json(new[] { dal.ObtenirConge(conge.Id) }.ToDataSourceResult(request, ModelState));
-        }*/
     }
 }

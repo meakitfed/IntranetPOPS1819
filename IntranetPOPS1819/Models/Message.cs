@@ -31,9 +31,9 @@ namespace IntranetPOPS1819.Models
                     Titre = "Demande de congés";
                     Contenu = "\nDu " + ((Conge)o).Debut + " au " + ((Conge)o).Fin;
                     if (((Conge)o).Statut == StatutConge.EnCours)
-                        Redirection = "/ChefDeService/Index/";
+                        Redirection = "/ChefDeService/Index";
                     else
-                        Redirection = "#";
+                        Redirection = "/RH/Index";
                     break;
                 case TypeMessage.NotifCongeRetour:
                     Titre = "Votre demande de congés";
