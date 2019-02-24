@@ -179,6 +179,8 @@ namespace IntranetPOPS1819.Models
                 AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 3, 25), Fin = new DateTime(2019, 3, 27), Statut = StatutConge.Valide });
+
             }
             catch (DbEntityValidationException e)
             {

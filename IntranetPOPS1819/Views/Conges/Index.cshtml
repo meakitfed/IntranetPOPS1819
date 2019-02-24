@@ -126,22 +126,24 @@
 
 
         <div class="col-lg-8 table-bordered text-center">
-            <div class="demo-section k-content" style="text-align: center;">
-                <h4>Faire une demande</h4>
-                @(Html.Kendo().Calendar()
-                    .Name("calendar")
-                    .Selectable("multiple")
-                    // .DisableDates(DayOfWeek.Saturday, DayOfWeek.Sunday)
-                    .Culture("fr-FR")
-                    .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
-                    "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
-                    "# } #" +
-                    "#= data.value #")
+            <h2>Faire une demande de congés</h2>
+            <div id="example" style="text-align: center;">
+                <div class="demo-section k-content wide" style="display: inline-block;">
+
+                    <h4>Selectionnez une plage</h4>
+                    @(Html.Kendo().MultiViewCalendar()
+                                                .Name("multiViewCalendar")
+                                                .Selectable("range")
+                                                .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
+                                        "<div class=\"en-attente\"></div>" +
+                                        "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
+                                        "<div class=\"valide\"></div>" +
+                                        "# } #" +
+                                        "#= data.value #")
+                                    )
 
                     )
-                )
-
-
+                </div>
             </div>
             @*.MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
         "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
@@ -161,8 +163,14 @@
             <br />
 
 
-            <button type="button" class="btn btn-primary">Je veux ce congé !</button>
+            <button id="demanderConge" type="button" class="btn btn-primary">Je veux ce congé !</button>
+
             <br />
+
+            <div id="retourConge"></div>
+
+            <br />
+
             @using (Html.BeginForm())
             {
                 <div>
@@ -204,7 +212,9 @@
 
 
         <div class="col-lg-2 table-bordered">
+            <h2>Aujourd'hui : </h2>
             <h4>@DateTime.Today.ToString("dd/MM/yyyy")</h4>
+            <br />
             <h3><font size="4">Informations du service</font></h3>
             <br />
 
@@ -220,10 +230,14 @@
 <script>
     
 
-    var raw = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesEnAttente() ));
-    var enAttente = raw.map(x => parseInt(x.substring(6, 19)))
-    var refusee = []
-    var validee = []
+    var rawAttente = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesEnAttente() ));
+    var enAttente = rawAttente.map(x => parseInt(x.substring(6, 19)))
+
+    var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
+    var estValide = rawValide.map(x => parseInt(x.substring(6, 19)))
+
+    var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
+    var estValide = rawValide.map(x => parseInt(x.substring(6,19)))
 
     @*
     var temp = @Html.Raw(Json.Encode(Model._Collaborateur.GetJSONTousJoursCongesEnAttente() ));
@@ -231,9 +245,12 @@
     var enAttente = ouu.map(x => +new Date(x[0], x[1], x[2]))
     *@
 
-    console.log(raw)
+    console.log(rawAttente)
     console.log(enAttente)
 
+
+    console.log(rawValide)
+    console.log(estValide)
     @*
     //console.log(babu)
     console.log(temp)
@@ -241,6 +258,40 @@
     //console.log(ouuu)*@
     
 
+
+
+
+
+
+    $(document).ready(function () {
+        var today = new Date();
+        var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
+        multiViewCalendar.value(today);
+
+
+        $("#demanderConge").click(function () {
+            var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
+            var range = multiViewCalendar.selectRange();
+            if (range.start && range.end) {
+                var options = {year: 'numeric', month: 'long', day: 'numeric' };
+                var msg;
+                alert("Start: " + range.start.toLocaleDateString(options) + "\nEnd: " + range.end.toLocaleDateString("en-US", options) + "\n");
+
+                console.log(typeof (range.start.toLocaleDateString(options)))
+                console.log(range.start)
+                console.log(range.start.toLocaleDateString(options))
+
+                $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
+                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés monsieur</font>")
+		        });
+              
+              
+            } else {
+                alert("Please select a range");
+            }
+        });
+
+    });
     
 
 </script>
@@ -256,21 +307,25 @@
     /* Template Days */
 
     .refuse {
-        font-weight: bold;
-        color: #C12600;
-    }
-    .enattente {
-        font-weight: bold;
-        color: #f9d71c;
-       @* font-size: "1";*@
-    }
-    .valide {
-        font-weight: bold;
-        color: #4cff00;
+        background: transparent url('@Url.Content("~/Content/images/red.png")') no-repeat 0 50%;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 3px;
     }
 
-    .birthday {
-        background: transparent url('@Url.Content("~/Content/images/badpage.jpg")') no-repeat 0 50%;
+    .valide {
+        background: transparent url('@Url.Content("~/Content/images/green.png")') no-repeat 0 50%;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 3px;
+    }
+
+    .en-attente {
+        background: transparent url('@Url.Content("~/Content/images/yellow.jpg")') no-repeat 0 50%;
         display: inline-block;
         width: 16px;
         height: 16px;

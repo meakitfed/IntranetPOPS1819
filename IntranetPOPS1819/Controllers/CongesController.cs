@@ -37,5 +37,17 @@ namespace IntranetPOPS1819.Controllers
             }
             return View(vm);
         }
+
+       public string DemandeConge(DateTime Debut, DateTime Fin)
+       {
+            IDal dal = new Dal();
+            Collaborateur col = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+
+            Conge conge = new Conge { Debut = Debut, Fin = Fin, Type = TypeConge.RTT };
+            System.Diagnostics.Debug.WriteLine(col + " " + conge + " " +  Debut+ " " + Fin );
+            return col.isCongeValide(conge).ToString();
+        }
+
+
     }
 }
