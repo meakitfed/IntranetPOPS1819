@@ -16,6 +16,7 @@ namespace IntranetPOPS1819.Models
 		[Display(Name = "Nom")]
 		public string Nom { get; set; }
 
+		[ScaffoldColumn(true)]
 		[Display(Name = "Mission")]
 		[UIHint("MissionTemplate")]
 		public virtual Mission Mission { get; set; }

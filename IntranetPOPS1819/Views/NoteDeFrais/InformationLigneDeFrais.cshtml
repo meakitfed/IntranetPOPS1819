@@ -1,66 +1,72 @@
 ﻿@using IntranetPOPS1819.Controllers
+@using IntranetPOPS1819.Models
 @(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
-							  .Name("grid")
-							  .HtmlAttributes(new { style = "height: 500px" })
-							  .Columns(columns =>
-							  {
-								  columns.Bound(c => c.Nom);
-								  columns.Bound(c => c.Somme);
-								  /*columns.Bound(c => c.Mission).ClientTemplate(
-										"#= Mission.Nom #"
-									);*/
-								  columns.Bound(c => c.Complete);
-								  columns.Bound(c => c.Statut).ClientTemplate(
-									"# if (Statut == 3){ #" +
-										"<font color=\"DarkOrange\">En Attente</font>" +
-									"# }else if(Statut == 0){ #" +
-										"<font color=\"ForestGreen\">Validée par le chef</font>" +
-									"# }else if(Statut == 1){ #" +
-										"<font color=\"ForestGreen\">Validée</font>" +
-									"# }else{ #" +
-										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
+								  .Name("grid")
+								  .HtmlAttributes(new { style = "height: 500px" })
+								  .Columns(columns =>
+								  {
+									  columns.Bound(c => c.Nom);
+									  columns.Bound(c => c.Somme);
+									  columns.Bound(c => c.Mission).ClientTemplate(
+											"# if (Mission != null) { #" +
+											"<div>#= Mission.Nom #</div>" +
+											"#} else {#" +
+											"<div> </div>" +
+											"# } #"
+										);
+									  columns.Bound(c => c.Complete);
+									  columns.Bound(c => c.Statut).ClientTemplate(
+										"# if (Statut == 3){ #" +
+											"<font color=\"DarkOrange\">En Attente</font>" +
+										"# }else if(Statut == 0){ #" +
+											"<font color=\"ForestGreen\">Validée par le chef</font>" +
+										"# }else if(Statut == 1){ #" +
+											"<font color=\"ForestGreen\">Validée</font>" +
+										"# }else{ #" +
+											"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 
-									);
-								  columns.Bound(c => c.Type);
-								  columns.Bound(c => c.Date).Format("{0:dd/MM/yyyy}");
-								  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
-								  columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
-								  columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);
-							  })
-									.ToolBar(toolbar =>
-									toolbar.Template(@<text>
-										<div>
-											<a class="k-button k-button-icontext k-grid-add" href="#"><span class="k-icon k-add"></span>Ajouter une Ligne</a>
-											<button class="k-button k-button-icontext"  id="EnvoyerLigne">Valider la ligne</button>
-										</div>
-									</text>)
-										)
-												.Editable(editable => editable.Mode(GridEditMode.PopUp))
-												.Sortable(sortable =>
-												{
-													sortable.SortMode(GridSortMode.SingleColumn);
-												})
-												.Scrollable(scrollable => scrollable.Height("auto"))
-												.Events(events =>
-												{
-													events.Save("onSave");
-													events.SaveChanges("onSaveChanges");
-													events.Edit("onEdit");
-													events.DataBound("onDataBound");
-													events.DataBinding("onDataBinding");
-												})
-												.DataSource(dataSource => dataSource
-													.Ajax()
-													.Model(model =>
-													{
-														model.Field(c => c.Statut).Editable(false);
-														model.Id(p => p.Id);
-													})
-													.Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { IdNote = Model }))
-													.Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { IdNote = Model }))
-													.Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
-													.Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
-												)
+										);
+									  columns.Bound(c => c.Type);
+									  columns.Bound(c => c.Date).Format("{0:dd/MM/yyyy}");
+									  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
+									  columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
+									  columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);
+								  })
+										.ToolBar(toolbar =>
+										toolbar.Template(@<text>
+											<div>
+												<a class="k-button k-button-icontext k-grid-add" href="#"><span class="k-icon k-add"></span>Ajouter une Ligne</a>
+												<button class="k-button k-button-icontext" id="EnvoyerLigne">Valider la note</button>
+											</div>
+										</text>)
+													)
+															.Editable(editable => editable.Mode(GridEditMode.PopUp))
+															.Sortable(sortable =>
+															{
+																sortable.SortMode(GridSortMode.SingleColumn);
+															})
+															.Scrollable(scrollable => scrollable.Height("auto"))
+															.Events(events =>
+															{
+																events.Save("onSave");
+																events.SaveChanges("onSaveChanges");
+																events.Edit("onEdit");
+																events.DataBound("onDataBound");
+																events.DataBinding("onDataBinding");
+															})
+															.DataSource(dataSource => dataSource
+																.Ajax()
+																.Model(model =>
+																{
+																	model.Field(c => c.Statut).Editable(false);
+																	//model.Field(c => c.Mission).DefaultValue(null);
+																	model.Id(p => p.Id);
+																})
+																.Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { IdNote = Model }))
+																.Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { IdNote = Model }))
+																.Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
+																.Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
+															)
 )
 <style>
 	.editer {
@@ -68,10 +74,10 @@
 		color: white;
 	}
 
-		.supprimer {
-			background-color: #dc3545;
-			color: white;
-		}
+	.supprimer {
+		background-color: #dc3545;
+		color: white;
+	}
 </style>
 <script type="text/javascript">
 	$('#EnvoyerLigne').click(function(){
@@ -91,6 +97,16 @@
 	}
 
 	function onEdit(e) {
+
+		//check if record is new
+		//if (e.model.isNew()) {
+			@{/*
+				Dal d = new Dal();
+				Mission m = d.GetMission(ViewBag[])
+				//set the required field value
+				e.model.set("Mission");
+			*/}
+		//}
 	}
 
 	function onDataBound(e) {
@@ -98,13 +114,13 @@
 		var gridData = grid.dataSource.view();
 		console.log("hey1");
 		for (var i = 0; i < gridData.length; i++) {
-			
+
 			var currentUid = gridData[i].uid;
 			if (gridData[i].Statut == 1 || gridData[i].Statut == 0) {
 				var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
 				var editButton = $(currenRow).find(".k-grid-edit");
 				var deleteButton = $(currenRow).find(".k-grid-delete");
-				
+
 				editButton.hide();
 				deleteButton.hide();
 			}
