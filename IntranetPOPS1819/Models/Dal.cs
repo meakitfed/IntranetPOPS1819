@@ -230,6 +230,7 @@ namespace IntranetPOPS1819.Models
         {
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.Conges.Add(c);
+            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
             bdd.SaveChanges();
         }
 
@@ -372,5 +373,11 @@ namespace IntranetPOPS1819.Models
 			string motDePasseSel = "Encodage123" + motDePasse + "IntranetPOPS";
 			return BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(ASCIIEncoding.Default.GetBytes(motDePasseSel)));
 		}
+
+        public void SupprimerDemandeConge(int id)
+        {
+            bdd.Conges.Remove(bdd.Conges.FirstOrDefault(c => c.Id == id));
+            bdd.SaveChanges();
+        }
 	}
 }

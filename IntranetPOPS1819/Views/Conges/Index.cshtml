@@ -24,18 +24,18 @@
 
 
 
-        <div class="col-lg-2 table-bordered">
+        <div id="recapConges" class="col-lg-2 table-bordered">
             <h3><font size="4">Récapitulatif Congés</font></h3>
             <br />
 
             <p>Déjà pris cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee() jours</p>
          
-
-            <p>A prendre : @Model._Collaborateur.CongesRestants jours</p>
-
+            <div id="a-prendre">
+                <p>A prendre : @Model._Collaborateur.CongesRestants jours</p>
+            </div>
 
             <div class="listbox-area">
-                <div class="left-area">
+                <div id="demandesAttente" class="left-area">
                     <span id="ss_elem">
                         Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente() jours
                     </span>
@@ -59,11 +59,16 @@
 
 
                     </select>
+                    
+                    <button id="supprimer" type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
                 </div>
             </div>
 
 
 
+            <br />
+            <br />
+            <br />
             <br />
 
             @if (@Model._Collaborateur.GetNombreCongesValidesFuturs() != 0)
@@ -73,26 +78,21 @@
                         <span id="ss_elem">
                             Demandes validées : @Model._Collaborateur.GetNombreCongesValidesFuturs() jours
                         </span>
-                        <select class="table-bordered"
-                            id="conges_valides_list"
-                            tabindex="0"
-                            role="listbox"
-                            aria-labelledby="conges_valides"
-                            size="5">
+                        <ul class="list-group">
 
                             @foreach (var c in Model._Collaborateur.Conges)
                             {
                                 if (c.Statut == StatutConge.Valide)
                                 {
-                                    <option id="@c.Id" role="option">
+                                    <li id="@c.Id">
                                         @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut
-                                    </option>
+                                    </li>
                                 }
                             }
 
 
 
-                        </select>
+                        </ul>
                     </div>
                 </div>
 
@@ -104,7 +104,6 @@
 
             <br />
 
-            <button type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
 
 
 
@@ -171,7 +170,7 @@
 
             <br />
 
-            @using (Html.BeginForm())
+            @*@using (Html.BeginForm())
             {
                 <div>
                     @Html.LabelFor(Model => Model._Conge.Debut)
@@ -189,7 +188,7 @@
                     @Html.ValidationMessageFor(Model => Model._Conge.Type)
                 </div>
                 <input type="submit" value="Demander congé" />
-            }
+            }*@
 
         </div>
 
@@ -257,39 +256,115 @@
     console.log(ouu)
     //console.log(ouuu)*@
     
+    //TODO TESTER TOUT CA
 
+    function prepareElements() {
 
-
-
-
-
-    $(document).ready(function () {
         var today = new Date();
         var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
         multiViewCalendar.value(today);
 
+        $("#conges_enattente_list").change(function () {
+            if ($(this).val() != 0) {
+                $("#supprimer").removeClass('disabled')
+            }
+        })
+
+        $("#supprimer").click(function () {
+            if (!$(this).hasClass("disabled")) {
+                $.post("SupprimerConge", { id: $("#conges_enattente_list").children(":selected").attr("id") }, function (data) {
+                    if (data == 0) {
+
+                        alert("Ok ça roule")
+                        $("#demandesAttente").load(window.location.href + " #demandesAttente");
+                        $("#a-prendre").load(window.location.href + " #a-prendre");
+
+                    }
+                });
+            }
+        })
 
         $("#demanderConge").click(function () {
             var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
             var range = multiViewCalendar.selectRange();
             if (range.start && range.end) {
-                var options = {year: 'numeric', month: 'long', day: 'numeric' };
-                var msg;
-                alert("Start: " + range.start.toLocaleDateString(options) + "\nEnd: " + range.end.toLocaleDateString("en-US", options) + "\n");
+                var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
                 console.log(typeof (range.start.toLocaleDateString(options)))
                 console.log(range.start)
                 console.log(range.start.toLocaleDateString(options))
 
                 $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
-                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés monsieur</font>")
+                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
+                    else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
+                    else if (data == "ok") {
+                        $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
+                        $("#demandesAttente").load(window.location.href + " #demandesAttente");
+                        $("#a-prendre").load(window.location.href + " #a-prendre");
+                         var today = new Date();
+        var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
+        multiViewCalendar.value(today);
+
+        $(document).on("change", "#conges_enattente_list",function () {
+            if ($(this).val() != 0) {
+                $("#supprimer").removeClass('disabled')
+                $("#supprimer").addClass('active')
+            }
+        })
+
+        $(document).on('click', '#supprimer', function (){
+            if (!$(this).hasClass("disabled")) {
+                $.post("SupprimerConge", { id: $("#conges_enattente_list").children(":selected").attr("id")}, function (data) {
+                    alert("Ok ça roule")
+                    $("#demandesAttente").load(window.location.href + " #demandesAttente");
+                    $("#a-prendre").load(window.location.href + " #a-prendre");
+                });
+            }
+        })
+
+        $("#demanderConge").click(function () {
+            var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
+            var range = multiViewCalendar.selectRange();
+            if (range.start && range.end) {
+                var options = {year: 'numeric', month: 'long', day: 'numeric' };
+
+                console.log(typeof (range.start.toLocaleDateString(options)))
+                console.log(range.start)
+                console.log(range.start.toLocaleDateString(options))
+
+                $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
+                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
+                    else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
+                    else if (data == "ok") {
+                        $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
+                        $("#demandesAttente").load(window.location.href + " #demandesAttente");
+                        $("#a-prendre").load(window.location.href + " #a-prendre");
+                        prepareElements()
+                    }
+
 		        });
               
               
             } else {
-                alert("Please select a range");
+                alert("Veuillez sélectionner une plage journalière");
             }
         });
+                    }
+
+                });
+
+
+            } else {
+                alert("Veuillez sélectionner une plage journalière");
+            }
+        });
+    }
+
+
+
+    $(document).ready(function () {
+
+        prepareElements()
 
     });
     
@@ -332,6 +407,15 @@
         vertical-align: middle;
         margin-right: 3px;
     }
+
+
+
+    .list-group{
+    max-height: 300px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
 
 </style>
 

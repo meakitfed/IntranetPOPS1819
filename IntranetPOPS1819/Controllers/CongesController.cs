@@ -38,14 +38,43 @@ namespace IntranetPOPS1819.Controllers
             return View(vm);
         }
 
-       public string DemandeConge(DateTime Debut, DateTime Fin)
-       {
+        public string DemandeConge(DateTime Debut, DateTime Fin)
+        {
             IDal dal = new Dal();
             Collaborateur col = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 
             Conge conge = new Conge { Debut = Debut, Fin = Fin, Type = TypeConge.RTT };
-            System.Diagnostics.Debug.WriteLine(col + " " + conge + " " +  Debut+ " " + Fin );
-            return col.isCongeValide(conge).ToString();
+            //System.Diagnostics.Debug.WriteLine(col + " " + conge + " " +  Debut+ " " + Fin );
+
+            string txt = "Service : " + col.Nom + "\n";
+            Message notif = new Message(TypeMessage.NotifCongeAller, col.Prenom + col.Nom + " - " + col.Service.Nom, conge);
+
+            ValiditeConge validite = col.isCongeValide(conge);
+
+            if (HttpContext.User.Identity.IsAuthenticated && validite == ValiditeConge.ok)
+            {
+                dal.AjoutNotif(col.Service.Chef().Id, notif);
+                dal.AjoutConge(col.Id, conge);
+                dal.EnvoiCongeChef(col.Service.Id, col.Id, conge.Id);
+            }
+
+            return validite.ToString();
+        }
+
+        public int SupprimerConge(int id)
+        {
+        
+            IDal dal = new Dal();
+            Conge c = dal.ObtenirConge(id);
+            //TODO attention dangereux
+            if (c.Statut == StatutConge.EnCours || c.Statut == StatutConge.ValideChef)
+            {
+                dal.SupprimerDemandeConge(id);
+            }
+            else return -1;
+
+            return 0;
+
         }
 
 
