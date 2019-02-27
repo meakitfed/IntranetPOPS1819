@@ -46,6 +46,9 @@ namespace IntranetPOPS1819.Models
 		public string ResumeFileUrl { set; get; }
 
 		public string Filename { set; get; }
+
+		[ScaffoldColumn(false)]
+		public int IdCollab { get; set; }
 	}
 
     public enum StatutLigneDeFrais

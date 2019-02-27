@@ -34,7 +34,7 @@ namespace IntranetPOPS1819.Controllers
 			{
 				System.Diagnostics.Debug.WriteLine("Passage dans EnvoyerNote" + IdNote);
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				dal.EnvoiNoteDeFraisChefService(c.Service.Id, c.Id, IdNote);
+				dal.EnvoiNoteDeFrais(c.Service.Id, c.Id, IdNote);
 				System.Diagnostics.Debug.WriteLine(c.GetNotesDeFraisAValider().Count);
 				return true;
 			}
@@ -206,7 +206,7 @@ namespace IntranetPOPS1819.Controllers
 			return View(vm);
 		}
 
-		[HttpPost]
+		/*[HttpPost]
 		public ActionResult Index(OngletNoteDeFraisViewModel vm)
 		{
 			if (HttpContext.User.Identity.IsAuthenticated)
@@ -224,8 +224,8 @@ namespace IntranetPOPS1819.Controllers
 						if (vm._Frais.Complete)
 						{
 							dal.EnvoiNoteDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
-							Message notif = new Message(TypeMessage.NotifLigneAller, vm._Collaborateur.Prenom + vm._Collaborateur.Nom + " - " + vm._Collaborateur.Service.Nom, vm._Frais);
-                            dal.AjoutNotif(vm._Collaborateur.Service.Chef().Id, notif);
+							//Message notif = new Message(TypeMessage.NotifLigneAller, vm._Collaborateur.Prenom + vm._Collaborateur.Nom + " - " + vm._Collaborateur.Service.Nom, vm._Frais);
+                            //dal.AjoutNotif(vm._Collaborateur.Service.Chef().Id, notif);
 							
 						}
 						return View(vm);
@@ -234,8 +234,7 @@ namespace IntranetPOPS1819.Controllers
 				return View(vm);
 			}
 			return View();
-
-		}
+		}*/
 
 		public ActionResult InformationLigneDeFrais(int IdNote)
 		{

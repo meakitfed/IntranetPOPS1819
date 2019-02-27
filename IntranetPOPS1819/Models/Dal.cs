@@ -57,6 +57,116 @@ namespace IntranetPOPS1819.Models
 		{
 			return bdd.Services.FirstOrDefault(t => t.Type == type);
 		}
+		public Collaborateur ObtenirDirecteurFinancier()
+		{
+			Service service = bdd.Services.FirstOrDefault(s => s.Type == TypeService.Comptabilité);
+			if(service != null)
+			{
+				return service.Chef();
+			}
+			return null;
+		}
+		public Collaborateur ObtenirPDG()
+		{
+			Service service = bdd.Services.FirstOrDefault(s => s.Type == TypeService.Direction);
+			if (service != null)
+			{
+				return service.Chef();
+			}
+			return null;
+		}
+		public void EnvoiNoteDeFrais(int idService, int idCollab, int idNote)
+		{
+			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
+			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
+			NoteDeFrais n = bdd.NotesDeFrais.FirstOrDefault(note => note.Id == idNote);
+			if (c != null && s != null && n != null)
+			{
+				switch(n.Statut)
+				{
+					case StatutNote.Brouillon:
+						n.Statut = StatutNote.EnAttenteDeValidation;
+						if (c.Service.Type == TypeService.Direction)
+						{
+							//Cas PDG
+							Collaborateur directeurFinancier = ObtenirDirecteurFinancier();
+							AjoutNotif(directeurFinancier.Id, new Message(TypeMessage.NotifNoteAller, c, n));
+							directeurFinancier.Service.NotesDeFrais.Add(n);
+						}
+						else if (c.Service.Type == TypeService.Comptabilité)
+						{
+							if (c.Chef)
+							{
+								Collaborateur pdg = ObtenirPDG();
+								AjoutNotif(pdg.Id, new Message(TypeMessage.NotifNoteAller, c, n));
+								pdg.Service.NotesDeFrais.Add(n);
+								//Cas chef de service compta
+							}
+							else
+							{
+								Collaborateur comptaChef = c.Service.Chef();
+								AjoutNotif(comptaChef.Id, new Message(TypeMessage.NotifNoteAller, c, n));
+								comptaChef.Service.NotesDeFrais.Add(n);
+								//Cas collab compta
+							}
+						}
+						else
+						{
+							if (c.Chef)
+							{
+								Service compta = bdd.Services.FirstOrDefault(serv => serv.Type == TypeService.Comptabilité);
+								//TODO envoyer notif à tout le service compta ? 
+								//Collaborateur pdg = ObtenirPDG();
+								//AjoutNotif(pdg.Id, new Message(TypeMessage.NotifNoteAller, c, n));
+								compta.NotesDeFrais.Add(n);
+								//Cas chef de service d'un autre service
+							}
+							else
+							{
+								Collaborateur chef = c.Service.Chef();
+								AjoutNotif(chef.Id, new Message(TypeMessage.NotifNoteAller, c, n));
+								chef.Service.NotesDeFrais.Add(n);
+								//Cas collab d'un autre service
+							}
+						}
+						break;
+					case StatutNote.EnAttenteDeValidation:
+						if (c.Service.Type == TypeService.Direction)
+						{
+							//Cas PDG
+						}
+						else if (c.Service.Type == TypeService.Comptabilité)
+						{
+							if (c.Chef)
+							{
+								//Cas chef de service compta
+							}
+							else
+							{
+								//Cas collab compta
+							}
+						}
+						else
+						{
+							if (c.Chef)
+							{
+								//Cas chef de service d'un autre service
+							}
+							else
+							{
+								//Cas collab d'un autre service
+							}
+						}
+						break;
+					case StatutNote.ValidéeParLeChef:
+						break;
+					
+					default:
+						break;
+				}
+			}
+			bdd.SaveChanges();
+		}
 		public void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
@@ -65,7 +175,6 @@ namespace IntranetPOPS1819.Models
 			if (c != null && s != null && n != null)
 			{
 				s.NotesDeFrais.Add(n);
-				bdd.SaveChanges();
 			}
 		}
 		public void MiseAJourNotesDeFrais(int IdCollaborateur)
@@ -150,6 +259,11 @@ namespace IntranetPOPS1819.Models
 				AssignerService(compta.Id, brian.Id);
 				AssignerChefDeService(brian.Id);
 
+				MiseAJourNotesDeFrais(nathan.Id);
+				MiseAJourNotesDeFrais(brian.Id);
+				MiseAJourNotesDeFrais(didier.Id);
+				MiseAJourNotesDeFrais(isabelle.Id);
+
 				List<Mission> Missions = new List<Mission>();
 				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
 				for (int j = 0; j < labelsMission.Length; j++)
@@ -158,6 +272,7 @@ namespace IntranetPOPS1819.Models
 					AssignerMission(m.Id, nathan.Id);
 					AssignerMission(m.Id, brian.Id);
 				}
+
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
@@ -181,12 +296,13 @@ namespace IntranetPOPS1819.Models
                 //throw;
             }
         }
+
 		public void AjoutNoteDeFrais(int year, int idCollab, int month)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
 			if (c != null)
 			{
-				NoteDeFrais n = new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false };
+				NoteDeFrais n = new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false, typeDuService = c.Service.Type };
 				c.NotesDeFrais.Add(n);
 				bdd.NotesDeFrais.Add(n);
 				bdd.SaveChanges();
@@ -200,8 +316,7 @@ namespace IntranetPOPS1819.Models
 				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
 				if(note != null)
 				{
-					//ligne.Note = note;
-					
+					ligne.IdCollab = idCollab;
 					note.LignesDeFrais.Add(ligne);
 					bdd.LigneDeFrais.Add(ligne);
 					System.Diagnostics.Debug.WriteLine("Création ligne de frais dans la BDD");
@@ -256,7 +371,6 @@ namespace IntranetPOPS1819.Models
 			bdd.Collaborateurs.Add(c);
 			bdd.SaveChanges();
 			System.Diagnostics.Debug.WriteLine(c.Id);
-			MiseAJourNotesDeFrais(c.Id);
 			return c;
         }
 

@@ -12,9 +12,11 @@ namespace IntranetPOPS1819.Models
         List<Collaborateur> ObtenirCollaborateursService(int id);
         Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp);
 		void AssignerChefDeService(int idCollab);
+		Collaborateur ObtenirDirecteurFinancier();
+		Collaborateur ObtenirPDG();
 
-        // Services
-        Service ObtenirServiceDeType(TypeService type);
+		// Services
+		Service ObtenirServiceDeType(TypeService type);
         List<Service> ObtenirTousLesServices();
 		Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda);
 		void AssignerService(int idService, int idCollaborateur);
@@ -38,9 +40,10 @@ namespace IntranetPOPS1819.Models
         void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote);
         void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut);
 		void ChangerMissionLigneDeFrais(int idLigne, int idMission);
+		void EnvoiNoteDeFrais(int idService, int idCollab, int idNote);
 
-        // Congés
-        void AjoutConge(int idCollab, Conge c);
+		// Congés
+		void AjoutConge(int idCollab, Conge c);
         void ChangerStatut(int id, StatutConge s);                                      // Testé
         void EnvoiCongeChef(int idService, int idCollab, int idConge);
         void ValiderConge(int idCollab, int idConge);                                   // Testé
