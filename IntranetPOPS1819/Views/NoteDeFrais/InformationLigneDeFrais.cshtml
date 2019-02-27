@@ -26,7 +26,7 @@
 											"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 										);
 									  columns.Bound(c => c.Type);
-									  columns.Bound(c => c.Date).Format("{0:dd/MM/yyyy}");
+									  columns.Bound(c => c.Date);
 									  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
 									  columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
 									  columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);
@@ -93,7 +93,6 @@
 	function onSave(e) {
 		//Implement the event handler for Save
 		console.log("save");
-		e.model.set("Date", e.model.date)
 	}
 
 		function onSaveChanges(e) {
