@@ -79,15 +79,15 @@
                     <div class=" dropdown-menu dropdown-menu-right scrollable-menu " aria-labelledby="navbarDropdownMenuLink">
                         @foreach (var m in c.Notifications)
                         {
-                            <a href=@m.Redirection class="list-group-item">
+                            <button class="list-group-item" onclick="window.location='@m.Redirection';">
                                 <b>@m.Titre</b>
                                 <p>
                                     <em>@m.Emetteur</em><br />
-                                    @m.Contenu<br />
+                                    @*@m.Contenu<br />
                                     @m.Date.ToString("dd/MM/yyyy")<br />
-                                    <em>Cliquez pour consulter</em>
+                                    <em>Cliquez pour consulter</em>*@
                                 </p>
-                            </a>
+                            </button>
                             
                         }
                     </div>
@@ -115,4 +115,14 @@
         position: relative;
         top: -10px;
     }
+
+    .list-group-item:hover {
+        background-color: lightgrey;
+    }
+
+    .dropdown-menu {
+        width: auto !important;
+        height: auto !important;
+    }
+   
 </style>
