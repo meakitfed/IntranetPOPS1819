@@ -35,6 +35,7 @@ namespace IntranetPOPS1819.Models
         void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
         void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote);
         void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut);
+		void ChangerMissionLigneDeFrais(int idLigne, int idMission);
 
         // Congés
         void AjoutConge(int idCollab, Conge c);

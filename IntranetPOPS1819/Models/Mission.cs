@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
 
 namespace IntranetPOPS1819.Models
 {
@@ -11,7 +12,10 @@ namespace IntranetPOPS1819.Models
 		public int Id { get; set; }
         public string Nom { get; set; }
         public StatutMission Statut { get; set; }
-        public Service Service { get; set; }
+        public virtual Service Service { get; set; }
+
+		[ScriptIgnore]
+		public virtual ICollection<Collaborateur> Collaborateurs { get; set; } = new HashSet<Collaborateur>();
 
 		public int CompareTo(object obj)
 		{
