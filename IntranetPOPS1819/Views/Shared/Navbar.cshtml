@@ -76,18 +76,18 @@
 				</li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i>@if(c.Notifications.Count() > 0){<span class="badge badge-notify">@c.Notifications.Count()</span>}</a>
-                    <div class=" dropdown-menu dropdown-menu-right scrollable-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <div class=" dropdown-menu dropdown-menu-right scrollable-menu " aria-labelledby="navbarDropdownMenuLink">
                         @foreach (var m in c.Notifications)
                         {
-                            <div href=@m.Redirection>
+                            <a href=@m.Redirection class="list-group-item">
                                 <b>@m.Titre</b>
                                 <p>
                                     <em>@m.Emetteur</em><br />
                                     @m.Contenu<br />
                                     @m.Date.ToString("dd/MM/yyyy")<br />
-                                    <a><em>Cliquez pour consulter</em></a>
+                                    <em>Cliquez pour consulter</em>
                                 </p>
-                            </div>
+                            </a>
                             
                         }
                     </div>

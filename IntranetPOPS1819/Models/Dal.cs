@@ -114,7 +114,7 @@ namespace IntranetPOPS1819.Models
 		{
             try
             {
-				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
+				/*Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
 				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
 				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
 				Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
@@ -126,8 +126,8 @@ namespace IntranetPOPS1819.Models
 				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);
 				m.Collaborateurs.Add(nathan);
 				AssignerMission(m.Id, brian.Id);
-				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);
-				/*Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "Bonnard", Prenom = "Nathan", MotDePasse = EncodeMD5("mdp"), CongesRestants = 5f, Present = true };
+				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);*/
+				Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "Bonnard", Prenom = "Nathan", MotDePasse = EncodeMD5("mdp"), CongesRestants = 5f, Present = true };
                 nathan.LastUpdate = new DateTime(2018, 1, 1);
                 Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true, Present = true };
                 brian.LastUpdate = new DateTime(2017, 1, 1);
@@ -198,7 +198,7 @@ namespace IntranetPOPS1819.Models
                 AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-            */
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 02, 5), Fin = new DateTime(2019, 02, 10), Statut = StatutConge.Valide });
 
 			}
             catch (DbEntityValidationException e)

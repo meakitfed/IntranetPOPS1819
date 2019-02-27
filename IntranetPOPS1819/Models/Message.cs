@@ -29,7 +29,7 @@ namespace IntranetPOPS1819.Models
             {
                 case TypeMessage.NotifCongeAller:
                     Titre = "Demande de congés";
-                    Contenu = "\nDu " + ((Conge)o).Debut + " au " + ((Conge)o).Fin;
+                    Contenu = "\nDu " + ((Conge)o).Debut.ToString("dd/MM/yyyy") + " au " + ((Conge)o).Fin.ToString("dd/MM/yyyy");
                     if (((Conge)o).Statut == StatutConge.EnCours)
                         Redirection = "/ChefDeService/Index";
                     else
@@ -37,7 +37,7 @@ namespace IntranetPOPS1819.Models
                     break;
                 case TypeMessage.NotifCongeRetour:
                     Titre = "Votre demande de congés";
-                    Contenu = "Du " + ((Conge)o).Debut + " au " + ((Conge)o).Fin + "\n" + ((Conge)o).Statut;
+                    Contenu = "Du " + ((Conge)o).Debut.ToString("dd/MM/yyyy") + " au " + ((Conge)o).Fin.ToString("dd/MM/yyyy") + "\n" + ((Conge)o).Statut;
                     break;
                 case TypeMessage.NotifLigneAller:    // TODO
                     Titre = "";
