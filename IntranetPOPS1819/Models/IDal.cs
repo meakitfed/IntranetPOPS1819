@@ -11,12 +11,14 @@ namespace IntranetPOPS1819.Models
         List<Collaborateur> ObtenirTousLesCollaborateurs();
         List<Collaborateur> ObtenirCollaborateursService(int id);
         Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp);
+		void AssignerChefDeService(int idCollab);
 
         // Services
         Service ObtenirServiceDeType(TypeService type);
         List<Service> ObtenirTousLesServices();
-        Service AjoutService(string nom);
-        void AssignerService(int idService, int idCollaborateur);
+		Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda);
+		void AssignerService(int idService, int idCollaborateur);
+		void EnleverChef(int idService);
 
         // Missions
         Mission GetMission(int idMission);

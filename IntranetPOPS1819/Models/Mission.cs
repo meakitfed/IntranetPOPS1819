@@ -11,7 +11,7 @@ namespace IntranetPOPS1819.Models
     {
 		public int Id { get; set; }
         public string Nom { get; set; }
-        public StatutMission Statut { get; set; }
+		public StatutMission Statut { get; set; } = StatutMission.EnCours;
         public virtual Service Service { get; set; }
 
 		[ScriptIgnore]
@@ -32,7 +32,7 @@ namespace IntranetPOPS1819.Models
     public enum StatutMission
     {
         EnCours, 
-        Validée,
+        Terminée,
         Annulée
     }
 }

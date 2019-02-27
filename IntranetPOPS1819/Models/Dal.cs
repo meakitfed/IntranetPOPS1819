@@ -110,96 +110,59 @@ namespace IntranetPOPS1819.Models
 			bdd.SaveChanges();
 		}
 
+		public void EnleverChef(int idService)
+		{
+			Service service = bdd.Services.FirstOrDefault(c => idService == c.Id);
+			foreach(Collaborateur c in service.Collaborateurs)
+			{
+				if(c.Chef)
+				{
+					c.Chef = false;
+				}
+			}
+		}
+		public void AssignerChefDeService(int idCollab)
+		{
+			Collaborateur collab = bdd.Collaborateurs.FirstOrDefault(c => idCollab == c.Id);
+			if(collab.Service != null)
+			{
+				EnleverChef(collab.Service.Id);
+				collab.Chef = true;
+			}
+		}
 		public void InitializeBdd()
 		{
             try
             {
-				/*Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
+				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
 				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
 				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
 				Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
 
-				Mission m = AjoutMission("SuperMission");
-				m.Collaborateurs.Add(nathan);
-				AssignerMission(m.Id, nathan.Id);
+				Service compta = AjoutService("Comptabilité", TypeService.Comptabilité);
+				AssignerService(compta.Id, didier.Id);
 
-				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);
-				m.Collaborateurs.Add(nathan);
-				AssignerMission(m.Id, brian.Id);
-				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);*/
-				Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "Bonnard", Prenom = "Nathan", MotDePasse = EncodeMD5("mdp"), CongesRestants = 5f, Present = true };
-                nathan.LastUpdate = new DateTime(2018, 1, 1);
-                Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true, Present = true };
-                brian.LastUpdate = new DateTime(2017, 1, 1);
-                Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true, CongesRestants = 12f, Present = true };
-                Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true, Present = true };
+				Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
+				AssignerService(compta.Id, isabelle.Id);
 
-                Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier }, Type = TypeService.Comptabilité };
-                Service rh = new Service { Nom = "RH", Type = TypeService.RessourcesHumaines };
-                Service marketing = new Service { Nom = "Marketing", Type = TypeService.ServiceLambda };
+				Service marketing = AjoutService("Marketing");
+				AssignerService(compta.Id, nathan.Id);
+				AssignerService(compta.Id, brian.Id);
+				AssignerChefDeService(brian.Id);
 
-                didier.Service = compta;
-                isabelle.Service = rh;
-                nathan.Service = marketing;
-                brian.Service = marketing;
-                brian.Chef = true;
-
-                List<Service> services = new List<Service>
+				List<Mission> Missions = new List<Mission>();
+				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
+				for (int j = 0; j < labelsMission.Length; j++)
 				{
-					compta,
-					rh,
-					marketing
-				};
-                List<Collaborateur> collabos = new List<Collaborateur>
-				{
-					nathan,
-					brian,
-					didier,
-					isabelle
-				};
-
-
-                Random r = new Random();
-                List<Mission> Missions = new List<Mission>();
-                string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
-                for (int j = 0; j < labelsMission.Length; j++)
-                {
-                    Missions.Add(new Mission { Nom = labelsMission[j], Service = compta, Statut = StatutMission.EnCours });
-                }
-
-                
-
-                foreach (Mission m in Missions)
-                {
-                    nathan.Missions.Add(m);
-                    brian.Missions.Add(m);
-                    bdd.Missions.Add(m);
-                }
-                //brian.Missions.Add(nathan.Missions[1]);
-                foreach (Service s in services)
-                    bdd.Services.Add(s);
-                foreach (Collaborateur c in collabos)
-                    bdd.Collaborateurs.Add(c);
-                bdd.SaveChanges();
-				MiseAJourNotesDeFrais(nathan.Id);
-				string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
-				foreach (NoteDeFrais n in nathan.NotesDeFrais)
-				{
-					for (int j = 0; j < 5; j++)
-					{
-						int rand = r.Next(0, labelsLigne.Length);
-						int rand2 = r.Next(0, Missions.Count);
-						AjoutLigneDeFrais(nathan.Id, n.Id, new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) });
-					}
+					Mission m = AjoutMission(labelsMission[j], compta.Id);
+					AssignerMission(m.Id, nathan.Id);
+					AssignerMission(m.Id, brian.Id);
 				}
-
-                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 02, 5), Fin = new DateTime(2019, 02, 10), Statut = StatutConge.Valide });
-
+				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 			}
             catch (DbEntityValidationException e)
             {
@@ -223,7 +186,9 @@ namespace IntranetPOPS1819.Models
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
 			if (c != null)
 			{
-				c.NotesDeFrais.Add(new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false/*, Collaborateur = c */});
+				NoteDeFrais n = new NoteDeFrais { Date = new DateTime(year, month, 1), Statut = StatutNote.Brouillon, Actif = false };
+				c.NotesDeFrais.Add(n);
+				bdd.NotesDeFrais.Add(n);
 				bdd.SaveChanges();
 			}
 		}
@@ -295,16 +260,17 @@ namespace IntranetPOPS1819.Models
 			return c;
         }
 
-		public Service AjoutService(string nom)
+		public Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda)
 		{
 			Service s = new Service { Nom = nom };
 			s.Collaborateurs = new List<Collaborateur>();
 			s.Missions = new List<Mission>();
+			s.Type = type;
 			bdd.Services.Add(s);
 			bdd.SaveChanges();
 			return s;
 		}
-        
+
 		public Mission AjoutMission(string nom, int serviceId)
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == serviceId);
@@ -365,6 +331,7 @@ namespace IntranetPOPS1819.Models
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollaborateur);
+			s.Collaborateurs.Add(c);
 			c.Service = s;
 			bdd.SaveChanges();
 		}
