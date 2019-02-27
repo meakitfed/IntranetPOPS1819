@@ -374,9 +374,12 @@ namespace IntranetPOPS1819.Models
 			return BitConverter.ToString(new MD5CryptoServiceProvider().ComputeHash(ASCIIEncoding.Default.GetBytes(motDePasseSel)));
 		}
 
-        public void SupprimerDemandeConge(int id)
+        public void SupprimerDemandeConge(int idCollab, int idConge)
         {
-            bdd.Conges.Remove(bdd.Conges.FirstOrDefault(c => c.Id == id));
+            Conge theConge = ObtenirConge(idConge);
+            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants += theConge.GetDuree();
+            bdd.Conges.Remove(bdd.Conges.FirstOrDefault(c => c.Id == idConge));
+
             bdd.SaveChanges();
         }
 	}

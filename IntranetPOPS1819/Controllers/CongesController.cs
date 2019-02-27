@@ -61,15 +61,17 @@ namespace IntranetPOPS1819.Controllers
             return validite.ToString();
         }
 
-        public int SupprimerConge(int id)
+        public int SupprimerConge(int idConge)
         {
         
             IDal dal = new Dal();
-            Conge c = dal.ObtenirConge(id);
+            Collaborateur col = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            Conge c = dal.ObtenirConge(idConge);
+
             //TODO attention dangereux
             if (c.Statut == StatutConge.EnCours || c.Statut == StatutConge.ValideChef)
             {
-                dal.SupprimerDemandeConge(id);
+                dal.SupprimerDemandeConge(col.Id,  idConge);
             }
             else return -1;
 

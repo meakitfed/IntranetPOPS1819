@@ -51,7 +51,7 @@
                             if (c.Statut == StatutConge.EnCours  ||  c.Statut == StatutConge.ValideChef)
                             {
                                 <option id="@c.Id" role="option">
-                                    @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut
+                                    Id: @c.Id - @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours
                                 </option>
                             }
                         }
@@ -61,7 +61,9 @@
                     </select>
                     
                     <button id="supprimer" type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
+                    <br />
                 </div>
+                <div id="retourSupprimer"></div>
             </div>
 
 
@@ -85,7 +87,7 @@
                                 if (c.Statut == StatutConge.Valide)
                                 {
                                     <li id="@c.Id">
-                                        @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut
+                                        Id: @c.Id - @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours
                                     </li>
                                 }
                             }
@@ -260,69 +262,34 @@
 
     function prepareElements() {
 
-        var today = new Date();
-        var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
-        multiViewCalendar.value(today);
+        
 
-        $("#conges_enattente_list").change(function () {
+
+        $(document).on("change", "#conges_enattente_list",function () {
             if ($(this).val() != 0) {
                 $("#supprimer").removeClass('disabled')
             }
         })
 
-        $("#supprimer").click(function () {
+        $(document).on('click', '#supprimer', function (){
             if (!$(this).hasClass("disabled")) {
-                $.post("SupprimerConge", { id: $("#conges_enattente_list").children(":selected").attr("id") }, function (data) {
+                $.post("SupprimerConge", { idConge: $("#conges_enattente_list").children(":selected").attr("id") }, function (data) {
                     if (data == 0) {
 
-                        alert("Ok ça roule")
-                        $("#demandesAttente").load(window.location.href + " #demandesAttente");
-                        $("#a-prendre").load(window.location.href + " #a-prendre");
+                        setTimeout("location.reload(true);", 1000);
+
+                        $("#retourSupprimer").html("<font color=\"green\">Votre demande de congé a bien été supprimée.</font>");
+                    }
+                    else {
+
+                        $("#retourSupprimer").html("<font color=\"red\">Il y a eu une erreur</font>");
 
                     }
                 });
             }
         })
 
-        $("#demanderConge").click(function () {
-            var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
-            var range = multiViewCalendar.selectRange();
-            if (range.start && range.end) {
-                var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-                console.log(typeof (range.start.toLocaleDateString(options)))
-                console.log(range.start)
-                console.log(range.start.toLocaleDateString(options))
-
-                $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
-                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
-                    else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
-                    else if (data == "ok") {
-                        $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
-                        $("#demandesAttente").load(window.location.href + " #demandesAttente");
-                        $("#a-prendre").load(window.location.href + " #a-prendre");
-                         var today = new Date();
-        var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
-        multiViewCalendar.value(today);
-
-        $(document).on("change", "#conges_enattente_list",function () {
-            if ($(this).val() != 0) {
-                $("#supprimer").removeClass('disabled')
-                $("#supprimer").addClass('active')
-            }
-        })
-
-        $(document).on('click', '#supprimer', function (){
-            if (!$(this).hasClass("disabled")) {
-                $.post("SupprimerConge", { id: $("#conges_enattente_list").children(":selected").attr("id")}, function (data) {
-                    alert("Ok ça roule")
-                    $("#demandesAttente").load(window.location.href + " #demandesAttente");
-                    $("#a-prendre").load(window.location.href + " #a-prendre");
-                });
-            }
-        })
-
-        $("#demanderConge").click(function () {
+        $(document).on("click", "#demanderConge", function () {
             var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
             var range = multiViewCalendar.selectRange();
             if (range.start && range.end) {
@@ -337,8 +304,8 @@
                     else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
                     else if (data == "ok") {
                         $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
-                        $("#demandesAttente").load(window.location.href + " #demandesAttente");
-                        $("#a-prendre").load(window.location.href + " #a-prendre");
+                        setTimeout("location.reload(true);", 1000);
+
                         prepareElements()
                     }
 
@@ -349,20 +316,16 @@
                 alert("Veuillez sélectionner une plage journalière");
             }
         });
-                    }
-
-                });
-
-
-            } else {
-                alert("Veuillez sélectionner une plage journalière");
-            }
-        });
+                   
     }
 
 
 
     $(document).ready(function () {
+
+        var today = new Date();
+        var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
+        multiViewCalendar.value(today);
 
         prepareElements()
 
