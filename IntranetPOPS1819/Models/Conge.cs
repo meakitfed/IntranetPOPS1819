@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace IntranetPOPS1819.Models
@@ -26,6 +27,16 @@ namespace IntranetPOPS1819.Models
         public int GetDuree()
         {
             return (Fin - Debut).Days + 1;
+        }
+
+        public List<DateTime> GetAllDaysInConge()
+        {
+            List<DateTime> allDates = new List<DateTime>();
+
+            for (DateTime date = Debut.Date; date <= Fin.Date; date = date.AddDays(1))
+                allDates.Add(date);
+
+            return allDates;
         }
 
     }

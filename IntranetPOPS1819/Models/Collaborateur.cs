@@ -24,7 +24,7 @@ namespace IntranetPOPS1819.Models
 		public string MotDePasse { get; set; }
 		public string Nom { get; set; }
         public string Prenom { get; set; }
-		public float CongesRestants { get; set; } = 0;
+		public float CongesRestants { get; set; } = 30;
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
@@ -53,15 +53,15 @@ namespace IntranetPOPS1819.Models
         
 		public int GetNombreCongesPrisCetteAnnee()
 		{
-			/*int nb = 0;
+			int nb = 0;
 			if(Conges != null)
 			{
 				foreach (Conge c in Conges)
 				{
-                    if (c.Debut.Year == DateTime.Now.Year) nb += c.Fin.Subtract(c.Debut).Days;
+                    if (c.Debut.Year == DateTime.Now.Year  &&  c.Statut == StatutConge.Valide) nb += c.Fin.Subtract(c.Debut).Days;
 				}
 				return nb;
-			}*/
+			}
 			return 0;
 		}
 
@@ -94,6 +94,40 @@ namespace IntranetPOPS1819.Models
             }
             return allDates;
         }
+
+
+        public ValiditeConge isCongeValide(Conge c)
+        {
+            if (c.GetDuree() > CongesRestants) return ValiditeConge.errorPasAssezDeCongesRestants;
+            else foreach(DateTime d1 in c.GetAllDaysInConge())
+                {
+                    foreach(Conge autreConge in Conges)
+                    {
+                        foreach (DateTime d2 in autreConge.GetAllDaysInConge()) if (d1.Date == d2.Date) return ValiditeConge.errorChevauchage;
+                    }
+                }
+
+            return ValiditeConge.ok;
+        }
+
+
+        public List<DateTime> GetTousJoursCongesValides()
+        {
+            List<DateTime> allDates = new List<DateTime>();
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Statut == StatutConge.Valide)
+                        for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
+                            allDates.Add(date);
+                }
+                return allDates;
+            }
+            return allDates;
+        }
+
+
 
         public List<String> GetJSONTousJoursCongesEnAttente()
         {
@@ -167,4 +201,11 @@ namespace IntranetPOPS1819.Models
             return nb;
         }
     }
+}
+
+public enum ValiditeConge
+{
+    ok,
+    errorChevauchage,
+    errorPasAssezDeCongesRestants,
 }

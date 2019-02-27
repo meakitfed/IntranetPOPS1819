@@ -24,18 +24,18 @@
 
 
 
-        <div class="col-lg-2 table-bordered">
+        <div id="recapConges" class="col-lg-2 table-bordered">
             <h3><font size="4">Récapitulatif Congés</font></h3>
             <br />
 
             <p>Déjà pris cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee() jours</p>
          
-
-            <p>A prendre : @Model._Collaborateur.CongesRestants jours</p>
-
+            <div id="a-prendre">
+                <p>A prendre : @Model._Collaborateur.CongesRestants jours</p>
+            </div>
 
             <div class="listbox-area">
-                <div class="left-area">
+                <div id="demandesAttente" class="left-area">
                     <span id="ss_elem">
                         Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente() jours
                     </span>
@@ -51,7 +51,7 @@
                             if (c.Statut == StatutConge.EnCours  ||  c.Statut == StatutConge.ValideChef)
                             {
                                 <option id="@c.Id" role="option">
-                                    @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut
+                                    Id: @c.Id - @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours
                                 </option>
                             }
                         }
@@ -59,11 +59,18 @@
 
 
                     </select>
+                    
+                    <button id="supprimer" type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
+                    <br />
                 </div>
+                <div id="retourSupprimer"></div>
             </div>
 
 
 
+            <br />
+            <br />
+            <br />
             <br />
 
             @if (@Model._Collaborateur.GetNombreCongesValidesFuturs() != 0)
@@ -73,26 +80,21 @@
                         <span id="ss_elem">
                             Demandes validées : @Model._Collaborateur.GetNombreCongesValidesFuturs() jours
                         </span>
-                        <select class="table-bordered"
-                            id="conges_valides_list"
-                            tabindex="0"
-                            role="listbox"
-                            aria-labelledby="conges_valides"
-                            size="5">
+                        <ul class="list-group">
 
                             @foreach (var c in Model._Collaborateur.Conges)
                             {
                                 if (c.Statut == StatutConge.Valide)
                                 {
-                                    <option id="@c.Id" role="option">
-                                        @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours : @c.Statut
-                                    </option>
+                                    <li id="@c.Id">
+                                        Id: @c.Id - @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours
+                                    </li>
                                 }
                             }
 
 
 
-                        </select>
+                        </ul>
                     </div>
                 </div>
 
@@ -104,7 +106,6 @@
 
             <br />
 
-            <button type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
 
 
 
@@ -126,22 +127,24 @@
 
 
         <div class="col-lg-8 table-bordered text-center">
-            <div class="demo-section k-content" style="text-align: center;">
-                <h4>Faire une demande</h4>
-                @(Html.Kendo().Calendar()
-                    .Name("calendar")
-                    .Selectable("multiple")
-                    // .DisableDates(DayOfWeek.Saturday, DayOfWeek.Sunday)
-                    .Culture("fr-FR")
-                    .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
-                    "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
-                    "# } #" +
-                    "#= data.value #")
+            <h2>Faire une demande de congés</h2>
+            <div id="example" style="text-align: center;">
+                <div class="demo-section k-content wide" style="display: inline-block;">
+
+                    <h4>Selectionnez une plage</h4>
+                    @(Html.Kendo().MultiViewCalendar()
+                                                .Name("multiViewCalendar")
+                                                .Selectable("range")
+                                                .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
+                                        "<div class=\"en-attente\"></div>" +
+                                        "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
+                                        "<div class=\"valide\"></div>" +
+                                        "# } #" +
+                                        "#= data.value #")
+                                    )
 
                     )
-                )
-
-
+                </div>
             </div>
             @*.MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
         "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
@@ -161,9 +164,15 @@
             <br />
 
 
-            <button type="button" class="btn btn-primary">Je veux ce congé !</button>
+            <button id="demanderConge" type="button" class="btn btn-primary">Je veux ce congé !</button>
+
             <br />
-            @using (Html.BeginForm())
+
+            <div id="retourConge"></div>
+
+            <br />
+
+            @*@using (Html.BeginForm())
             {
                 <div>
                     @Html.LabelFor(Model => Model._Conge.Debut)
@@ -181,7 +190,7 @@
                     @Html.ValidationMessageFor(Model => Model._Conge.Type)
                 </div>
                 <input type="submit" value="Demander congé" />
-            }
+            }*@
 
         </div>
 
@@ -204,7 +213,9 @@
 
 
         <div class="col-lg-2 table-bordered">
+            <h2>Aujourd'hui : </h2>
             <h4>@DateTime.Today.ToString("dd/MM/yyyy")</h4>
+            <br />
             <h3><font size="4">Informations du service</font></h3>
             <br />
 
@@ -220,10 +231,14 @@
 <script>
     
 
-    var raw = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesEnAttente() ));
-    var enAttente = raw.map(x => parseInt(x.substring(6, 19)))
-    var refusee = []
-    var validee = []
+    var rawAttente = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesEnAttente() ));
+    var enAttente = rawAttente.map(x => parseInt(x.substring(6, 19)))
+
+    var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
+    var estValide = rawValide.map(x => parseInt(x.substring(6, 19)))
+
+    var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
+    var estValide = rawValide.map(x => parseInt(x.substring(6,19)))
 
     @*
     var temp = @Html.Raw(Json.Encode(Model._Collaborateur.GetJSONTousJoursCongesEnAttente() ));
@@ -231,16 +246,90 @@
     var enAttente = ouu.map(x => +new Date(x[0], x[1], x[2]))
     *@
 
-    console.log(raw)
+    console.log(rawAttente)
     console.log(enAttente)
 
+
+    console.log(rawValide)
+    console.log(estValide)
     @*
     //console.log(babu)
     console.log(temp)
     console.log(ouu)
     //console.log(ouuu)*@
     
+    //TODO TESTER TOUT CA
 
+    function prepareElements() {
+
+        
+
+
+        $(document).on("change", "#conges_enattente_list",function () {
+            if ($(this).val() != 0) {
+                $("#supprimer").removeClass('disabled')
+            }
+        })
+
+        $(document).on('click', '#supprimer', function (){
+            if (!$(this).hasClass("disabled")) {
+                $.post("SupprimerConge", { idConge: $("#conges_enattente_list").children(":selected").attr("id") }, function (data) {
+                    if (data == 0) {
+
+                        setTimeout("location.reload(true);", 1000);
+
+                        $("#retourSupprimer").html("<font color=\"green\">Votre demande de congé a bien été supprimée.</font>");
+                    }
+                    else {
+
+                        $("#retourSupprimer").html("<font color=\"red\">Il y a eu une erreur</font>");
+
+                    }
+                });
+            }
+        })
+
+        $(document).on("click", "#demanderConge", function () {
+            var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
+            var range = multiViewCalendar.selectRange();
+            if (range.start && range.end) {
+                var options = {year: 'numeric', month: 'long', day: 'numeric' };
+
+                console.log(typeof (range.start.toLocaleDateString(options)))
+                console.log(range.start)
+                console.log(range.start.toLocaleDateString(options))
+
+                $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
+                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
+                    else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
+                    else if (data == "ok") {
+                        $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
+                        setTimeout("location.reload(true);", 1000);
+
+                        prepareElements()
+                    }
+
+		        });
+              
+              
+            } else {
+                alert("Veuillez sélectionner une plage journalière");
+            }
+        });
+                   
+    }
+
+
+
+    $(document).ready(function () {
+
+        var today = new Date();
+        var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
+        multiViewCalendar.value(today);
+
+        prepareElements()
+
+    });
     
 
 </script>
@@ -256,27 +345,40 @@
     /* Template Days */
 
     .refuse {
-        font-weight: bold;
-        color: #C12600;
-    }
-    .enattente {
-        font-weight: bold;
-        color: #f9d71c;
-       @* font-size: "1";*@
-    }
-    .valide {
-        font-weight: bold;
-        color: #4cff00;
-    }
-
-    .birthday {
-        background: transparent url('@Url.Content("~/Content/images/badpage.jpg")') no-repeat 0 50%;
+        background: transparent url('@Url.Content("~/Content/images/red.png")') no-repeat 0 50%;
         display: inline-block;
         width: 16px;
         height: 16px;
         vertical-align: middle;
         margin-right: 3px;
     }
+
+    .valide {
+        background: transparent url('@Url.Content("~/Content/images/green.png")') no-repeat 0 50%;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 3px;
+    }
+
+    .en-attente {
+        background: transparent url('@Url.Content("~/Content/images/yellow.jpg")') no-repeat 0 50%;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        margin-right: 3px;
+    }
+
+
+
+    .list-group{
+    max-height: 300px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
 
 </style>
 

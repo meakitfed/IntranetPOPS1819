@@ -79,13 +79,16 @@
                     <div class=" dropdown-menu dropdown-menu-right scrollable-menu" aria-labelledby="navbarDropdownMenuLink">
                         @foreach (var m in c.Notifications)
                         {
-                            <b>@m.Titre</b>
-                            <p>
-                                <em>@m.Emetteur</em><br/>
-                                @m.Contenu<br />
-                                @m.Date<br />
-                                <a href=@m.Redirection><em>Cliquez pour consulter</em></a>
-                            </p>
+                            <div href=@m.Redirection>
+                                <b>@m.Titre</b>
+                                <p>
+                                    <em>@m.Emetteur</em><br />
+                                    @m.Contenu<br />
+                                    @m.Date.ToString("dd/MM/yyyy")<br />
+                                    <a><em>Cliquez pour consulter</em></a>
+                                </p>
+                            </div>
+                            
                         }
                     </div>
                 </li>
