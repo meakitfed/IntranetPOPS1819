@@ -134,7 +134,7 @@ namespace IntranetPOPS1819.Models
 		{
             try
             {
-				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
+				/*Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
 				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
 				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
 				Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
@@ -142,27 +142,82 @@ namespace IntranetPOPS1819.Models
 				Service compta = AjoutService("Comptabilité", TypeService.Comptabilité);
 				AssignerService(compta.Id, didier.Id);
 
-				Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
-				AssignerService(compta.Id, isabelle.Id);
+				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);
+				m.Collaborateurs.Add(nathan);
+				AssignerMission(m.Id, brian.Id);
+				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);
+				/*Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "Bonnard", Prenom = "Nathan", MotDePasse = EncodeMD5("mdp"), CongesRestants = 5f, Present = true };
+                nathan.LastUpdate = new DateTime(2018, 1, 1);
+                Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true, Present = true };
+                brian.LastUpdate = new DateTime(2017, 1, 1);
+                Collaborateur didier = new Collaborateur { Mail = "didier@gmail.com", Nom = "Degroote", Prenom = "Didier", MotDePasse = EncodeMD5("dede"), Chef = true, CongesRestants = 12f, Present = true };
+                Collaborateur isabelle = new Collaborateur { Mail = "isabelle@gmail.com", Nom = "Soun", Prenom = "Isabelle", MotDePasse = EncodeMD5("isa"), Chef = true, Present = true };
+
+                Service compta = new Service { Nom = "Comptabilité", Collaborateurs = { didier }, Type = TypeService.Comptabilité };
+                Service rh = new Service { Nom = "RH", Type = TypeService.RessourcesHumaines };
+                Service marketing = new Service { Nom = "Marketing", Type = TypeService.ServiceLambda };
 
 				Service marketing = AjoutService("Marketing");
 				AssignerService(compta.Id, nathan.Id);
 				AssignerService(compta.Id, brian.Id);
 				AssignerChefDeService(brian.Id);
 
-				List<Mission> Missions = new List<Mission>();
-				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
-				for (int j = 0; j < labelsMission.Length; j++)
+                List<Service> services = new List<Service>
 				{
-					Mission m = AjoutMission(labelsMission[j], compta.Id);
-					AssignerMission(m.Id, nathan.Id);
-					AssignerMission(m.Id, brian.Id);
+					compta,
+					rh,
+					marketing
+				};
+                List<Collaborateur> collabos = new List<Collaborateur>
+				{
+					nathan,
+					brian,
+					didier,
+					isabelle
+				};
+
+
+                Random r = new Random();
+                List<Mission> Missions = new List<Mission>();
+                string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
+                for (int j = 0; j < labelsMission.Length; j++)
+                {
+                    Missions.Add(new Mission { Nom = labelsMission[j], Service = compta, Statut = StatutMission.EnCours });
+                }
+
+                
+
+                foreach (Mission m in Missions)
+                {
+                    nathan.Missions.Add(m);
+                    brian.Missions.Add(m);
+                    bdd.Missions.Add(m);
+                }
+                //brian.Missions.Add(nathan.Missions[1]);
+                foreach (Service s in services)
+                    bdd.Services.Add(s);
+                foreach (Collaborateur c in collabos)
+                    bdd.Collaborateurs.Add(c);
+                bdd.SaveChanges();
+				MiseAJourNotesDeFrais(nathan.Id);
+				string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
+				foreach (NoteDeFrais n in nathan.NotesDeFrais)
+				{
+					for (int j = 0; j < 5; j++)
+					{
+						int rand = r.Next(0, labelsLigne.Length);
+						int rand2 = r.Next(0, Missions.Count);
+						AjoutLigneDeFrais(nathan.Id, n.Id, new LigneDeFrais { Nom = labelsLigne[rand], Complete = true, Mission = Missions[rand2], Somme = rand * rand2 * 5, Statut = (n.Actif ? StatutLigneDeFrais.EnAttente : StatutLigneDeFrais.Validée) });
+					}
 				}
-				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+            */
+
 			}
             catch (DbEntityValidationException e)
             {
