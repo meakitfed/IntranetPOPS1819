@@ -7,39 +7,39 @@ using System.Text;
 
 namespace IntranetPOPS1819.Models
 {
-    public class Dal : IDal
-    {
-        public BddContext bdd;
+	public class Dal : IDal
+	{
+		public BddContext bdd;
 
-        public Dal()
-        {
-            bdd = new BddContext();
-        }
+		public Dal()
+		{
+			bdd = new BddContext();
+		}
 
-        public void Dispose()
-        {
-            bdd.Dispose();
-        }
+		public void Dispose()
+		{
+			bdd.Dispose();
+		}
 
 		public List<Collaborateur> ObtenirTousLesCollaborateurs()
-        {
-            return bdd.Collaborateurs.ToList();
-        }
+		{
+			return bdd.Collaborateurs.ToList();
+		}
 
-        public List<Collaborateur> ObtenirCollaborateursService(int id)
-        {
-            return bdd.Services.First(s => s.Id == id).Collaborateurs.ToList();
-        }
+		public List<Collaborateur> ObtenirCollaborateursService(int id)
+		{
+			return bdd.Services.First(s => s.Id == id).Collaborateurs.ToList();
+		}
 
-        public List<Mission> ObtenirToutesLesMissions()
-        {
-            return bdd.Missions.ToList();
-        }
+		public List<Mission> ObtenirToutesLesMissions()
+		{
+			return bdd.Missions.ToList();
+		}
 
-        public List<Service> ObtenirTousLesServices()
-        {
-            return bdd.Services.ToList();
-        }
+		public List<Service> ObtenirTousLesServices()
+		{
+			return bdd.Services.ToList();
+		}
 		public void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut)
 		{
 			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(l => l.Id == idLigne);
@@ -62,7 +62,7 @@ namespace IntranetPOPS1819.Models
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
 			NoteDeFrais n = bdd.NotesDeFrais.FirstOrDefault(note => note.Id == idNote);
-			if(c != null && s != null && n != null)
+			if (c != null && s != null && n != null)
 			{
 				s.NotesDeFrais.Add(n);
 				bdd.SaveChanges();
@@ -101,11 +101,33 @@ namespace IntranetPOPS1819.Models
 				bdd.SaveChanges();
 			}
 		}
+
+		public void ChangerMissionLigneDeFrais(int idLigne, int idMission)
+		{
+			Mission mission = bdd.Missions.FirstOrDefault(m => m.Id == idMission);
+			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(l => l.Id == idLigne);
+			ligne.Mission = mission;
+			bdd.SaveChanges();
+		}
+
 		public void InitializeBdd()
 		{
             try
             {
-                Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "Bonnard", Prenom = "Nathan", MotDePasse = EncodeMD5("mdp"), CongesRestants = 5f, Present = true };
+				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
+				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
+				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
+				Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
+
+				Mission m = AjoutMission("SuperMission");
+				m.Collaborateurs.Add(nathan);
+				AssignerMission(m.Id, nathan.Id);
+
+				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);
+				m.Collaborateurs.Add(nathan);
+				AssignerMission(m.Id, brian.Id);
+				System.Diagnostics.Debug.WriteLine(nathan.Missions.Count);
+				/*Collaborateur nathan = new Collaborateur { Mail = "nathan.bonnard@u-psud.fr", Nom = "Bonnard", Prenom = "Nathan", MotDePasse = EncodeMD5("mdp"), CongesRestants = 5f, Present = true };
                 nathan.LastUpdate = new DateTime(2018, 1, 1);
                 Collaborateur brian = new Collaborateur { Mail = "admin@gmail.com", Nom = "Martin", Prenom = "Brian", MotDePasse = EncodeMD5("admin"), Admin = true, Present = true };
                 brian.LastUpdate = new DateTime(2017, 1, 1);
@@ -142,8 +164,7 @@ namespace IntranetPOPS1819.Models
                 string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
                 for (int j = 0; j < labelsMission.Length; j++)
                 {
-                    int rand = r.Next(0, labelsMission.Length);
-                    Missions.Add(new Mission { Nom = labelsMission[rand], Service = compta, Statut = StatutMission.EnCours });
+                    Missions.Add(new Mission { Nom = labelsMission[j], Service = compta, Statut = StatutMission.EnCours });
                 }
 
                 
@@ -151,17 +172,15 @@ namespace IntranetPOPS1819.Models
                 foreach (Mission m in Missions)
                 {
                     nathan.Missions.Add(m);
-                    //brian.Missions.Add(m);
+                    brian.Missions.Add(m);
                     bdd.Missions.Add(m);
                 }
-                brian.Missions.Add(nathan.Missions[1]);
+                //brian.Missions.Add(nathan.Missions[1]);
                 foreach (Service s in services)
                     bdd.Services.Add(s);
                 foreach (Collaborateur c in collabos)
                     bdd.Collaborateurs.Add(c);
-
                 bdd.SaveChanges();
-
 				MiseAJourNotesDeFrais(nathan.Id);
 				string[] labelsLigne = { "Restaurant", "Taxi", "Avion", "Péage", "Essence" };
 				foreach (NoteDeFrais n in nathan.NotesDeFrais)
@@ -179,9 +198,9 @@ namespace IntranetPOPS1819.Models
                 AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 3, 25), Fin = new DateTime(2019, 3, 27), Statut = StatutConge.Valide });
+            */
 
-            }
+			}
             catch (DbEntityValidationException e)
             {
                 foreach (var eve in e.EntityValidationErrors)
@@ -267,9 +286,12 @@ namespace IntranetPOPS1819.Models
 
 		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
         {
+			
 			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};
 			bdd.Collaborateurs.Add(c);
-            bdd.SaveChanges();
+			bdd.SaveChanges();
+			System.Diagnostics.Debug.WriteLine(c.Id);
+			MiseAJourNotesDeFrais(c.Id);
 			return c;
         }
 
@@ -286,7 +308,7 @@ namespace IntranetPOPS1819.Models
 		public Mission AjoutMission(string nom, int serviceId)
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == serviceId);
-			Mission m = new Mission { Nom = nom, Service = s };
+			Mission m = new Mission { Nom = nom/*, Service = s */};
 			bdd.Missions.Add(m);
 			bdd.SaveChanges();
 			return m;

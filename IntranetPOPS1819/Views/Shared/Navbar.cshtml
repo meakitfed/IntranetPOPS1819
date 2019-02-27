@@ -38,18 +38,24 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/Collaborateurs/Index">Collaborateurs</a>
 				</li>
-				@if (c.Chef)
-				{
-					<li class="nav-item">
-						<a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
-					</li>
+				@{
+					if (c.Service != null)
+					{
+						if (c.Chef)
+						{
+							<li class="nav-item">
+								<a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
+							</li>
+						}
+						if (c.Service.Type == TypeService.RessourcesHumaines)
+						{
+							<li class="nav-item">
+								<a class="nav-link" href="/RH/Index">Ressources humaines</a>
+							</li>
+						}
+					}
 				}
-                @if(c.Service.Type == TypeService.RessourcesHumaines)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="/RH/Index">Ressources humaines</a>
-                    </li>
-                }
+
 				@if (c.Admin)
 				{
 					<li class="nav-item dropdown">

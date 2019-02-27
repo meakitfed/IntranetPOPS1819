@@ -11,7 +11,7 @@ namespace IntranetPOPS1819.Models
     {
 		public Collaborateur()
 		{
-			LastUpdate = DateTime.Now;
+			LastUpdate = new DateTime(2018, 1, 1);
 		}
 
 		//variables
@@ -31,15 +31,17 @@ namespace IntranetPOPS1819.Models
         //[RegularExpression(@"^0[0-9]{9}$")]
 		public string Telephone { get; set; }
 
-		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
-		public virtual List<Mission> AnciennesMissions { get; set; } = new List<Mission>();
+		public virtual ICollection<tmp> t { get; set; } = new HashSet<tmp>();
+
+		public virtual ICollection<Mission> Missions { get; set; } = new HashSet<Mission>();
+		//public virtual List<Mission> AnciennesMissions { get; set; } = new List<Mission>();
 		public virtual List<Conge> Conges { get; set; } = new List<Conge>();
 		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
 
 		[DataType(DataType.Date)]
-		public DateTime LastUpdate { get; set; }
+		public DateTime LastUpdate { get; set; } = new DateTime(2018, 1, 1);
 		public int LastUpdateNoteDeFrais { get; set; }
 
 		/*[ForeignKey("Service")]

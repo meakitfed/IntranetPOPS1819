@@ -24,7 +24,6 @@
 											"<font color=\"ForestGreen\">Validée</font>" +
 										"# }else{ #" +
 											"<font color=\"FireBrick\">Refusée</font>" + "# } #"
-
 										);
 									  columns.Bound(c => c.Type);
 									  columns.Bound(c => c.Date).Format("{0:dd/MM/yyyy}");
@@ -40,7 +39,7 @@
 											</div>
 										</text>)
 													)
-															.Editable(editable => editable.Mode(GridEditMode.PopUp))
+															.Editable(editable => editable.Mode(GridEditMode.InLine))
 															.Sortable(sortable =>
 															{
 																sortable.SortMode(GridSortMode.SingleColumn);
@@ -58,8 +57,10 @@
 																.Ajax()
 																.Model(model =>
 																{
-																	model.Field(c => c.Statut).Editable(false);
-																	//model.Field(c => c.Mission).DefaultValue(null);
+																	model.Field(c => c.Date).DefaultValue(DateTime.Today);
+																	model.Field(c => c.Somme).DefaultValue(0);
+																	model.Field(c => c.Statut).DefaultValue(IntranetPOPS1819.Models.StatutLigneDeFrais.EnAttente).Editable(false);
+																	model.Field(c => c.Mission).DefaultValue(ViewData["defaultMission"] as IntranetPOPS1819.Models.Mission);
 																	model.Id(p => p.Id);
 																})
 																.Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { IdNote = Model }))
@@ -83,6 +84,7 @@
 	$('#EnvoyerLigne').click(function(){
 		$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
 			alert('updated');
+			console.Log(data);
 		});
 	});
 </script>
@@ -90,23 +92,37 @@
 
 	function onSave(e) {
 		//Implement the event handler for Save
+		console.log("save");
+		e.model.set("Date", e.model.date)
 	}
 
-	function onSaveChanges(e) {
+		function onSaveChanges(e) {
 		//Implement the event handler for SaveChanges
+		@{/*
+				Dal d = new Dal();
+				Mission m = d.GetMission(ViewBag["ListMission"]);
+				//set the required field value
+				<text>
+				// Put your javascript code here
+				e.model.set("Mission");
+				</text>
+		*/}
 	}
 
 	function onEdit(e) {
 
 		//check if record is new
-		//if (e.model.isNew()) {
+		if (e.model.isNew()) {
 			@{/*
 				Dal d = new Dal();
-				Mission m = d.GetMission(ViewBag[])
+				Mission m = d.GetMission(ViewBag["ListMission"]);
 				//set the required field value
+				<text>
+				// Put your javascript code here
 				e.model.set("Mission");
-			*/}
-		//}
+				</text>*/
+			}
+		}
 	}
 
 	function onDataBound(e) {

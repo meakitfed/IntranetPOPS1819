@@ -1,27 +1,33 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Intranet POPS1819</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - Intranet POPS1819</title>
 
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    <link href="~/CSS/style.css" rel="stylesheet" />
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	<link href="~/CSS/style.css" rel="stylesheet" />
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/jqueryval")
 
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.common.min.css" />
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.min.css" />
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.mobile.min.css" />
+	<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-    <script src="https://kendo.cdn.telerik.com/2019.1.115/js/jquery.min.js"></script>
-    <script src="https://kendo.cdn.telerik.com/2019.1.115/js/kendo.all.min.js"></script>
-    <script src="~/Scripts/kendo/2019.1.115/kendo.aspnetmvc.min.js"></script>
-    <script src="~/Scripts/kendo/2019.1.115/cultures/kendo.culture.br-FR.min.js"></script>
+	<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.common.min.css" />
+	<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.min.css" />
+	<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.mobile.min.css" />
+
+	<script src="https://kendo.cdn.telerik.com/2019.1.115/js/jquery.min.js"></script>
+	<script src="https://kendo.cdn.telerik.com/2019.1.115/js/kendo.all.min.js"></script>
+	<script src="~/Scripts/kendo/2019.1.115/kendo.aspnetmvc.min.js"></script>
+	@{
+		var culture = System.Globalization.CultureInfo.CurrentCulture.ToString();
+		<script src="@Url.Content("~/Scripts/kendo/2019.1.115/cultures/kendo.culture." + culture + ".min.js")"></script>
+	}
+	<script>
+        kendo.culture("@culture");
+	</script>
 </head>
 <body>
 	<!--<div class="navbar navbar-inverse navbar-fixed-top">

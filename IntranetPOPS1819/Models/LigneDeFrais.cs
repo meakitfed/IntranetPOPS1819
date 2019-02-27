@@ -8,7 +8,7 @@ using System.Web;
 namespace IntranetPOPS1819.Models
 {
     public class LigneDeFrais
-    {
+	{
 		[ScaffoldColumn(false)]
 		public int Id { get; set; }
 
@@ -16,7 +16,6 @@ namespace IntranetPOPS1819.Models
 		[Display(Name = "Nom")]
 		public string Nom { get; set; }
 
-		[ScaffoldColumn(true)]
 		[Display(Name = "Mission")]
 		[UIHint("MissionTemplate")]
 		public virtual Mission Mission { get; set; }
@@ -39,6 +38,7 @@ namespace IntranetPOPS1819.Models
 
 		[UIHint("DateTemplate")]
 		[DataType(DataType.Date)]
+		//[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
 		public DateTime? Date { get; set; }
 
 		//public virtual NoteDeFrais Note { get; set; }

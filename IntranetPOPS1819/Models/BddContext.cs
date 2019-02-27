@@ -11,6 +11,8 @@ namespace IntranetPOPS1819.Models
 		public DbSet<NoteDeFrais> NotesDeFrais { get; set; }
 		public DbSet<LigneDeFrais> LigneDeFrais { get; set; }
         public DbSet<Conge> Conges { get; set; }
+		public DbSet<tmp> tmp { get; set; }
+
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 		}
