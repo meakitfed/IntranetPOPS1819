@@ -135,6 +135,7 @@
                     @(Html.Kendo().MultiViewCalendar()
                                                 .Name("multiViewCalendar")
                                                 .Selectable("range")
+                                                //.Culture("fr-FR")
                                                 .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
                                         "<div class=\"en-attente\"></div>" +
                                         "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
@@ -276,7 +277,7 @@
                 $.post("SupprimerConge", { idConge: $("#conges_enattente_list").children(":selected").attr("id") }, function (data) {
                     if (data == 0) {
 
-                        setTimeout("location.reload(true);", 1000);
+                        setTimeout("location.reload(true);", 2000);
 
                         $("#retourSupprimer").html("<font color=\"green\">Votre demande de congé a bien été supprimée.</font>");
                     }
@@ -304,7 +305,7 @@
                     else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
                     else if (data == "ok") {
                         $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
-                        setTimeout("location.reload(true);", 1000);
+                        setTimeout("location.reload(true);", 2000);
 
                         prepareElements()
                     }
@@ -323,9 +324,7 @@
 
     $(document).ready(function () {
 
-        var today = new Date();
-        var multiViewCalendar = $("#multiViewCalendar").data("kendoMultiViewCalendar");
-        multiViewCalendar.value(today);
+   
 
         prepareElements()
 
