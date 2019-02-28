@@ -154,6 +154,14 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\badpage.jpg" />
+    <Content Include="Content\images\collaborateurs\col1.jpg" />
+    <Content Include="Content\images\collaborateurs\col2.jpg" />
+    <Content Include="Content\images\collaborateurs\col3.jpg" />
+    <Content Include="Content\images\collaborateurs\col4.jpg" />
+    <Content Include="Content\images\collaborateurs\col5.jpg" />
+    <Content Include="Content\images\collaborateurs\col6.jpg" />
+    <Content Include="Content\images\collaborateurs\col7.jpg" />
+    <Content Include="Content\images\collaborateurs\col8.jpg" />
     <Content Include="Content\images\green.png" />
     <Content Include="Content\images\orange.jpg" />
     <Content Include="Content\images\red.png" />
@@ -2869,6 +2877,7 @@
     <Content Include="Views\Compta\Index.cshtml" />
     <Content Include="Views\Compta\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Collaborateurs\Index.cshtml" />
+    <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

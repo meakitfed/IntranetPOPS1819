@@ -15,5 +15,13 @@ namespace IntranetPOPS1819.Controllers
             IDal dal = new Dal();
             return View(dal.ObtenirTousLesServices().ToList());
         }
+
+
+		public ActionResult InformationsCollaborateur(Collaborateur col)
+		{
+			return PartialView(col);
+		}
     }
+
+
 }
