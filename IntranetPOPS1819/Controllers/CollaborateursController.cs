@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntranetPOPS1819.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,8 @@ namespace IntranetPOPS1819.Controllers
         // GET: Collaborateurs
         public ActionResult Index()
         {
-            return View();
+            IDal dal = new Dal();
+            return View(dal.ObtenirTousLesServices().ToList());
         }
     }
 }

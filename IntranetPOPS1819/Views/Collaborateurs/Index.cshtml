@@ -1,4 +1,5 @@
 ﻿@using IntranetPOPS1819.Models
+@model List<Service>
 @{
     ViewBag.Title = "Collaborateurs";
 
@@ -10,7 +11,25 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-2 table-bordered">
-                EEE
+                <p><h3 class="text-center">Collaborateurs par services</h3></p>
+                @{
+                    foreach (Service service in Model)
+                    {
+                        <button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@service</button>
+                        <div id=@(("Année" + d)) style="display:none;">
+                            @while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
+                            {
+                                @Ajax.ActionLink(@Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM"), "InformationLigneDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[a].Id }, new AjaxOptions
+                                {
+                                     InsertionMode = InsertionMode.Replace,
+                                     UpdateTargetId = "InfoNoteActive",
+                                     HttpMethod = "Post"
+                                }, new { @class = "btn btn-block btn-3" })
+                                a--;
+                            }
+                        </div>
+                    }
+                }
             </div>
             <div class="col-lg-10 table-bordered">
                 <div id="InfoCollaborateurActif">
