@@ -2803,6 +2803,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChefDeServiceController.cs" />
+    <Compile Include="Controllers\CollaborateursController.cs" />
     <Compile Include="Controllers\ComptaController.cs" />
     <Compile Include="Controllers\CongesController.cs" />
     <Compile Include="Controllers\GridController.cs" />
@@ -2867,6 +2868,7 @@
     <Content Include="Views\Shared\ListeServices.cshtml" />
     <Content Include="Views\Compta\Index.cshtml" />
     <Content Include="Views\Compta\InformationLigneDeFrais.cshtml" />
+    <Content Include="Views\Collaborateurs\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
