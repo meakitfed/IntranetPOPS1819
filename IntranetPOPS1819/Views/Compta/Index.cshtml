@@ -1,0 +1,30 @@
+﻿@using IntranetPOPS1819.Models
+@{
+	ViewBag.Title = "Service Comptabilité";
+
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+	@Styles.Render("~/Content/css")
+</head>
+
+@Html.Partial("../Shared/Navbar")
+@{
+	int firstNote = -1;
+	<div>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-2 table-bordered">
+				</div>
+				<div class="col-lg-12 table-bordered">
+						<div>
+							@Html.Partial("InformationLigneDeFrais")
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+}
+
+

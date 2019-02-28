@@ -53,10 +53,10 @@ namespace IntranetPOPS1819.Models
 
     public enum StatutLigneDeFrais
     {
-		ValidéeChef,
-		Validée,
-		Refusée,
-		EnAttente
+		ValidéeChef = 2,
+		Validée = 3,
+		Refusée = 0,
+		EnAttente = 1,
     }
 
 	public enum TypeLigneDeFrais

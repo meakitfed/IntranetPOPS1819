@@ -16,14 +16,14 @@
 										);
 									  columns.Bound(c => c.Complete);
 									  columns.Bound(c => c.Statut).ClientTemplate(
-										"# if (Statut == 3){ #" +
-											"<font color=\"DarkOrange\">En Attente</font>" +
-										"# }else if(Statut == 0){ #" +
-											"<font color=\"ForestGreen\">Validée par le chef</font>" +
-										"# }else if(Statut == 1){ #" +
-											"<font color=\"ForestGreen\">Validée</font>" +
-										"# }else{ #" +
-											"<font color=\"FireBrick\">Refusée</font>" + "# } #"
+										"# if (Statut == 1){ #" +
+										"<font color=\"DarkOrange\">En Attente</font>" +
+									"# }else if(Statut == 2){ #" +
+										"<font color=\"ForestGreen\">Validée par le chef</font>" +
+									"# }else if(Statut == 3){ #" +
+										"<font color=\"ForestGreen\">Validée</font>" +
+									"# }else{ #" +
+										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 										);
 									  columns.Bound(c => c.Type);
 									  columns.Bound(c => c.Date);
@@ -34,8 +34,8 @@
 										.ToolBar(toolbar =>
 										toolbar.Template(@<text>
 											<div>
-												<a class="k-button k-button-icontext k-grid-add" href="#"><span class="k-icon k-add"></span>Ajouter une Ligne</a>
-												<button class="k-button k-button-icontext" id="EnvoyerLigne">Valider la note</button>
+												<button class="k-button k-button-icontext k-grid-add" id="AddLigne" href="#"><span class="k-icon k-add"></span>Ajouter une Ligne</button>
+												<button class="k-button k-button-icontext" id="EnvoyerNote">Valider la note</button>
 											</div>
 										</text>)
 													)
@@ -79,12 +79,27 @@
 		background-color: #dc3545;
 		color: white;
 	}
+	.Disabled {
+		pointer-events: none;
+		cursor: not-allowed;
+		opacity: 0.65;
+		filter: alpha(opacity=65);
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
 </style>
 <script type="text/javascript">
-	$('#EnvoyerLigne').click(function(){
+	var test = '@ViewData["IsComplete"]';
+	if (test == 'True') {
+		$('#EnvoyerNote').addClass('Disabled');
+		$('#AddLigne').addClass('Disabled');
+	}
+	$('#EnvoyerNote').click(function () {
+		$('#EnvoyerNote').addClass('Disabled');
+		$('#AddLigne').addClass('Disabled');
 		$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
 			alert('updated');
-			console.Log(data);
+			console.log(data);
 		});
 	});
 </script>
@@ -92,7 +107,6 @@
 
 	function onSave(e) {
 		//Implement the event handler for Save
-		console.log("save");
 	}
 
 		function onSaveChanges(e) {
@@ -127,11 +141,12 @@
 	function onDataBound(e) {
 		var grid = $("#grid").data("kendoGrid");
 		var gridData = grid.dataSource.view();
-		console.log("hey1");
+		
 		for (var i = 0; i < gridData.length; i++) {
 
 			var currentUid = gridData[i].uid;
-			if (gridData[i].Statut == 1 || gridData[i].Statut == 0) {
+			
+			if (gridData[i].Statut == 2 || gridData[i].Statut == 3) {
 				var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
 				var editButton = $(currenRow).find(".k-grid-edit");
 				var deleteButton = $(currenRow).find(".k-grid-delete");

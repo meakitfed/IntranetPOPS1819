@@ -1,5 +1,6 @@
 ﻿
-		@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
+
+@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
 							  .Name("LigneDeFrais")
 							  .HtmlAttributes(new { style = "height: 500px" })
 							  .Columns(columns =>
@@ -22,7 +23,7 @@
 								);
 								  columns.Bound(c => c.Type);
 								  columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
-									})
+							  })
 										.Sortable(sortable =>
 										{
 											sortable.SortMode(GridSortMode.SingleColumn);
@@ -31,9 +32,9 @@
 										.DataSource(dataSource => dataSource
 											.Ajax()
 											.Model(model => model.Id(p => p.Id))
-											.Read(read => read.Action("LigneDeFrais_Read", "ChefDeService"))
+											.Read(read => read.Action("LigneDeFrais_Read", "Compta"))
 										)
-		)
+)
 
 <script type="text/javascript">
 	function Valider(e) {
@@ -43,7 +44,7 @@
 		var items = grid.dataSource.data();
 		for (var i = 0; i < items.length; i++) {
 			if (dataItem.Id == items[i].Id) {
-				items[i].set("Statut", 2);
+				items[i].set("Statut", 3);
 			}
 		}
 		$.ajax({

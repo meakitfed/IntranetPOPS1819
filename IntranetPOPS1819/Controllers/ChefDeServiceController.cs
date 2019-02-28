@@ -29,9 +29,29 @@ namespace IntranetPOPS1819.Controllers
 		{
             //Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
+			LigneDeFrais ligne = dal.bdd.LigneDeFrais.FirstOrDefault(l => l.Id == Id);
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
+			//TODO
+			Collaborateur col = dal.bdd.Collaborateurs.FirstOrDefault(c => c.Id == ligne.IdCollab);
+			foreach(NoteDeFrais n in col.NotesDeFrais)
+			{
+				if (n.LignesDeFrais.Contains(ligne))
+				{
+					if(n.EstValidéeParLeChef())
+					{
+						System.Diagnostics.Debug.WriteLine("Envoi de la note, elle est bien validée par le chef" + Id);
+						dal.EnvoiNoteDeFrais(col.Service.Id, col.Id, n.Id);
+						return Json(null, JsonRequestBehavior.AllowGet);
+					}
+					else
+					{
+						return null;
+					}
+				}
+			}
+
             //dal.ValiderConge(c.Id, new Message { Titre = "Validation de Note", Date = DateTime.Now, Contenu = "Une Ligne de frais a été validée par le chef de service"})
-			return Json(null, JsonRequestBehavior.AllowGet);
+			return null;
 		}
 
 		public ActionResult RefuserLigne(int Id)

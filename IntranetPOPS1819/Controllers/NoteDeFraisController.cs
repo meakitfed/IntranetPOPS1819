@@ -48,7 +48,8 @@ namespace IntranetPOPS1819.Controllers
 			{
 				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				IQueryable<LigneDeFrais> lignedefrais = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();
+				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote);
+				IQueryable<LigneDeFrais> lignedefrais = note.LignesDeFrais.AsQueryable();
 				DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
@@ -65,7 +66,7 @@ namespace IntranetPOPS1819.Controllers
 						Statut = ligneDeFrais.Mission.Statut,
 					},
 				});
-				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Read envoie des données");
+				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Read envoie des données : IsComplete a une valuer de " + (note.Statut != StatutNote.Brouillon));
 				return Json(result);
 			}
 			return null;
@@ -297,6 +298,8 @@ namespace IntranetPOPS1819.Controllers
 				{
 					ViewData["defaultMission"] = null;
 				}
+				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote);
+				ViewData["IsComplete"] = (note.Statut != StatutNote.Brouillon);
 			}
 			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur envoie des données");
 			return PartialView(IdNote);

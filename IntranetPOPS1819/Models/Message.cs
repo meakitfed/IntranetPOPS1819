@@ -56,7 +56,12 @@ namespace IntranetPOPS1819.Models
 					Contenu = "" ;
 					//SetRedirection(c, n);
 					break;
+				case TypeMessage.NotifNoteRetour:
+					break;
+				case TypeMessage.NotifLigneAller:
+					break;
 				case TypeMessage.NotifLigneRetour:
+					break;
 				default:
 					throw new HttpUnhandledException();
 			}

@@ -133,16 +133,22 @@ namespace IntranetPOPS1819.Models
 					case StatutNote.EnAttenteDeValidation:
 						if (c.Service.Type == TypeService.Direction)
 						{
+							n.Statut = StatutNote.Validée;
+							AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteRetour, c, n));
 							//Cas PDG
 						}
 						else if (c.Service.Type == TypeService.Comptabilité)
 						{
 							if (c.Chef)
 							{
+								n.Statut = StatutNote.Validée;
+								AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteRetour, c, n));
 								//Cas chef de service compta
 							}
 							else
 							{
+								n.Statut = StatutNote.Validée;
+								AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteRetour, c, n));
 								//Cas collab compta
 							}
 						}
@@ -150,15 +156,27 @@ namespace IntranetPOPS1819.Models
 						{
 							if (c.Chef)
 							{
+								n.Statut = StatutNote.Validée;
+								AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteRetour, c, n));
 								//Cas chef de service d'un autre service
 							}
 							else
 							{
+								n.Statut = StatutNote.ValidéeParLeChef;
+								AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteRetour, c, n));
+								//TODO envoyer notif à toute la compta faire fct
+								//AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteAller, c, n));
+								Service compta = bdd.Services.FirstOrDefault(serv => serv.Type == TypeService.Comptabilité);
+								compta.NotesDeFrais.Add(n);
 								//Cas collab d'un autre service
 							}
 						}
 						break;
 					case StatutNote.ValidéeParLeChef:
+						n.Statut = StatutNote.Validée;
+						AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteRetour, c, n));
+						System.Diagnostics.Debug.WriteLine("Valider d'une note par le service Compta");
+
 						break;
 					
 					default:
@@ -252,11 +270,11 @@ namespace IntranetPOPS1819.Models
 				AssignerService(compta.Id, didier.Id);
 
 				Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
-				AssignerService(compta.Id, isabelle.Id);
+				AssignerService(rh.Id, isabelle.Id);
 
 				Service marketing = AjoutService("Marketing");
-				AssignerService(compta.Id, nathan.Id);
-				AssignerService(compta.Id, brian.Id);
+				AssignerService(marketing.Id, nathan.Id);
+				AssignerService(marketing.Id, brian.Id);
 				AssignerChefDeService(brian.Id);
 
 				MiseAJourNotesDeFrais(nathan.Id);
