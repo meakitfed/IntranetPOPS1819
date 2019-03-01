@@ -176,9 +176,7 @@ namespace IntranetPOPS1819.Models
 						n.Statut = StatutNote.Validée;
 						AjoutNotif(c.Id, new Message(TypeMessage.NotifNoteRetour, c, n));
 						System.Diagnostics.Debug.WriteLine("Valider d'une note par le service Compta");
-
 						break;
-					
 					default:
 						break;
 				}
@@ -264,12 +262,20 @@ namespace IntranetPOPS1819.Models
 				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
 				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
 				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
-				Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
+                Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco");
+                Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
+                Collaborateur marie = AjoutCollaborateur("Marie-Christine", "Henriot", "marie@gmail.com", "mch");
 
-				Service compta = AjoutService("Comptabilité", TypeService.Comptabilité);
+                Service direction = AjoutService("Direction", TypeService.Direction);
+                AssignerService(direction.Id, marie.Id);
+                AssignerChefDeService(marie.Id);
+
+                Service compta = AjoutService("Comptabilité", TypeService.Comptabilité);
 				AssignerService(compta.Id, didier.Id);
+                AssignerService(compta.Id, coco.Id);
+                AssignerChefDeService(didier.Id);
 
-				Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
+                Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
 
 				Service marketing = AjoutService("Marketing");
@@ -281,17 +287,24 @@ namespace IntranetPOPS1819.Models
 				MiseAJourNotesDeFrais(brian.Id);
 				MiseAJourNotesDeFrais(didier.Id);
 				MiseAJourNotesDeFrais(isabelle.Id);
+                MiseAJourNotesDeFrais(marie.Id);
+                MiseAJourNotesDeFrais(coco.Id);
 
-				List<Mission> Missions = new List<Mission>();
+                List<Mission> Missions = new List<Mission>();
 				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
 				for (int j = 0; j < labelsMission.Length; j++)
 				{
 					Mission m = AjoutMission(labelsMission[j], compta.Id);
 					AssignerMission(m.Id, nathan.Id);
 					AssignerMission(m.Id, brian.Id);
-				}
+                    AssignerMission(m.Id, didier.Id);
+                    AssignerMission(m.Id, isabelle.Id);
+                    AssignerMission(m.Id, marie.Id);
+                    AssignerMission(m.Id, coco.Id);
+                }
 
-				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });

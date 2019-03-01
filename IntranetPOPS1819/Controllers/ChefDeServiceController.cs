@@ -60,31 +60,31 @@ namespace IntranetPOPS1819.Controllers
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Refusée);
 			return Json(null, JsonRequestBehavior.AllowGet);
 		}
-		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request/*, int IdNote*/)
+		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int idCol)
 		{
-			List<LigneDeFrais> l = new List<LigneDeFrais>();
-			foreach(NoteDeFrais n in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais)
-			{
-				l.AddRange(n.LignesDeFrais.Where(s => (s.Statut != StatutLigneDeFrais.Validée && s.Statut != StatutLigneDeFrais.ValidéeChef)));
-			}
-			IQueryable<LigneDeFrais> lignedefrais = l.AsQueryable();
-			/*IQueryable<LigneDeFrais> lignedefrais = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();           /*foreach(LigneDeFrais l in lignedefrais)*/
-			/*System.Diagnostics.Debug.WriteLine(l.Mission.Nom);*/
-			DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
-				Id = ligneDeFrais.Id,
-				Nom = ligneDeFrais.Nom,
-				Somme = ligneDeFrais.Somme,
-				Type = ligneDeFrais.Type,
-				Complete = ligneDeFrais.Complete,
-				Statut = ligneDeFrais.Statut,
-				Date = ligneDeFrais.Date,
-				ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
-				Filename = ligneDeFrais.Filename,
-				Mission = ligneDeFrais.Mission
-			});
+                List<LigneDeFrais> l = new List<LigneDeFrais>();
+                foreach (NoteDeFrais n in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais)
+                {
+                    l.AddRange(n.LignesDeFrais.Where(s => (s.Statut != StatutLigneDeFrais.Validée && s.Statut != StatutLigneDeFrais.ValidéeChef && s.IdCollab == idCol)));
+                }
+                IQueryable<LigneDeFrais> lignedefrais = l.AsQueryable();
+                /*IQueryable<LigneDeFrais> lignedefrais = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();           /*foreach(LigneDeFrais l in lignedefrais)*/
+                /*System.Diagnostics.Debug.WriteLine(l.Mission.Nom);*/
+                DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
+                    Id = ligneDeFrais.Id,
+                    Nom = ligneDeFrais.Nom,
+                    Somme = ligneDeFrais.Somme,
+                    Type = ligneDeFrais.Type,
+                    Complete = ligneDeFrais.Complete,
+                    Statut = ligneDeFrais.Statut,
+                    Date = ligneDeFrais.Date,
+                    ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
+                    Filename = ligneDeFrais.Filename,
+                    Mission = ligneDeFrais.Mission
+                });
 
-			return Json(result);
-		}
+                return Json(result);
+        }
 
 		protected override void Dispose(bool disposing)
 		{
@@ -102,9 +102,9 @@ namespace IntranetPOPS1819.Controllers
 			return View();
         }
 
-		public ActionResult InformationLigneDeFraisSelection(/*int idNote = default(int)*/)
+		public ActionResult InformationLigneDeFraisSelection(int idCol)
 		{
-			return PartialView(/*idNote*/);
+			return PartialView(idCol);
 		}
 
         public void ValiderConges(int idConge)
