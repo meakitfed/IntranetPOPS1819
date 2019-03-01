@@ -38,7 +38,13 @@
     <tbody>
         <tr>
             <td scope="row" id="nom">Nom : &nbsp;</td>
-            <td><!-- TODO : DatePicker --></td>
+            <td><!-- TODO : DatePicker -->
+            @(Html.Kendo().DatePicker()
+                .Name("datePickerCongesRH")
+                .Value(DateTime.Today)
+            )
+            <button id="get" class="k-button">Get</button>
+            </td>
         </tr>
         <tr>
             <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
@@ -52,6 +58,35 @@
 </table>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $("datePickerCongesRH").kendoDatePicker()
+            .closest(".k-widget")
+            .attr("id", "datepicker_wrapper");
+
+        var datepicker = $("#datePickerCongesRH").data("kendoDatePicker");
+
+        var setValue = function () {
+            datepicker.value($("#value").val());
+        };
+
+        $("#enable").click(function () {
+            datepicker.enable();
+        });
+
+        $("#disable").click(function () {
+            datepicker.enable(false);
+        });
+
+        /*$("#readonly").click(function () {
+            datepicker.readonly();
+        });*/
+
+        //open, close, value, set
+
+        $("#get").click(function () {
+            alert(datepicker.value());
+        });
+    });
 
     function showDetailsRH(e) {
                     e.preventDefault();
