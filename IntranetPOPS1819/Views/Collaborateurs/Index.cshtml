@@ -1,0 +1,52 @@
+﻿@using IntranetPOPS1819.Models
+@model List<Service>
+@{
+				/**/
+
+				ViewBag.Title = "Collaborateurs";
+
+				Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("../Shared/Navbar")
+
+<head>
+
+	<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+</head>
+
+<body>
+
+	<div>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-2 table-bordered">
+					<p><h3 class="text-center">Collaborateurs par services</h3></p>
+					@{
+						foreach (Service service in Model)
+						{
+							<button class="btn btn-block btn-1" onclick="javascript:toggleVisibility(('service' + @service.Id)); return false;">@service.Nom</button>
+							<div id=@(("service" + service.Id)) style="display:none;">
+								@foreach (Collaborateur col in service.Collaborateurs)
+								{
+									@Ajax.ActionLink(col.Nom, "InformationsCollaborateur", new { idCol = col.Id }, new AjaxOptions
+								   {
+									   InsertionMode = InsertionMode.Replace,
+									   UpdateTargetId = "InfoCollaborateurActif",
+									   HttpMethod = "Post",
+								   }, new { @class = "btn btn-block btn-3" })
+								}
+							</div>
+						}
+					}
+				</div>
+				<div class="col-lg-10 table-bordered">
+					<div id="InfoCollaborateurActif">
+						Veulliez selectionner un collabo <i class="em em-8ball"></i><i class="em em-woman-frowning"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>

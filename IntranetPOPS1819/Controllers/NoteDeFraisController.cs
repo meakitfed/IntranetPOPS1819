@@ -2,6 +2,7 @@
 using IntranetPOPS1819.ViewModel;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -33,7 +34,7 @@ namespace IntranetPOPS1819.Controllers
 			{
 				System.Diagnostics.Debug.WriteLine("Passage dans EnvoyerNote" + IdNote);
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				dal.EnvoiNoteDeFraisChefService(c.Service.Id, c.Id, IdNote);
+				dal.EnvoiNoteDeFrais(c.Service.Id, c.Id, IdNote);
 				System.Diagnostics.Debug.WriteLine(c.GetNotesDeFraisAValider().Count);
 				return true;
 			}
@@ -47,7 +48,8 @@ namespace IntranetPOPS1819.Controllers
 			{
 				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				IQueryable<LigneDeFrais> lignedefrais = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();
+				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote);
+				IQueryable<LigneDeFrais> lignedefrais = note.LignesDeFrais.AsQueryable();
 				DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
@@ -58,9 +60,13 @@ namespace IntranetPOPS1819.Controllers
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
-					Mission = ligneDeFrais.Mission,
+					Mission = new Mission {
+						Id = ligneDeFrais.Mission.Id,
+						Nom = ligneDeFrais.Mission.Nom,
+						Statut = ligneDeFrais.Mission.Statut,
+					},
 				});
-
+				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Read envoie des données : IsComplete a une valuer de " + (note.Statut != StatutNote.Brouillon));
 				return Json(result);
 			}
 			return null;
@@ -70,8 +76,14 @@ namespace IntranetPOPS1819.Controllers
 		[AcceptVerbs(HttpVerbs.Post)]
 		public ActionResult LigneDeFrais_Create([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais, int IdNote)
 		{
+			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create");
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
+				var modelStateErrors = ModelState
+					.Where(x => x.Value.Errors.Count > 0)
+					.Select(x => new { x.Key, x.Value.Errors })
+					.ToArray();
+
 				if (ModelState.IsValid)
 				{
 					dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
@@ -100,9 +112,10 @@ namespace IntranetPOPS1819.Controllers
 					System.Diagnostics.Debug.WriteLine("Errors : ModelState isn't valid : ");
 					foreach (var v in errors)
 					{
-						System.Diagnostics.Debug.WriteLine("\t- " + v.ToString());
+						System.Diagnostics.Debug.WriteLine(v);
 					}
 				}
+				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create envoie des données");
 				return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
 			}
 			return null;
@@ -111,7 +124,7 @@ namespace IntranetPOPS1819.Controllers
 		[AcceptVerbs(HttpVerbs.Post)]
 		public ActionResult LigneDeFrais_Update([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
 		{
-			System.Diagnostics.Debug.WriteLine("Noms : " + ligneDeFrais.ResumeFileUrl  + " et " + ligneDeFrais.Filename);
+			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_update");
 			if (ModelState.IsValid)
 			{
 				var entity = new LigneDeFrais
@@ -125,13 +138,11 @@ namespace IntranetPOPS1819.Controllers
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
-					Mission = ligneDeFrais.Mission,
 				};
-				System.Diagnostics.Debug.WriteLine("Date : " + ligneDeFrais.Date);
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.Entry(entity).State = EntityState.Modified;
-				System.Diagnostics.Debug.WriteLine("Date : " + entity.Date);
 				dal.bdd.SaveChanges();
+				dal.ChangerMissionLigneDeFrais(ligneDeFrais.Id, ligneDeFrais.Mission.Id);
 			}
 			else
 			{
@@ -144,13 +155,14 @@ namespace IntranetPOPS1819.Controllers
 					System.Diagnostics.Debug.WriteLine(v);
 				}
 			}
-
+			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_update envoie des données");
 			return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
 		}
 
 		[AcceptVerbs(HttpVerbs.Post)]
 		public ActionResult LigneDeFrais_Destroy([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
 		{
+			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_destroy");
 			if (ModelState.IsValid)
 			{
 				var entity = new LigneDeFrais
@@ -171,7 +183,7 @@ namespace IntranetPOPS1819.Controllers
 				dal.bdd.LigneDeFrais.Remove(entity);
 				dal.bdd.SaveChanges();
 			}
-
+			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_destroy envoie des données");
 			return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
 		}
 
@@ -191,10 +203,11 @@ namespace IntranetPOPS1819.Controllers
 				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 			}
+			System.Diagnostics.Debug.WriteLine("Passage dans Index GET NoteDeFraisControlleur evnoie des données");
 			return View(vm);
 		}
 
-		[HttpPost]
+		/*[HttpPost]
 		public ActionResult Index(OngletNoteDeFraisViewModel vm)
 		{
 			if (HttpContext.User.Identity.IsAuthenticated)
@@ -212,8 +225,8 @@ namespace IntranetPOPS1819.Controllers
 						if (vm._Frais.Complete)
 						{
 							dal.EnvoiNoteDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
-							Message notif = new Message(TypeMessage.NotifLigneAller, vm._Collaborateur.Prenom + vm._Collaborateur.Nom + " - " + vm._Collaborateur.Service.Nom, vm._Frais);
-                            dal.AjoutNotif(vm._Collaborateur.Service.Chef().Id, notif);
+							//Message notif = new Message(TypeMessage.NotifLigneAller, vm._Collaborateur.Prenom + vm._Collaborateur.Nom + " - " + vm._Collaborateur.Service.Nom, vm._Frais);
+                            //dal.AjoutNotif(vm._Collaborateur.Service.Chef().Id, notif);
 							
 						}
 						return View(vm);
@@ -222,11 +235,11 @@ namespace IntranetPOPS1819.Controllers
 				return View(vm);
 			}
 			return View();
-
-		}
+		}*/
 
 		public ActionResult InformationLigneDeFrais(int IdNote)
 		{
+			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur");
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
@@ -262,19 +275,52 @@ namespace IntranetPOPS1819.Controllers
 					});
 				}
 				//TODO prendre que certaines missions ici
-				foreach (var m in c.AnciennesMissions)
+				/*foreach (var m in c.AnciennesMissions)
 				{
 					listMission.Add(new SelectListItem()
 					{
 						Text = m.Nom,
 						Value = ((int)m.Id).ToString()
 					});
-				}
+				}*/
 				ViewData["ListMission"] = listMission;
-
-				System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur");
+				if(c.Missions.Count != 0)
+				{
+					Mission  m = c.Missions.First();
+					ViewData["defaultMission"] = new Mission
+					{
+						Id = m.Id,
+						Nom = m.Nom,
+						Statut = m.Statut,
+					};
+				}
+				else
+				{
+					ViewData["defaultMission"] = null;
+				}
+				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote);
+				ViewData["IsComplete"] = (note.Statut != StatutNote.Brouillon);
 			}
+			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur envoie des données");
 			return PartialView(IdNote);
+		}
+
+		public JsonResult GetMissions(string text)
+		{
+			System.Diagnostics.Debug.WriteLine("Passage dans GetMissions dans NoteDeFraisControlleur");
+			if (HttpContext.User.Identity.IsAuthenticated)
+			{
+				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				var missions = c.Missions.Select(m => new Mission
+				{
+					Nom = m.Nom,
+					Id = m.Id,
+					Statut = m.Statut,
+				});
+				System.Diagnostics.Debug.WriteLine("Passage dans GetMissions dans NoteDeFraisControlleur envoie des missions");
+				return Json(missions, JsonRequestBehavior.AllowGet);
+			}
+			return null;
 		}
 
 		public JsonResult SaveResumeFile()

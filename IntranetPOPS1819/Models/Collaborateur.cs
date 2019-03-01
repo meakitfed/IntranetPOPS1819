@@ -11,7 +11,7 @@ namespace IntranetPOPS1819.Models
     {
 		public Collaborateur()
 		{
-			LastUpdate = DateTime.Now;
+			LastUpdate = new DateTime(2018, 1, 1);
 		}
 
 		//variables
@@ -24,22 +24,24 @@ namespace IntranetPOPS1819.Models
 		public string MotDePasse { get; set; }
 		public string Nom { get; set; }
         public string Prenom { get; set; }
-		public float CongesRestants { get; set; } = 0;
+		public float CongesRestants { get; set; } = 30;
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
         //[RegularExpression(@"^0[0-9]{9}$")]
 		public string Telephone { get; set; }
 
-		public virtual List<Mission> Missions { get; set; } = new List<Mission>();
-		public virtual List<Mission> AnciennesMissions { get; set; } = new List<Mission>();
+		public virtual ICollection<tmp> t { get; set; } = new HashSet<tmp>();
+
+		public virtual ICollection<Mission> Missions { get; set; } = new HashSet<Mission>();
+		//public virtual List<Mission> AnciennesMissions { get; set; } = new List<Mission>();
 		public virtual List<Conge> Conges { get; set; } = new List<Conge>();
 		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
 		public virtual List<Message> Messages { get; set; } = new List<Message>();
 		public virtual List<Message> Notifications { get; set; } = new List<Message>();
 
 		[DataType(DataType.Date)]
-		public DateTime LastUpdate { get; set; }
+		public DateTime LastUpdate { get; set; } = new DateTime(2018, 1, 1);
 		public int LastUpdateNoteDeFrais { get; set; }
 
 		/*[ForeignKey("Service")]
@@ -51,15 +53,15 @@ namespace IntranetPOPS1819.Models
         
 		public int GetNombreCongesPrisCetteAnnee()
 		{
-			/*int nb = 0;
+			int nb = 0;
 			if(Conges != null)
 			{
 				foreach (Conge c in Conges)
 				{
-                    if (c.Debut.Year == DateTime.Now.Year) nb += c.Fin.Subtract(c.Debut).Days;
+                    if (c.Debut.Year == DateTime.Now.Year  &&  c.Statut == StatutConge.Valide) nb += c.Fin.Subtract(c.Debut).Days;
 				}
 				return nb;
-			}*/
+			}
 			return 0;
 		}
 
@@ -84,7 +86,7 @@ namespace IntranetPOPS1819.Models
             {
                 foreach (Conge c in Conges)
                 {
-                    if (c.Statut == StatutConge.EnCours)
+                    if (c.Statut == StatutConge.EnCours  ||  c.Statut == StatutConge.ValideChef)
                         for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
                             allDates.Add(date);
                 }
@@ -92,6 +94,40 @@ namespace IntranetPOPS1819.Models
             }
             return allDates;
         }
+
+
+        public ValiditeConge isCongeValide(Conge c)
+        {
+            if (c.GetDuree() > CongesRestants) return ValiditeConge.errorPasAssezDeCongesRestants;
+            else foreach(DateTime d1 in c.GetAllDaysInConge())
+                {
+                    foreach(Conge autreConge in Conges)
+                    {
+                        foreach (DateTime d2 in autreConge.GetAllDaysInConge()) if (d1.Date == d2.Date) return ValiditeConge.errorChevauchage;
+                    }
+                }
+
+            return ValiditeConge.ok;
+        }
+
+
+        public List<DateTime> GetTousJoursCongesValides()
+        {
+            List<DateTime> allDates = new List<DateTime>();
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Statut == StatutConge.Valide)
+                        for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
+                            allDates.Add(date);
+                }
+                return allDates;
+            }
+            return allDates;
+        }
+
+
 
         public List<String> GetJSONTousJoursCongesEnAttente()
         {
@@ -165,4 +201,11 @@ namespace IntranetPOPS1819.Models
             return nb;
         }
     }
+}
+
+public enum ValiditeConge
+{
+    ok,
+    errorChevauchage,
+    errorPasAssezDeCongesRestants,
 }

@@ -1,0 +1,86 @@
+﻿
+
+@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
+							  .Name("LigneDeFrais")
+							  .HtmlAttributes(new { style = "height: 500px" })
+							  .Columns(columns =>
+							  {
+								  columns.Bound(c => c.Nom);
+								  columns.Bound(c => c.Somme);
+								  columns.Bound(c => c.Statut).ClientTemplate(
+									"# if (Statut == 1){ #" +
+										"<font color=\"DarkOrange\">En Attente</font>" +
+									"# }else if(Statut == 2){ #" +
+										"<font color=\"ForestGreen\">Validée par le chef</font>" +
+									"# }else if(Statut == 3){ #" +
+										"<font color=\"ForestGreen\">Validée</font>" +
+									"# }else{ #" +
+										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
+									);
+								  columns.Bound(c => c.Date);
+								  columns.Bound(c => c.Mission).ClientTemplate(
+									"#= Mission.Nom #"
+								);
+								  columns.Bound(c => c.Type);
+								  columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
+							  })
+										.Sortable(sortable =>
+										{
+											sortable.SortMode(GridSortMode.SingleColumn);
+										})
+										.Scrollable(scrollable => scrollable.Height("auto"))
+										.DataSource(dataSource => dataSource
+											.Ajax()
+											.Model(model => model.Id(p => p.Id))
+											.Read(read => read.Action("LigneDeFrais_Read", "Compta"))
+										)
+)
+
+<script type="text/javascript">
+	function Valider(e) {
+		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+		console.log(dataItem);
+		var grid = $("#LigneDeFrais").data("kendoGrid");
+		var items = grid.dataSource.data();
+		for (var i = 0; i < items.length; i++) {
+			if (dataItem.Id == items[i].Id) {
+				items[i].set("Statut", 3);
+			}
+		}
+		$.ajax({
+			url: 'ValiderLigne',
+			data: { id: dataItem.Id }
+		})
+	}
+
+	function Refuser(e) {
+		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+		console.log(dataItem);
+		var grid = $("#LigneDeFrais").data("kendoGrid");
+		var items = grid.dataSource.data();
+		for (var i = 0; i < items.length; i++) {
+			if (dataItem.Id == items[i].Id) {
+				items[i].set("Statut", 0);
+			}
+		}
+		$.ajax({
+			url: 'RefuserLigne',
+			data: { id: dataItem.Id }
+		})
+	}
+</script>
+<script>
+
+	function onSave(e) {
+		//Implement the event handler for Save
+	}
+
+	function onSaveChanges(e) {
+		//Implement the event handler for SaveChanges
+	}
+
+	function onDataBinding(e) {
+		//Implement the event handler for DataBinding
+	}
+
+</script>

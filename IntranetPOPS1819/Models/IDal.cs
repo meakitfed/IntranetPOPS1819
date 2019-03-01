@@ -11,12 +11,16 @@ namespace IntranetPOPS1819.Models
         List<Collaborateur> ObtenirTousLesCollaborateurs();
         List<Collaborateur> ObtenirCollaborateursService(int id);
         Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp);
+		void AssignerChefDeService(int idCollab);
+		Collaborateur ObtenirDirecteurFinancier();
+		Collaborateur ObtenirPDG();
 
-        // Services
-        Service ObtenirServiceDeType(TypeService type);
+		// Services
+		Service ObtenirServiceDeType(TypeService type);
         List<Service> ObtenirTousLesServices();
-        Service AjoutService(string nom);
-        void AssignerService(int idService, int idCollaborateur);
+		Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda);
+		void AssignerService(int idService, int idCollaborateur);
+		void EnleverChef(int idService);
 
         // Missions
         Mission GetMission(int idMission);
@@ -35,14 +39,17 @@ namespace IntranetPOPS1819.Models
         void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne);
         void EnvoiNoteDeFraisChefService(int idService, int idCollab, int idNote);
         void ChangerStatutLigneDeFrais(int idLigne, StatutLigneDeFrais statut);
+		void ChangerMissionLigneDeFrais(int idLigne, int idMission);
+		void EnvoiNoteDeFrais(int idService, int idCollab, int idNote);
 
-        // Congés
-        void AjoutConge(int idCollab, Conge c);
+		// Congés
+		void AjoutConge(int idCollab, Conge c);
         void ChangerStatut(int id, StatutConge s);                                      // Testé
         void EnvoiCongeChef(int idService, int idCollab, int idConge);
         void ValiderConge(int idCollab, int idConge);                                   // Testé
         void ModifierCongesRestant(int id, float jours);                                // Testé
         Conge ObtenirConge(int id);
+        void SupprimerDemandeConge(int idCollab, int idConge);
 
         // Notifications
         void AjoutNotif(int idCollab, Message m);

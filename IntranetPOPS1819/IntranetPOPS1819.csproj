@@ -154,6 +154,18 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\images\badpage.jpg" />
+    <Content Include="Content\images\collaborateurs\col1.jpg" />
+    <Content Include="Content\images\collaborateurs\col2.jpg" />
+    <Content Include="Content\images\collaborateurs\col3.jpg" />
+    <Content Include="Content\images\collaborateurs\col4.jpg" />
+    <Content Include="Content\images\collaborateurs\col5.jpg" />
+    <Content Include="Content\images\collaborateurs\col6.jpg" />
+    <Content Include="Content\images\collaborateurs\col7.jpg" />
+    <Content Include="Content\images\collaborateurs\col8.jpg" />
+    <Content Include="Content\images\green.png" />
+    <Content Include="Content\images\orange.jpg" />
+    <Content Include="Content\images\red.png" />
+    <Content Include="Content\images\yellow.jpg" />
     <Content Include="Content\kendo\2019.1.115\ascx\Boolean.ascx" />
     <Content Include="Content\kendo\2019.1.115\ascx\Currency.ascx" />
     <Content Include="Content\kendo\2019.1.115\ascx\Date.ascx" />
@@ -2799,6 +2811,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ChefDeServiceController.cs" />
+    <Compile Include="Controllers\CollaborateursController.cs" />
+    <Compile Include="Controllers\ComptaController.cs" />
     <Compile Include="Controllers\CongesController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -2820,6 +2834,7 @@
     <Compile Include="Models\Mission.cs" />
     <Compile Include="Models\NoteDeFrais.cs" />
     <Compile Include="Models\Service.cs" />
+    <Compile Include="Models\tmp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ChefDeServiceViewModel.cs" />
     <Compile Include="ViewModel\CongesViewModel.cs" />
@@ -2859,6 +2874,10 @@
     <Content Include="Views\RH\Index.cshtml" />
     <Content Include="Views\RH\CongesRH.cshtml" />
     <Content Include="Views\Shared\ListeServices.cshtml" />
+    <Content Include="Views\Compta\Index.cshtml" />
+    <Content Include="Views\Compta\InformationLigneDeFrais.cshtml" />
+    <Content Include="Views\Collaborateurs\Index.cshtml" />
+    <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2916,6 +2935,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
+    <ItemGroup>
+      <RoslynFiles Include="$(CscToolPath)\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
   <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
     <ItemGroup>
       <RoslynFiles Include="$(CscToolPath)\*" />

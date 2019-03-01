@@ -38,18 +38,30 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/Collaborateurs/Index">Collaborateurs</a>
 				</li>
-				@if (c.Chef)
-				{
-					<li class="nav-item">
-						<a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
-					</li>
+				@{
+					if (c.Service != null)
+					{
+						if (c.Chef)
+						{
+							<li class="nav-item">
+								<a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
+							</li>
+						}
+						if (c.Service.Type == TypeService.RessourcesHumaines)
+						{
+							<li class="nav-item">
+								<a class="nav-link" href="/RH/Index">Ressources humaines</a>
+							</li>
+						}
+						if (c.Service.Type == TypeService.Comptabilité)
+						{
+							<li class="nav-item">
+								<a class="nav-link" href="/Compta/Index">Comptabilité</a>
+							</li>
+						}
+					}
 				}
-                @if(c.Service.Type == TypeService.RessourcesHumaines)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="/RH/Index">Ressources humaines</a>
-                    </li>
-                }
+
 				@if (c.Admin)
 				{
 					<li class="nav-item dropdown">
@@ -70,16 +82,19 @@
 				</li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i>@if(c.Notifications.Count() > 0){<span class="badge badge-notify">@c.Notifications.Count()</span>}</a>
-                    <div class=" dropdown-menu dropdown-menu-right scrollable-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <div class=" dropdown-menu dropdown-menu-right scrollable-menu " aria-labelledby="navbarDropdownMenuLink">
                         @foreach (var m in c.Notifications)
                         {
-                            <b>@m.Titre</b>
-                            <p>
-                                <em>@m.Emetteur</em><br />
-                                @m.Contenu<br />
-                                @m.Date<br />
-                                <a href=@m.Redirection><em>Cliquez pour consulter</em></a>
-                            </p>
+                            <button class="list-group-item" onclick="window.location='@m.Redirection';">
+                                <b>@m.Titre</b>
+                                <p>
+                                    <em>@m.Emetteur</em><br />
+                                    @*@m.Contenu<br />
+                                    @m.Date.ToString("dd/MM/yyyy")<br />
+                                    <em>Cliquez pour consulter</em>*@
+                                </p>
+                            </button>
+                            
                         }
                     </div>
                 </li>
@@ -106,4 +121,14 @@
         position: relative;
         top: -10px;
     }
+
+    .list-group-item:hover {
+        background-color: lightgrey;
+    }
+
+    .dropdown-menu {
+        width: auto !important;
+        height: auto !important;
+    }
+   
 </style>

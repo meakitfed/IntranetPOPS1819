@@ -8,7 +8,7 @@ using System.Web;
 namespace IntranetPOPS1819.Models
 {
     public class LigneDeFrais
-    {
+	{
 		[ScaffoldColumn(false)]
 		public int Id { get; set; }
 
@@ -38,6 +38,7 @@ namespace IntranetPOPS1819.Models
 
 		[UIHint("DateTemplate")]
 		[DataType(DataType.Date)]
+		//[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
 		public DateTime? Date { get; set; }
 
 		//public virtual NoteDeFrais Note { get; set; }
@@ -45,14 +46,17 @@ namespace IntranetPOPS1819.Models
 		public string ResumeFileUrl { set; get; }
 
 		public string Filename { set; get; }
+
+		[ScaffoldColumn(false)]
+		public int IdCollab { get; set; }
 	}
 
     public enum StatutLigneDeFrais
     {
-		ValidéeChef,
-		Validée,
-		Refusée,
-		EnAttente
+		ValidéeChef = 2,
+		Validée = 3,
+		Refusée = 0,
+		EnAttente = 1,
     }
 
 	public enum TypeLigneDeFrais

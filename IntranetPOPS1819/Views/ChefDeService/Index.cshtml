@@ -12,49 +12,51 @@
 
 @Html.Partial("../Shared/Navbar")
 @{
-	int firstNote = -1;
-	<h2>@Model._Collaborateur.Service.Nom</h2>
-	<div>
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col-lg-2 table-bordered">
-					@{/*for (int k = 0; k < Model._Collaborateur.Service.Collaborateurs.Count; k++)
-					{
-					<button class="btn btn-block btn-2" href="" onclick="javascript:toggleVisibility(('c' + @Model._Collaborateur.Service.Collaborateurs[k].Id)); return false;">@Model._Collaborateur.Service.Collaborateurs[k].Nom</button>
-					<div id=@("c" + Model._Collaborateur.Service.Collaborateurs[k].Id) style="display:none;">
-						@foreach (NoteDeFrais n in Model._Collaborateur.Service.Collaborateurs[k].GetNotesDeFraisAValider())
-						{
-							if (firstNote == -1)
-							{
-								firstNote = n.Id;
-							}
-							@Ajax.ActionLink(n.Date.ToString(), "InformationLigneDeFraisSelection", new { idNote = n.Id }, new AjaxOptions
-							{
-							   InsertionMode = InsertionMode.Replace,
-							   UpdateTargetId = "InfoLigne",
-							   HttpMethod = "Post"
-							}, new { @class = "btn btn-block btn-3" })
-						}
-					</div>
-					*/}
-				</div>
-				<div class="col-lg-12 table-bordered">
-					<nav class="nav nav-tabs">
-						<a class="nav-item nav-link active" href="#p1" data-toggle="tab">Congés</a>
-						<a class="nav-item nav-link" href="#p2" data-toggle="tab">Notes de frais</a>
-					</nav>
-					<div class="tab-content">
-						<div class="tab-pane active" id="p1">
-							@Html.Partial("Conges2")
-						</div>
-                        <div class="tab-pane" id="p2">
-                            @Html.Partial("InformationLigneDeFraisSelection")
+    int id = -1;
+<h2>@Model._Collaborateur.Service.Nom</h2>
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 table-bordered">
+                <nav class="nav nav-tabs">
+                    <a class="nav-item nav-link active" href="#p1" data-toggle="tab">Congés</a>
+                    <a class="nav-item nav-link" href="#p2" data-toggle="tab">Notes de frais</a>
+                </nav>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="p1">
+                        @Html.Partial("Conges2")
+                    </div>
+                    <div class="tab-pane" id="p2">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                @foreach (Collaborateur c in Model._Collaborateur.Service.Collaborateurs)
+                                {
+                                    if (c.Id != Model._Collaborateur.Id)
+                                    {
+                                        if (id == -1) { id = c.Id; };
+                                        @Ajax.ActionLink(c.Prenom + " " + c.Nom, "InformationLigneDeFraisSelection", new { idCol = c.Id }, new AjaxOptions
+                                        {
+                                            InsertionMode = InsertionMode.Replace,
+                                            UpdateTargetId = "InfoLigne",
+                                            HttpMethod = "Post"
+                                        }, new { @class = "btn btn-block btn-3" })
+                                    }
+                                }
+                            </div>
+                            <div id="InfoLigne" class="col-lg-10">
+                                @{
+                                    if (id != -1)
+                                    {
+                                        Html.RenderAction("InformationLigneDeFraisSelection", new { idCol = id });
+                                    }
+                                }
+                            </div>
+
                         </div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
 }
 
 
