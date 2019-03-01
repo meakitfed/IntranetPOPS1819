@@ -3,31 +3,43 @@
 
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-lg-6 table-bordered">
+		<div class="col-lg-6">
 			<div id="infos" class="text-center">
 				<h1>@Model.Prenom @Model.Nom</h1>
 				<br />
-				Service : @Model.Service.Nom
-				Present :	@if (Model.isEnConge())
-				{
-					<div>non <i class="em em-cry"></i></div>
-				}
-				else
-				{
-					<div>oui</div>
-				}
-				<i class="em em-e-mail"></i> : @Model.Mail
-				<i class="em em-telephone_receiver"></i> : @Model.Telephone
+				<p>Service : @Model.Service.Nom</p>
+				<p>
+					Present :	@if (Model.isEnConge())
+					{
+						<text>non <i class="em em-cry"></i></text>
+					}
+					else
+					{
+						<text>oui</text>
+					}
+				</p>
+				<p><i class="em em-e-mail"></i> : @Model.Mail</p>
+				<p><i class="em em-telephone_receiver"></i> : @Model.Telephone</p>
 			</div>
 		</div>
-		<div class="col-lg-6 table-bordered">
+		<div class="col-lg-6">
 			@{ 
-				Random rng = new Random();
-				int rand = rng.Next(1, 9);
+				int rand = Model.Id % 9 + 1;
 				string path = "~/Content/images/collaborateurs/col" + rand + ".jpg";
 			}
-			<img src=@path>
+			<img src="@Url.Content(path)" class="heightSet" >
 
 		</div>
 	</div>
 </div>
+
+<style>
+	.widthSet {
+		max-width: 64px;
+	}
+
+	.heightSet {
+		max-height: 500px;
+	}
+
+</style>

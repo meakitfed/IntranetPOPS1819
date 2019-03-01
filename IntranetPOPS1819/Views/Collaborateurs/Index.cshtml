@@ -29,7 +29,7 @@
 							<div id=@(("service" + service.Id)) style="display:none;">
 								@foreach (Collaborateur col in service.Collaborateurs)
 								{
-									@Ajax.ActionLink(col.Nom, "InformationsCollaborateur", new { col = col }, new AjaxOptions
+									@Ajax.ActionLink(col.Nom, "InformationsCollaborateur", new { idCol = col.Id }, new AjaxOptions
 								   {
 									   InsertionMode = InsertionMode.Replace,
 									   UpdateTargetId = "InfoCollaborateurActif",

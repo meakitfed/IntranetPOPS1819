@@ -17,8 +17,11 @@ namespace IntranetPOPS1819.Controllers
         }
 
 
-		public ActionResult InformationsCollaborateur(Collaborateur col)
+		public ActionResult InformationsCollaborateur(int idCol)
 		{
+			IDal dal = new Dal();
+			Collaborateur col = dal.ObtenirCollaborateur(idCol);
+
 			return PartialView(col);
 		}
     }
