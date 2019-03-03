@@ -1,4 +1,5 @@
 ﻿@using IntranetPOPS1819.Models
+@using HelperExtensionNameSpace
 @model IntranetPOPS1819.ViewModel.OngletNoteDeFraisViewModel
 @{
     ViewBag.Title = "Note De Frais";
@@ -8,26 +9,45 @@
 
 @Html.Partial("../Shared/Navbar")
 <div>
-    <div class="container-fluid">
+    <div class="container-fluid profil-layout">
         <div class="row">
-            <div class="col-lg-2 table-bordered">
+            <div class="col-md-2 row1">
                 <p><h3 class="text-center">Historique</h3></p>
                 @{
                     int a = Model._Collaborateur.NotesDeFrais.Count - 1;
                     int d = DateTime.Now.Year;
-					
+
                     while (d >= Model._Collaborateur.NotesDeFrais[0].Date.Year && a >= 0)
                     {
                         <button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
                         <div id=@(("Année" + d)) style="display:none;">
                             @while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
                             {
-                                @Ajax.ActionLink(@Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM"), "InformationLigneDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[a].Id }, new AjaxOptions
+                                string s = Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM");
+
+                                if (Model._Collaborateur.NotesDeFrais[a].NbrEnAttente() != 0)
                                 {
-                                     InsertionMode = InsertionMode.Replace,
-                                     UpdateTargetId = "InfoNoteActive",
-                                     HttpMethod = "Post"
-                                }, new { @class = "btn btn-block btn-3" })
+                                    s += "   <span class='orange'>" + Model._Collaborateur.NotesDeFrais[a].NbrEnAttente() + "</span>";
+                                }
+                                if (Model._Collaborateur.NotesDeFrais[a].NbrRefusé() != 0)
+                                {
+                                    s += "<span class='red'>" + Model._Collaborateur.NotesDeFrais[a].NbrRefusé() + "</span>";
+                                }
+                                if (Model._Collaborateur.NotesDeFrais[a].NbrValidéeChef() != 0)
+                                {
+                                    s += "  <span class='green'>" + Model._Collaborateur.NotesDeFrais[a].NbrValidéeChef() + "</span>";
+                                }
+                                if (Model._Collaborateur.NotesDeFrais[a].NbrValidée() != 0)
+                                {
+                                    s += "<span class='green2'>" + Model._Collaborateur.NotesDeFrais[a].NbrValidée() + "</span>";
+                                }
+                                @Ajax.RawActionLink(string.Format(s), "InformationLigneDeFrais", "NoteDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[a].Id }, new AjaxOptions
+                           {
+                               //Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM") + "<div class='numberCircle'>"+ Model._Collaborateur.NotesDeFrais[a].NbrEnAttente() + "</div>"
+                               InsertionMode = InsertionMode.Replace,
+                               UpdateTargetId = "InfoNoteActive",
+                               HttpMethod = "Post"
+                           }, new { @class = "btn btn-block btn-3" })
                                 a--;
                             }
                         </div>
@@ -35,8 +55,8 @@
                     }
                 }
             </div>
-			<div class="col-lg-10 table-bordered">
-				<div id="InfoNoteActive">
+			<div class="col-md-10">
+				<div id="InfoNoteActive" class="row2">
 					@{
 						Html.RenderAction("InformationLigneDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[Model._Collaborateur.NotesDeFrais.Count - 1].Id });
 					}

@@ -1,13 +1,19 @@
-﻿using IntranetPOPS1819.Models;
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IntranetPOPS1819.Models;
 using System.Data.Entity;
+using System.Linq;
 
 namespace IntranetTests.Tests
 {
+
     [TestClass]
-    public class CongesTest
+    public class DalTests
     {
-        private IDal dal;
+
+        private Dal dal;
 
         [TestInitialize]
         public void Init_AvantChaqueTest()
@@ -25,15 +31,19 @@ namespace IntranetTests.Tests
         {
             dal.Dispose();
         }
-        
+
+
         [TestMethod]
-        public void TestValidationFinale_OK()
+        public void InitializeBdd_MissionsAssigneesAuxServices()
         {
-            Conge c = new Conge { Debut = new System.DateTime(2019, 2, 15), Fin = new System.DateTime(2019, 2, 17), Type = TypeConge.RTT };
-            dal.AjoutConge(1, c);
-            dal.ValiderConge(1, dal.ObtenirCollaborateur(1).Conges[0].Id);
-            Assert.AreEqual(dal.ObtenirCollaborateur(1).Conges[0].Statut, StatutConge.Valide);
-            Assert.AreEqual(dal.ObtenirCollaborateur(1).CongesRestants, 7);
+            Service s = dal.bdd.Services.FirstOrDefault(serv => serv.Nom == "Comptabilité");
+            Assert.IsNotNull(s);
+
+            if (s != null)
+            {
+                Assert.IsTrue(s.Collaborateurs.Count > 0, "no collab");
+                Assert.IsTrue(s.Missions.Count > 0, "no missions");
+            }
         }
     }
 }

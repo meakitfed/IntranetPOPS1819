@@ -6,27 +6,34 @@
 
 @if (!@User.Identity.IsAuthenticated)
 {
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+    <a class="navbar-brand logo-pos" href="#">Intranet POPS1819</a>
+</nav>
 
 
 	using (Html.BeginForm())
 	{
-		<div id="inner">
-			<p>
-				Identifiant : &nbsp;&nbsp;&nbsp;&nbsp;
-				@Html.TextBoxFor(m => m._Collaborateur.Mail)
-				@Html.ValidationMessageFor(m => m._Collaborateur.Mail)
-			</p>
-		</div>
-		<div id="inner">
-			<p>
-				Mot de passe :
-				@Html.PasswordFor(m => m._Collaborateur.MotDePasse)
-				@Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
-			</p>
-		</div>
-		<div id="inner">
-			<input type="submit" value="Se connecter" />
-		</div>
+        <div class="login-partie">
+            <h2 class="identification">Identification</h2>
+            <div id="inner">
+                <p class="login-partie1">
+                    Identifiant : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    @Html.TextBoxFor(m => m._Collaborateur.Mail)
+                    @Html.ValidationMessageFor(m => m._Collaborateur.Mail)
+                </p>
+		    </div>
+		    <div id="inner">
+                <p class="login-partie2">
+                    Mot de passe : &nbsp;&nbsp;&nbsp;
+                    @Html.PasswordFor(m => m._Collaborateur.MotDePasse)
+                    @Html.ValidationMessageFor(m => m._Collaborateur.MotDePasse)
+                </p>
+		    </div>
+		    <div id="inner" align="center">
+			    <input type="submit" class="seconnect" value="    Se connecter    " />
+		    </div>
+        </div>
+		
 		
 	}
 
