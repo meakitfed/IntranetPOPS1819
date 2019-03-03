@@ -260,6 +260,7 @@ namespace IntranetPOPS1819.Models
             try
             {
 				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
+                Collaborateur mathias = AjoutCollaborateur("Bazin", "Mathias", "mat@gmail.com", "yahoo");
 				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
 				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
                 Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco");
@@ -277,6 +278,7 @@ namespace IntranetPOPS1819.Models
 
                 Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
+                AssignerService(rh.Id, mathias.Id);
 
 				Service marketing = AjoutService("Marketing");
 				AssignerService(marketing.Id, nathan.Id);

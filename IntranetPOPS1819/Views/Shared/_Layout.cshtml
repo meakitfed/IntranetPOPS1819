@@ -1,66 +1,122 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - Intranet POPS1819</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Intranet POPS1819</title>
 
-	@Styles.Render("~/Content/css")
-	@Scripts.Render("~/bundles/modernizr")
-	<link href="~/CSS/style.css" rel="stylesheet" />
-	@Scripts.Render("~/bundles/jquery")
-	@Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-	<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.mobile.min.css" />
 
-	<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.common.min.css" />
-	<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.min.css" />
-	<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.115/styles/kendo.metro.mobile.min.css" />
-
-	<script src="https://kendo.cdn.telerik.com/2019.1.115/js/jquery.min.js"></script>
-	<script src="https://kendo.cdn.telerik.com/2019.1.115/js/kendo.all.min.js"></script>
-	<script src="~/Scripts/kendo/2019.1.115/kendo.aspnetmvc.min.js"></script>
-	@{
-		var culture = System.Globalization.CultureInfo.CurrentCulture.ToString();
-		<script src="@Url.Content("~/Scripts/kendo/2019.1.115/cultures/kendo.culture." + culture + ".min.js")"></script>
-	}
-	<script>
+    <script src="https://kendo.cdn.telerik.com/2019.1.115/js/jquery.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2019.1.115/js/kendo.all.min.js"></script>
+    <script src="~/Scripts/kendo/2019.1.115/kendo.aspnetmvc.min.js"></script>
+    @{
+        var culture = System.Globalization.CultureInfo.CurrentCulture.ToString();
+        <script src="@Url.Content("~/Scripts/kendo/2019.1.115/cultures/kendo.culture." + culture + ".min.js")"></script>
+    }
+    
+    <script>
         kendo.culture("@culture");
-	</script>
+    </script>
 </head>
 <body>
-	<!--<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav"></ul>
-			</div>
-		</div>
-	</div>-->
+    <!--<div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </div>-->
 
-	<div class=" container-fluid body-content">
-		@RenderBody()
-		<hr />
-		<footer>
-			<p>&copy; @DateTime.Now.Year - by Club Orteil</p>
-		</footer>
-	</div>
-
-	
-	@Scripts.Render("~/bundles/bootstrap")
-	@RenderSection("scripts", required: false)
-	<script type="text/javascript" src="@Url.Content("/JavaScript/Functions.js")"></script>
-	
-	
+    <div class=" container-fluid body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - by Club Orteil</p>
+        </footer>
+    </div>
 
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript" src="@Url.Content("/JavaScript/Functions.js")"></script>
+
+    <link href="~/CSS/style.css" rel="stylesheet" type="text/css"/>
+    <style>
+        span.red {
+            background: red;
+            border-radius: 0.8em;
+            -moz-border-radius: 0.8em;
+            -webkit-border-radius: 0.8em;
+            color: #ffffff;
+            display: inline-block;
+            font-weight: bold;
+            line-height: 1.6em;
+            margin-left: 5px;
+            text-align: center;
+            width: 1.6em;
+        }
+
+        span.green {
+            background: #16b62b;
+            border-radius: 0.8em;
+            -moz-border-radius: 0.8em;
+            -webkit-border-radius: 0.8em;
+            color: #fff;
+            display: inline-block;
+            font-weight: bold;
+            line-height: 1.6em;
+            margin-left: 5px;
+            text-align: center;
+            width: 1.6em;
+        }
+
+        span.green2 {
+            background: #51de14;
+            border-radius: 0.8em;
+            -moz-border-radius: 0.8em;
+            -webkit-border-radius: 0.8em;
+            color: #ffffff;
+            display: inline-block;
+            font-weight: bold;
+            line-height: 1.6em;
+            margin-left: 5px;
+            text-align: center;
+            width: 1.6em;
+        }
+
+        span.orange {
+            background: #ff6a00;
+            border-radius: 0.8em;
+            -moz-border-radius: 0.8em;
+            -webkit-border-radius: 0.8em;
+            color: #ffffff;
+            display: inline-block;
+            font-weight: bold;
+            line-height: 1.6em;
+            margin-left: 5px;
+            text-align: center;
+            width: 1.6em;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 </body>
 </html>
