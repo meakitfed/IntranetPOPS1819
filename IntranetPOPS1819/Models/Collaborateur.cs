@@ -203,12 +203,16 @@ namespace IntranetPOPS1819.Models
 
         public string RoleToString()
         {
-            if (this.Admin)
-                return "Administrateur";
-            else if (this.Chef)
-                return "Chef de service";
+            string rst = "";
+            if (this.Chef)
+                rst += "Chef de service";
             else
-                return "Collaborateur";
+                rst += "Collaborateur";
+
+            if (this.Admin)
+                rst += ", Administrateur";
+
+            return rst;
         }
     }
 }

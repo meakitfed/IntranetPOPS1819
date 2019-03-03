@@ -263,7 +263,7 @@ namespace IntranetPOPS1819.Models
             {
                 //création collaborateurs
 				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp", "06 06 12 09 11");
-				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin", "07 06 12 09 83");
+				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin", "07 06 12 09 83", admin: true);
 
                 Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede", "06 54 12 09 83");
                 Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco", "07 06 06 06 06");
@@ -404,20 +404,21 @@ namespace IntranetPOPS1819.Models
 			return bdd.Missions.FirstOrDefault(m => m.Id == idMission);
 		}
 
-		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, string tel)
+        //comme l'autre ajoutCol, mais avec le telephone en plus
+		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, string tel, bool chef = false, bool admin = false)
         {
 			
-			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp), Telephone = tel};
+			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp), Telephone = tel, Chef = chef, Admin = admin};
 			bdd.Collaborateurs.Add(c);
 			bdd.SaveChanges();
 			System.Diagnostics.Debug.WriteLine(c.Id);
 			return c;
         }
 
-        public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
+        public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, bool chef = false, bool admin = false)
         {
 
-            Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail, MotDePasse = EncodeMD5(mdp)};
+            Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail, MotDePasse = EncodeMD5(mdp), Chef = chef, Admin = admin };
             bdd.Collaborateurs.Add(c);
             bdd.SaveChanges();
             System.Diagnostics.Debug.WriteLine(c.Id);
