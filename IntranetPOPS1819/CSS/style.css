@@ -1,16 +1,23 @@
 ﻿.btn-1 {
-	background-color: #000000;
+	background-color: #343a40;
 	color: white;
+	border: 1px solid #ccc;
+	box-shadow: 1px 1px 3px #999;
 }
 
 .btn-2 {
 	background-color: #404040;
 	color: white;
+	border: 1px solid #ccc;
+	box-shadow: 1px 1px 3px #999;
 }
 
 .btn-3 {
 	background-color: #808080;
 	color: white;
+	margin-bottom: -10px;
+	border: 1px solid #ccc;
+	box-shadow: 1px 1px 3px #999;
 }
 
 #inner {
@@ -35,4 +42,15 @@
     height: auto;
     max-height: 200px;
     overflow-x: hidden;
+}
+
+.DemandeInfo {
+	border: 1px solid grey;
+	border-radius: 1px; /* 边框半径 */
+	cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+	outline: none; /* 不显示轮廓线 */
+	font-family: Microsoft YaHei; /* 设置字体 */
+	color: black; /* 字体颜色 */
+	box-shadow: 3px 3px 2px #888888;
+	white-space: pre-line;
 }

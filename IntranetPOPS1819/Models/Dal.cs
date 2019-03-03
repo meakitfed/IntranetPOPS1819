@@ -275,21 +275,30 @@ namespace IntranetPOPS1819.Models
                 Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco", "07 06 06 06 06");
                 Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa", "07 06 12 09 83");
                 Collaborateur marie = AjoutCollaborateur("Marie-Christine", "Henriot", "marie@gmail.com", "mch", "06 13 63 32 18");
+				Collaborateur jean = AjoutCollaborateur("Jean", "Monrant", "jean@gmail.com", "mdp", "06 28 15 32 25");
+				Collaborateur luc = AjoutCollaborateur("Luc", "Baton", "luc@gmail.com", "mdp", "06 13 47 32 89");
 
-                //création services
-                Service direction = AjoutService("Direction", TypeService.Direction);
+				//création services
+				Service direction = AjoutService("Direction", TypeService.Direction);
                 AssignerService(direction.Id, marie.Id);
                 AssignerChefDeService(marie.Id);
 
                 Service compta = AjoutService("Comptabilité", TypeService.Comptabilité);
 				AssignerService(compta.Id, didier.Id);
                 AssignerService(compta.Id, coco.Id);
-                AssignerChefDeService(didier.Id);
+				AssignerService(compta.Id, luc.Id);
+				AssignerService(compta.Id, jean.Id);
+				AssignerChefDeService(didier.Id);
 
                 Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
-
-				EnvoiDemandeInformation(new Message { Contenu = "Salut toi", Emetteur = "Nathan" });
+				string Demande =
+				"Bonjour, \n" +
+				"J'ai des inquiétudes pour ce qui est du projet Parking Velizy, je n'ai toujours pas de nouvelles de l'agent commercial\n" +
+				"Serait-il possible de prendre contact par un autre biais ?\n" +
+				"Merci d'avance,\n" +
+				"Nathan.\n";
+				EnvoiDemandeInformation(new Message { Contenu = (Demande), Emetteur = "Nathan" });
 				EnvoiDemandeInformation(new Message { Contenu = "Salut toi 2", Emetteur = "Nathan 2 " });
 				EnvoiDemandeInformation(new Message { Contenu = "Salut toi 3", Emetteur = "Nathan 3" });
 
@@ -305,10 +314,12 @@ namespace IntranetPOPS1819.Models
 				MiseAJourNotesDeFrais(isabelle.Id);
                 MiseAJourNotesDeFrais(marie.Id);
                 MiseAJourNotesDeFrais(coco.Id);
+				MiseAJourNotesDeFrais(jean.Id);
+				MiseAJourNotesDeFrais(luc.Id);
 
 
-                //tout le monde se voit assigner toutes les missions
-                List<Mission> Missions = new List<Mission>();
+				//tout le monde se voit assigner toutes les missions
+				List<Mission> Missions = new List<Mission>();
 				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
 				for (int j = 0; j < labelsMission.Length; j++)
 				{

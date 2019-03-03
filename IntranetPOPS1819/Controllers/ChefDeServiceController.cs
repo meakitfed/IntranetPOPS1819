@@ -75,7 +75,6 @@ namespace IntranetPOPS1819.Controllers
                     Nom = ligneDeFrais.Nom,
                     Somme = ligneDeFrais.Somme,
                     Type = ligneDeFrais.Type,
-                    Complete = ligneDeFrais.Complete,
                     Statut = ligneDeFrais.Statut,
                     Date = ligneDeFrais.Date,
                     ResumeFileUrl = ligneDeFrais.ResumeFileUrl,

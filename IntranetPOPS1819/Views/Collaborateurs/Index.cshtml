@@ -22,32 +22,36 @@
 			<div class="row">
 				<div class="col-md-2 row1">
 					<p><h3 class="text-center">Collaborateurs par services</h3></p>
-					@{
-						foreach (Service service in Model)
-						{
-							<button class="btn btn-block btn-1" onclick="javascript:toggleVisibility(('service' + @service.Id)); return false;">@service.Nom</button>
-							<div id=@(("service" + service.Id)) style="display:none;">
-								@foreach (Collaborateur col in service.Collaborateurs)
+					<div>
+						<div class="list-group">
+							@{
+								foreach (Service service in Model)
 								{
-									@Ajax.ActionLink(col.Nom, "InformationsCollaborateur", new { idCol = col.Id }, new AjaxOptions
-								   {
-									   InsertionMode = InsertionMode.Replace,
-									   UpdateTargetId = "InfoCollaborateurActif",
-									   HttpMethod = "Post",
-								   }, new { @class = "btn btn-block btn-3" })
+									<button class="list-group-item btn btn-block btn-1 " onclick="javascript:toggleVisibility(('service' + @service.Id)); return false;">@service.Nom</button>
+									<span id=@(("service" + service.Id)) style="display:none;">
+										@foreach (Collaborateur col in service.Collaborateurs)
+										{
+											@Ajax.ActionLink(col.Nom, "InformationsCollaborateur", new { idCol = col.Id }, new AjaxOptions
+										   {
+											   InsertionMode = InsertionMode.Replace,
+											   UpdateTargetId = "InfoCollaborateurActif",
+											   HttpMethod = "Post",
+										   }, new { @class = "list-group-item btn btn-block btn-3 btn-list-intranet" })
+										}
+									</span>
 								}
-							</div>
-						}
-					}
-                    <br/><br />
+							}
+						</div>
+					</div>
+					<br /><br />
 				</div>
 				<div class="col-md-10">
-                    <div id="InfoCollaborateurActif" class="row2">
-                        &nbsp;&nbsp;Veulliez selectionner un collabo <i class="em em-8ball"></i><i class="em em-woman-frowning"></i>
-                    </div>
+					<div id="InfoCollaborateurActif" class="row2">
+						&nbsp;&nbsp;Veulliez selectionner un collabo <i class="em em-8ball"></i><i class="em em-woman-frowning"></i>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-</body>
+		</body>

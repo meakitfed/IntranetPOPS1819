@@ -54,7 +54,6 @@ namespace IntranetPOPS1819.Controllers
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
 					Somme = ligneDeFrais.Somme,
-					Complete = ligneDeFrais.Complete,
 					Statut = ligneDeFrais.Statut,
 					ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 					Filename = ligneDeFrais.Filename,
@@ -83,17 +82,15 @@ namespace IntranetPOPS1819.Controllers
 					.Where(x => x.Value.Errors.Count > 0)
 					.Select(x => new { x.Key, x.Value.Errors })
 					.ToArray();
-
+				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 				if (ModelState.IsValid)
 				{
 					dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
-					Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-					
+
 					var entity = new LigneDeFrais
 					{
 						Nom = ligneDeFrais.Nom,
 						Somme = ligneDeFrais.Somme,
-						Complete = ligneDeFrais.Complete,
 						Statut = ligneDeFrais.Statut,
 						ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 						Filename = ligneDeFrais.Filename,
@@ -115,6 +112,14 @@ namespace IntranetPOPS1819.Controllers
 						System.Diagnostics.Debug.WriteLine(v);
 					}
 				}
+				foreach(HttpPostedFileBase f in Session["RESUMEFILE"] as List<HttpPostedFileBase>)
+				{
+					DirectoryInfo di = Directory.CreateDirectory(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id));
+					f.SaveAs(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id + "/" + f.FileName));
+					System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + f.FileName + "length" + f.ContentLength);
+				}
+				Session.Remove("RESUMEFILE");
+
 				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create envoie des données");
 				return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
 			}
@@ -132,7 +137,6 @@ namespace IntranetPOPS1819.Controllers
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
 					Somme = ligneDeFrais.Somme,
-					Complete = ligneDeFrais.Complete,
 					Statut = ligneDeFrais.Statut,
 					ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 					Filename = ligneDeFrais.Filename,
@@ -170,7 +174,6 @@ namespace IntranetPOPS1819.Controllers
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
 					Somme = ligneDeFrais.Somme,
-					Complete = ligneDeFrais.Complete,
 					Statut = ligneDeFrais.Statut,
 					ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 					Filename = ligneDeFrais.Filename,
@@ -341,11 +344,12 @@ namespace IntranetPOPS1819.Controllers
 					{
 						files.Add(newFile);
 					}
-					HttpContext.Session[sessionKey] = files;
+					Session[sessionKey] = files;
 					if (newFile != null)
 						filename = Path.GetFileName(newFile.FileName);
 				}
 			}
+
 			System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + filename);
 			return Json(new { Type = "Upload", FileName = filename }, JsonRequestBehavior.AllowGet);
 		}

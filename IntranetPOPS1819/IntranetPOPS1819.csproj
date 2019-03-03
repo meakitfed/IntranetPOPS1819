@@ -5117,6 +5117,7 @@
     <Content Include="Views\Collaborateurs\Index.cshtml" />
     <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
     <Content Include="Views\RH\InformationMessage.cshtml" />
+    <Content Include="Views\RH\DemandeInformation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -5127,6 +5128,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\kendo\2019.1.115\fonts\" />
+    <Folder Include="Justifications\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
