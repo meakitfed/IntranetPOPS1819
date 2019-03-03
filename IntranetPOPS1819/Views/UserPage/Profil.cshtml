@@ -26,7 +26,7 @@
                         Service : @if (@Model._Collaborateur.Service != null)
                         {@Model._Collaborateur.Service.Nom}
                     </p>
-                    <p>Rôle : Collaborateur TODO</p>
+                    <p>Rôle : @Model._Collaborateur.RoleToString()</p>
                     <p><a href="mailto:@Model._Collaborateur.Mail">@Model._Collaborateur.Mail</a></p>
                     <p>Téléphone : @Model._Collaborateur.Telephone</p>
                 </div>
