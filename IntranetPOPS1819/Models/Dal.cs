@@ -262,12 +262,13 @@ namespace IntranetPOPS1819.Models
             try
             {
                 //création collaborateurs
-				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
-				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
-				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
-                Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco");
-                Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
-                Collaborateur marie = AjoutCollaborateur("Marie-Christine", "Henriot", "marie@gmail.com", "mch");
+				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp", "06 06 12 09 11");
+				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin", "07 06 12 09 83");
+
+                Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede", "06 54 12 09 83");
+                Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco", "07 06 06 06 06");
+                Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa", "07 06 12 09 83");
+                Collaborateur marie = AjoutCollaborateur("Marie-Christine", "Henriot", "marie@gmail.com", "mch", "06 13 63 32 18");
 
                 //création services
                 Service direction = AjoutService("Direction", TypeService.Direction);
@@ -403,17 +404,27 @@ namespace IntranetPOPS1819.Models
 			return bdd.Missions.FirstOrDefault(m => m.Id == idMission);
 		}
 
-		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
+		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, string tel)
         {
 			
-			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};
+			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp), Telephone = tel};
 			bdd.Collaborateurs.Add(c);
 			bdd.SaveChanges();
 			System.Diagnostics.Debug.WriteLine(c.Id);
 			return c;
         }
 
-		public Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda)
+        public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
+        {
+
+            Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail, MotDePasse = EncodeMD5(mdp)};
+            bdd.Collaborateurs.Add(c);
+            bdd.SaveChanges();
+            System.Diagnostics.Debug.WriteLine(c.Id);
+            return c;
+        }
+
+        public Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda)
 		{
 			Service s = new Service { Nom = nom };
 			s.Collaborateurs = new List<Collaborateur>();
