@@ -47,7 +47,7 @@
                                     if (c.Statut == StatutConge.EnCours || c.Statut == StatutConge.ValideChef)
                                     {
                                         <option id="@c.Id" role="option">
-                                            Id:@c.Id-@c.Debut.ToString("dd/MM/yyyy")-@c.GetDuree() jours
+                                            Id:@c.Id  @c.Debut.ToString("dd/MM/yy")  @c.GetDuree()j  type:@c.Type.ToString()
                                         </option>
                                     }
                                 }
@@ -83,7 +83,7 @@
                                         if (c.Statut == StatutConge.Valide)
                                         {
                                             <li id="@c.Id">
-                                                Id: @c.Id-@c.Debut.ToString("dd/MM/yyyy")-@c.GetDuree() jours
+                                                Id:@c.Id  @c.Debut.ToString("dd/MM/yy")  @c.GetDuree()j  type:@c.Type.ToString()
                                             </li>
                                         }
                                     }
@@ -298,9 +298,10 @@
                     console.log(range.start)
                     console.log(range.start.toLocaleDateString(options))
 
-                    $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
+                    $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString(), type: $("#selectType").children(":selected").attr("id") }, function (data) {
                         if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
                         else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
+                        else if (data == "erreurTypeConge") $("#retourConge").html("<font color=\"red\">ERREUR : Il y a eu un soucis avec le type de conge.</font>")
                         else if (data == "ok") {
                             $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
                             setTimeout("location.reload(true);", 1500);
@@ -379,7 +380,11 @@
     margin-bottom: 10px;
     overflow:scroll;
     -webkit-overflow-scrolling: touch;
-}
+    }
+
+    #selectType {
+   text-align: center;
+    }
 
 </style>
 
