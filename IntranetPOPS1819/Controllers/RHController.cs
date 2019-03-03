@@ -11,20 +11,24 @@ namespace IntranetPOPS1819.Controllers
 {
     public class RHController : Controller
     {
-        // GET: RH
-        public ActionResult Index()
-        {
-            IDal dal = new Dal();
+		Dal dal = new Dal();
 
+		// GET: RH
+		public ActionResult Index()
+        {
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                ChefDeServiceViewModel vm = new ChefDeServiceViewModel { _Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name)};
-                return View(vm);
+                Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+                return View(c);
             }
             return View();
         }
 
-        public ActionResult Conges_ReadRH([DataSourceRequest]DataSourceRequest request)
+		public ActionResult InformationMessage(int id)
+		{
+			return PartialView(dal.bdd.Messages.FirstOrDefault(m => m.Id == id));
+		}
+		public ActionResult Conges_ReadRH([DataSourceRequest]DataSourceRequest request)
         {
             IDal dal = new Dal();
 

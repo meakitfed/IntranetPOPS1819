@@ -1,6 +1,7 @@
-﻿
+﻿@using IntranetPOPS1819.Models
+@model Collaborateur
 @{
-    ViewBag.Title = "Chef De Service";
+    ViewBag.Title = "Ressources Humaines";
 
     Layout = "/Views/Shared/_Layout.cshtml";
 }
@@ -15,19 +16,55 @@
 </head>
 
 <body>
-    @Html.Partial("../Shared/Navbar")
-    @{
-        <div>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-2 table-bordered">
-                        @Html.Partial("ListeServices")
-                    </div>
-                    <div class="col-lg-12 table-bordered">
-                        @Html.Partial("CongesRH")
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
+	@Html.Partial("../Shared/Navbar")
+
+	@{
+		Message message = null;
+		<div>
+			<div class="container-fluid">
+				<div class="row">
+					<nav class="nav nav-tabs">
+						<a class="nav-item nav-link active" href="#p1" data-toggle="tab">Congés</a>
+						<a class="nav-item nav-link" href="#p2" data-toggle="tab">Notes de frais</a>
+					</nav>
+					<div class="tab-content">
+						<div class="tab-pane active" id="p1">
+							<div class="col-lg-2 table-bordered">
+								@Html.Partial("ListeServices")
+							</div>
+							<div class="col-lg-12 table-bordered">
+								@Html.Partial("CongesRH")
+							</div>
+						</div>
+						<div class="tab-pane" id="p2">
+							<div class="row">
+								<div class="col-lg-2">
+									@for(int i = 0; i < Model.Service.Messages.Count; i++)
+									{
+										if (message == null) { message = Model.Service.Messages[i]; }
+										@Ajax.ActionLink(Model.Service.Messages[i].Emetteur, "InformationMessage", new { id = Model.Service.Messages[i].Id }, new AjaxOptions
+										{
+											InsertionMode = InsertionMode.Replace,
+											UpdateTargetId = "InfoMessage",
+											HttpMethod = "Post"
+										}, new { @class = "btn btn-block btn-3" })
+									}
+								</div>
+								<div id="InfoMessage" class="col-lg-10">
+									@{
+										if(message != null)
+										{
+											Html.RenderAction("InformationMessage", new { id = message.Id });
+										}
+									}
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	}
 </body>
