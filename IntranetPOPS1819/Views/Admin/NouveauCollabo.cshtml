@@ -1,29 +1,40 @@
 ﻿@model IntranetPOPS1819.ViewModel.NouveauCollaborateurViewModel
 @{
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
 
 @Html.Partial("../Shared/Navbar")
-<div>
-	@using (Html.BeginForm())
-	{
-		<div>
-			@Html.LabelFor(Model => Model.Prenom)
-			@Html.TextBoxFor(Model => Model.Prenom)
-			@Html.ValidationMessageFor(Model => Model.Prenom)
-		</div>
-		<div>
-			@Html.LabelFor(Model => Model.Nom)
-			@Html.TextBoxFor(Model => Model.Nom)
-			@Html.ValidationMessageFor(Model => Model.Nom)
-		</div>
-		<div>
-			@Html.LabelFor(Model => Model.Mail)
-			@Html.TextBoxFor(Model => Model.Mail)
-			@Html.ValidationMessageFor(Model => Model.Mail)
-		</div>
-		<input type="submit" value="Ajouter collabo" />
-	}
+<div class="nc1">
+    <div class="nc1-h">
+        <h4>Information de Nouveau Collaborateur</h4>
+    </div>
+    @using (Html.BeginForm())
+    {
+        <div align="center">
+            <p>
+                Prenom :&nbsp;&nbsp;
+                @Html.TextBoxFor(Model => Model.Prenom)
+                @Html.ValidationMessageFor(Model => Model.Prenom)
+            <p>
+        </div>
+        <div align="center">
+            <p>
+                Nom : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @Html.TextBoxFor(Model => Model.Nom)
+                @Html.ValidationMessageFor(Model => Model.Nom)
+            <p>
+        </div>
+        <div align="center">
+            <p>
+                Mail : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                @Html.TextBoxFor(Model => Model.Mail)
+                @Html.ValidationMessageFor(Model => Model.Mail)
+            <p>
+        </div>
+        <div align="center">
+            <input type="submit" value="Ajouter collabo" />
+        </div>
+    }
 </div>

@@ -8,9 +8,9 @@
 
 @Html.Partial("../Shared/Navbar")
 <div>
-    <div class="container-fluid">
+    <div class="container-fluid profil-layout">
         <div class="row">
-            <div class="col-lg-2 table-bordered">
+            <div class="col-md-2 row1">
                 <p><h3 class="text-center">Historique</h3></p>
                 @{
                     int a = Model._Collaborateur.NotesDeFrais.Count - 1;
@@ -35,8 +35,8 @@
                     }
                 }
             </div>
-			<div class="col-lg-10 table-bordered">
-				<div id="InfoNoteActive">
+			<div class="col-md-10">
+				<div id="InfoNoteActive" class="row2">
 					@{
 						Html.RenderAction("InformationLigneDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[Model._Collaborateur.NotesDeFrais.Count - 1].Id });
 					}
