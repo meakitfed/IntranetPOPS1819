@@ -132,7 +132,7 @@
                             @(Html.Kendo().MultiViewCalendar()
                                                                 .Name("multiViewCalendar")
                                                                 .Selectable("range")
-                                                                //.Culture("fr-FR")
+                                                                //.DisableDates(DayOfWeek.Saturday, DayOfWeek.Sunday) //a decommenter si on veut faire genre qu'on est stylés mais alors y aura du boulot et on est pas nés pour ça 
                                                                 .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
                                                         "<div class=\"en-attente\"></div>" +
                                                         "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
@@ -144,22 +144,18 @@
                             )
                         </div>
                     </div>
-                    @*.MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
-                        "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
-                        "# } #" +
-                        "#= data.value #")*@
-
-
-                    @*.MonthTemplate(month => month.Content(   "# if($.inArray(+data.date, enAttente) != -1){ #" +
-                            "<div class='enattente'>#= data.value #</div>"
-                        +"#} elseif($.inArray(+data.date, refusee) != -1){#"
-                            +"<div class='refusee'>#= data.value #</div> "
-                        +"#} elseif($.inArray(+data.date, validee) != -1){#"
-                            +"<div class='validee'>#= data.value #</div> "
-                        +"#else {#"
-                            +"#= data.value #"
-                        +"# } #")*@
+                 
                     <br />
+
+                    <div class="form-group">
+                        <label for="selectType">Sélectionnez le type de congé</label>
+                        <select class="form-control text-center" id="selectType">
+                            <option id="no">Type de congé</option>
+                            <option id="rtt">RTT</option>
+                            <option id="sans">Sans solde</option>
+                            <option id="abs">Absence</option>
+                        </select>
+                    </div>
 
 
                     <button id="demanderConge" type="button" class="btn btn-primary">Je veux ce congé !</button>
@@ -294,23 +290,29 @@
             var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
             var range = multiViewCalendar.selectRange();
             if (range.start && range.end) {
-                var options = {year: 'numeric', month: 'long', day: 'numeric' };
 
-                console.log(typeof (range.start.toLocaleDateString(options)))
-                console.log(range.start)
-                console.log(range.start.toLocaleDateString(options))
+                if ($("#selectType").children(":selected").attr("id") != "no") {
+                    var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
-                $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
-                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
-                    else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
-                    else if (data == "ok") {
-                        $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
-                        setTimeout("location.reload(true);", 1500);
+                    console.log(typeof (range.start.toLocaleDateString(options)))
+                    console.log(range.start)
+                    console.log(range.start.toLocaleDateString(options))
 
-                        prepareElements()
-                    }
+                    $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
+                        if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
+                        else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
+                        else if (data == "ok") {
+                            $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
+                            setTimeout("location.reload(true);", 1500);
 
-		        });
+                            prepareElements()
+                        }
+
+                    });
+                }
+                else {
+                    $("#retourConge").html("<font color=\"red\">ERREUR : Veuillez selectionner un type de congé.</font>")
+                }
               
               
             } else {
