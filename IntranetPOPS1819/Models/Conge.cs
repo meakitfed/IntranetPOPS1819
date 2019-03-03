@@ -54,5 +54,6 @@ public enum TypeConge
 {
 	RTT,
 	SansSolde,
-	Absence
+	Absence,
+    Defaut,
 }

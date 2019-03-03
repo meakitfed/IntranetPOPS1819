@@ -388,6 +388,16 @@ namespace IntranetPOPS1819.Models
 
         public void AjoutConge(int idCollab, Conge c)
         {
+            c.Type = TypeConge.Defaut;
+            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
+            bdd.Conges.Add(c);
+            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
+            bdd.SaveChanges();
+        }
+
+        public void AjoutConge(int idCollab, Conge c, TypeConge type)
+        {
+            c.Type = type;
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.Conges.Add(c);
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();

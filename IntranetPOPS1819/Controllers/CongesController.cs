@@ -38,8 +38,15 @@ namespace IntranetPOPS1819.Controllers
             return View(vm);
         }
 
-        public string DemandeConge(DateTime Debut, DateTime Fin)
+        public string DemandeConge(DateTime Debut, DateTime Fin, string type)
         {
+            System.Diagnostics.Debug.WriteLine(type);
+            TypeConge typeConge;
+            if (type == "rtt") typeConge = TypeConge.RTT;
+            else if (type == "sans") typeConge = TypeConge.SansSolde;
+            else if (type == "abs") typeConge = TypeConge.Absence;
+            else return "erreurTypeConge";
+
             IDal dal = new Dal();
             Collaborateur col = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 
@@ -50,11 +57,12 @@ namespace IntranetPOPS1819.Controllers
             Message notif = new Message(TypeMessage.NotifCongeAller, col.Prenom + col.Nom + " - " + col.Service.Nom, conge);
 
             ValiditeConge validite = col.isCongeValide(conge);
+            
 
             if (HttpContext.User.Identity.IsAuthenticated && validite == ValiditeConge.ok)
             {
                 dal.AjoutNotif(col.Service.Chef().Id, notif);
-                dal.AjoutConge(col.Id, conge);
+                dal.AjoutConge(col.Id, conge, typeConge);
                 dal.EnvoiCongeChef(col.Service.Id, col.Id, conge.Id);
             }
 
