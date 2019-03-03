@@ -22,3 +22,121 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.profil-layout {
+    margin-top: 20px;
+}
+
+.row1 {
+    border: 1px solid black;
+    box-shadow: 3px 3px 2px #888888;
+    padding-top: 20px;
+    padding-right:10px;
+}
+
+.row1-h {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.row2 {
+    padding-bottom: 10px;
+    border: 1px solid black;
+    box-shadow: 3px 3px 2px #888888;
+    padding-top: 20px;
+    height:100%;
+}
+
+.row2-h {
+    text-align: center;
+}
+
+.row2-1 {
+    padding-top: 10px;
+}
+
+.row2-2 {
+    margin-left: 5%;
+}
+
+.row2-3 {
+    margin-left: 15%;
+}
+
+.row3 {
+    border: 1px solid black;
+    box-shadow: 3px 3px 2px #888888;
+    padding-top: 20px;
+    padding-left: 10px;
+    text-align: center;
+}
+
+.row3-h {
+    margin-bottom: 20px;
+}
+
+.row3-input {
+    border: 1px solid black;
+    margin: 0 auto;
+}
+
+.nc1 {
+    height: 300px;
+    margin-top: 50px;
+}
+
+.nc1-h {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.ns {
+    margin-bottom: 50px;
+    margin-top: 150px;
+    text-align:center;
+}
+
+.ns-p {
+    font-size: 20px;
+}
+
+.logo-pos {
+    margin: 0 auto;
+}
+
+.login-partie {
+    border: 1px solid black;
+    margin: 20px auto;
+    width: 60%;
+    height: 500px;
+}
+
+.identification {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.seconnect {
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 3px; /* 边框半径 */
+    cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+    outline: none; /* 不显示轮廓线 */
+    font-family: Microsoft YaHei; /* 设置字体 */
+    color: black; /* 字体颜色 */
+    font-size: 17px; /* 字体大小 */
+    box-shadow: 3px 3px 2px #888888;
+}
+
+.login-partie1 {
+    margin-top: 100px;
+    margin-bottom: 30px;
+    font-weight:bold;
+}
+
+.login-partie2 {
+    margin-bottom: 70px;
+    font-weight: bold;
+}
+

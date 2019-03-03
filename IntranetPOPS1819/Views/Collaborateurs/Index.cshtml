@@ -18,9 +18,9 @@
 <body>
 
 	<div>
-		<div class="container-fluid">
+		<div class="container-fluid profil-layout">
 			<div class="row">
-				<div class="col-lg-2 table-bordered">
+				<div class="col-md-2 row1">
 					<p><h3 class="text-center">Collaborateurs par services</h3></p>
 					@{
 						foreach (Service service in Model)
@@ -39,11 +39,12 @@
 							</div>
 						}
 					}
+                    <br/><br />
 				</div>
-				<div class="col-lg-10 table-bordered">
-					<div id="InfoCollaborateurActif">
-						Veulliez selectionner un collabo <i class="em em-8ball"></i><i class="em em-woman-frowning"></i>
-					</div>
+				<div class="col-md-10">
+                    <div id="InfoCollaborateurActif" class="row2">
+                        &nbsp;&nbsp;Veulliez selectionner un collabo <i class="em em-8ball"></i><i class="em em-woman-frowning"></i>
+                    </div>
 				</div>
 			</div>
 		</div>

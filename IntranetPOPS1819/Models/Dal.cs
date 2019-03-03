@@ -246,6 +246,7 @@ namespace IntranetPOPS1819.Models
 				}
 			}
 		}
+
 		public void AssignerChefDeService(int idCollab)
 		{
 			Collaborateur collab = bdd.Collaborateurs.FirstOrDefault(c => idCollab == c.Id);
@@ -255,18 +256,21 @@ namespace IntranetPOPS1819.Models
 				collab.Chef = true;
 			}
 		}
+
 		public void InitializeBdd()
 		{
             try
             {
-				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp");
-                Collaborateur mathias = AjoutCollaborateur("Bazin", "Mathias", "mat@gmail.com", "yahoo");
-				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin");
-				Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede");
-                Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco");
-                Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa");
-                Collaborateur marie = AjoutCollaborateur("Marie-Christine", "Henriot", "marie@gmail.com", "mch");
+                //création collaborateurs
+				Collaborateur nathan = AjoutCollaborateur("Bonnard", "Nathan", "nathan.bonnard@u-psud.fr", "mdp", "06 06 12 09 11");
+				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin", "07 06 12 09 83", admin: true);
 
+                Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede", "06 54 12 09 83");
+                Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco", "07 06 06 06 06");
+                Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa", "07 06 12 09 83");
+                Collaborateur marie = AjoutCollaborateur("Marie-Christine", "Henriot", "marie@gmail.com", "mch", "06 13 63 32 18");
+
+                //création services
                 Service direction = AjoutService("Direction", TypeService.Direction);
                 AssignerService(direction.Id, marie.Id);
                 AssignerChefDeService(marie.Id);
@@ -278,13 +282,13 @@ namespace IntranetPOPS1819.Models
 
                 Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
-                AssignerService(rh.Id, mathias.Id);
 
 				Service marketing = AjoutService("Marketing");
 				AssignerService(marketing.Id, nathan.Id);
 				AssignerService(marketing.Id, brian.Id);
 				AssignerChefDeService(brian.Id);
 
+                //??
 				MiseAJourNotesDeFrais(nathan.Id);
 				MiseAJourNotesDeFrais(brian.Id);
 				MiseAJourNotesDeFrais(didier.Id);
@@ -292,6 +296,8 @@ namespace IntranetPOPS1819.Models
                 MiseAJourNotesDeFrais(marie.Id);
                 MiseAJourNotesDeFrais(coco.Id);
 
+
+                //tout le monde se voit assigner toutes les missions
                 List<Mission> Missions = new List<Mission>();
 				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
 				for (int j = 0; j < labelsMission.Length; j++)
@@ -306,6 +312,7 @@ namespace IntranetPOPS1819.Models
                 }
 
 
+                //Gestion congé
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
@@ -397,17 +404,28 @@ namespace IntranetPOPS1819.Models
 			return bdd.Missions.FirstOrDefault(m => m.Id == idMission);
 		}
 
-		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp)
+        //comme l'autre ajoutCol, mais avec le telephone en plus
+		public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, string tel, bool chef = false, bool admin = false)
         {
 			
-			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp)};
+			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp), Telephone = tel, Chef = chef, Admin = admin};
 			bdd.Collaborateurs.Add(c);
 			bdd.SaveChanges();
 			System.Diagnostics.Debug.WriteLine(c.Id);
 			return c;
         }
 
-		public Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda)
+        public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, bool chef = false, bool admin = false)
+        {
+
+            Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail, MotDePasse = EncodeMD5(mdp), Chef = chef, Admin = admin };
+            bdd.Collaborateurs.Add(c);
+            bdd.SaveChanges();
+            System.Diagnostics.Debug.WriteLine(c.Id);
+            return c;
+        }
+
+        public Service AjoutService(string nom, TypeService type = TypeService.ServiceLambda)
 		{
 			Service s = new Service { Nom = nom };
 			s.Collaborateurs = new List<Collaborateur>();
@@ -474,6 +492,7 @@ namespace IntranetPOPS1819.Models
             bdd.Collaborateurs.First(c => c.Id == id).CongesRestants -= jours;
         }
 
+        //A n'utiliser qu'à l'initialisation de la base de données, ou à la création d'un collaborateur
         public void AssignerService(int idService, int idCollaborateur)
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
