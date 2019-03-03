@@ -32,7 +32,7 @@
     <thead>
         <tr>
             <th scope="col" class="text-center">Collaborateur</th>
-            <th scope="col" class="text-center">Service @Model._Collaborateur.Service.Nom</th>
+            <th scope="col" class="text-center">Service @Model.Service.Nom</th>
         </tr>
     </thead>
     <tbody>
@@ -42,7 +42,7 @@
         </tr>
         <tr>
             <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
-            <td>Collaborateurs Absents : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges()</td>
+            <td>Collaborateurs Absents : @Model.Service.GetNombreCollaborateursEnConges()</td>
         </tr>
         <tr>
             <td scope="row" id="journeesRestantes">Journées restantes : &nbsp;</td>

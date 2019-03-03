@@ -53,9 +53,10 @@ namespace IntranetPOPS1819.Models
 
         // Notifications
         void AjoutNotif(int idCollab, Message m);
+		void EnvoiDemandeInformation(Message m);
 
-        // BD
-        void InitializeBdd();
+		// BD
+		void InitializeBdd();
         
 	}
 }

@@ -255,6 +255,13 @@ namespace IntranetPOPS1819.Models
 				collab.Chef = true;
 			}
 		}
+
+		public void EnvoiDemandeInformation(Message m)
+		{
+			Service service = bdd.Services.FirstOrDefault(c => TypeService.RessourcesHumaines == c.Type);
+			service.Messages.Add(m);
+			bdd.SaveChanges();
+		}
 		public void InitializeBdd()
 		{
             try
@@ -277,6 +284,10 @@ namespace IntranetPOPS1819.Models
 
                 Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
+
+				EnvoiDemandeInformation(new Message { Contenu = "Salut toi", Emetteur = "Nathan" });
+				EnvoiDemandeInformation(new Message { Contenu = "Salut toi 2", Emetteur = "Nathan 2 " });
+				EnvoiDemandeInformation(new Message { Contenu = "Salut toi 3", Emetteur = "Nathan 3" });
 
 				Service marketing = AjoutService("Marketing");
 				AssignerService(marketing.Id, nathan.Id);

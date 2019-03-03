@@ -7,7 +7,7 @@ namespace IntranetPOPS1819.Models
     {
 		public int Id { get; set; }
 		public string Titre { get; set; }
-        public DateTime Date { get; set; }
+        //public DateTime Date { get; set; }
         public string Contenu { get; set; }
 		public bool Lu { get; set; }
         public TypeMessage Type { get; set; }
@@ -23,7 +23,7 @@ namespace IntranetPOPS1819.Models
         {
             Type = t;
             Emetteur = emetteur;
-            Date = DateTime.Now;
+            //Date = DateTime.Now;
             Lu = false;
             switch (t)
             {
@@ -47,7 +47,7 @@ namespace IntranetPOPS1819.Models
 		{
 			Type = t;
 			Emetteur = c.Prenom + c.Nom + " - " + c.Service.Nom;
-			Date = DateTime.Now;
+			//Date = DateTime.Now;
 			Lu = false;
 			switch (t)
 			{
