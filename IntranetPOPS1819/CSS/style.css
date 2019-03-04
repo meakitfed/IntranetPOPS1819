@@ -54,3 +54,8 @@
 	box-shadow: 3px 3px 2px #888888;
 	white-space: pre-line;
 }
+
+#pp{
+    max-height: 250px;
+    border: 5px;
+}

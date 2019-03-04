@@ -23,11 +23,8 @@
 			</div>
 		</div>
 		<div class="col-lg-6">
-			@{ 
-				int rand = Model.Id % 9 + 1;
-				string path = "~/Content/images/collaborateurs/col" + rand + ".jpg";
-			}
-			<img src="@Url.Content(path)" class="heightSet" >
+			
+			<img src="@Url.Content(Model.GetPpPath())" class="heightSet" >
 
 		</div>
 	</div>

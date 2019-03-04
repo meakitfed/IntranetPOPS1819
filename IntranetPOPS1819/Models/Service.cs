@@ -71,6 +71,11 @@ namespace IntranetPOPS1819.Models
             else return 0;
         }
 
+        public float GetProportionAbsents()
+        {
+            return ((float)GetNombreCollaborateursEnConges() / (float)Collaborateurs.Count) * 100;
+        }
+
         public int GetNombreCollaborateursEnConges()
         {
             return GetNombreCollaborateursEnConges(DateTime.Today);

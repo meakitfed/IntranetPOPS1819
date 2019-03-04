@@ -175,6 +175,41 @@ namespace IntranetPOPS1819.Models
             return liste;
         }
 
+        public int GetSommeValideeCeMois()
+        {
+            int somme = 0;
+            foreach (NoteDeFrais note in NotesDeFrais)
+            {
+                if (note.Date.Month == DateTime.Today.Month)
+                {
+                    foreach (LigneDeFrais ligne in note.LignesDeFrais)
+                    {
+                        if (ligne.Statut == StatutLigneDeFrais.Validée) somme += ligne.Somme;
+                    }
+                }
+
+            }
+            return somme;
+        }
+
+        public int GetNombreNotesDeFraisValidees()
+        {
+            int nb = 0;
+
+            foreach (NoteDeFrais note in NotesDeFrais)
+            {
+                if (note.Statut == StatutNote.Validée) nb += 1;
+            }
+
+            return nb;
+        }
+
+        public string GetPpPath()
+        {
+            int nb = Id % 14;
+            return "~/Content/images/collaborateurs/col" + nb + ".jpg";
+        }
+
         public bool isEnConge(System.DateTime date)
         {
             if (Conges != null)
