@@ -41,14 +41,14 @@ namespace IntranetPOPS1819.Controllers
 			return false;
 		}
 
-		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int IdNote)
+		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int idNote)
 		{
-			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Read");
+			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Read | idNote = " + idNote);
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote);
+				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
 				IQueryable<LigneDeFrais> lignedefrais = note.LignesDeFrais.AsQueryable();
 				DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
 					Id = ligneDeFrais.Id,
@@ -75,9 +75,9 @@ namespace IntranetPOPS1819.Controllers
 		}
 
 		[AcceptVerbs(HttpVerbs.Post)]
-		public ActionResult LigneDeFrais_Create([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais, int IdNote)
+		public ActionResult LigneDeFrais_Create([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais, int n)
 		{
-			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create");
+			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create | idNote = " + n);
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				var modelStateErrors = ModelState
@@ -102,9 +102,11 @@ namespace IntranetPOPS1819.Controllers
                         IdCollab = ligneDeFrais.IdCollab,
                         IdNote = ligneDeFrais.IdNote,
                     };
-					dal.AjoutLigneDeFrais(c.Id, IdNote, entity);
+					System.Diagnostics.Debug.WriteLine("Creationd e la ligne dans la BD, Idnote : " + n);
+					dal.AjoutLigneDeFrais(c.Id, n, entity);
 					ligneDeFrais.Id = entity.Id;
 					ligneDeFrais.IdCollab = entity.IdCollab;
+					ligneDeFrais.IdNote = entity.IdNote;
 				}
 				else
 				{
@@ -284,7 +286,7 @@ namespace IntranetPOPS1819.Controllers
 				ViewData["IsComplete"] = (note.Statut != StatutNote.Brouillon);
 				ViewData["IsOld"] = (DateTime.Now.Subtract(note.Date).Days / (365.25 / 12)) > 2;
 			}
-			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur envoie des données");
+			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur envoie des données | Idnote = " + IdNote);
 			return PartialView(IdNote);
 		}
 
