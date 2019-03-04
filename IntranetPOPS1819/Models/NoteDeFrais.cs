@@ -37,6 +37,20 @@ namespace IntranetPOPS1819.Models
             }
             return i;
         }
+
+
+        public int GetSommeValidee()
+        {
+            int somme = 0;
+            foreach(LigneDeFrais ligne in LignesDeFrais)
+            {
+                if (ligne.Statut == StatutLigneDeFrais.Validée) somme += ligne.Somme;
+            }
+
+            return somme;
+        }
+
+
         public int NbrValidéeChef()
         {
             int i = 0;
