@@ -40,7 +40,6 @@ namespace IntranetPOPS1819.Controllers
 			{
 				dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
 			}
-			
 			//TODO
 			
 			foreach(NoteDeFrais n in col.NotesDeFrais)
@@ -111,6 +110,21 @@ namespace IntranetPOPS1819.Controllers
 				if(vm._Collaborateur.Service.Type == TypeService.Direction && vm._Collaborateur.Chef)
 				{
 					vm.ListeCollab.AddRange(dal.getChefRhEtCompta());
+				}
+				foreach (Collaborateur c in vm.ListeCollab)
+				{
+					int a = 0;
+					int b = 0;
+					foreach (NoteDeFrais n in vm._Collaborateur.Service.NotesDeFrais)
+					{
+						if(c.NotesDeFrais.Contains(n))
+						{
+							a += n.NbrRefusé();
+							b += n.NbrEnAttente();
+						}
+					}
+					vm.nbrRefusé.Add(a);
+					vm.nbrEnAttente.Add(b);
 				}
 				
 				return View(vm);

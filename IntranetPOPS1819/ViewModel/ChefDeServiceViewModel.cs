@@ -7,5 +7,7 @@ namespace IntranetPOPS1819.ViewModel
 	{
 		public Collaborateur _Collaborateur { get; set; }
 		public List<Collaborateur> ListeCollab { get; set; } = new List<Collaborateur>();
+		public List<int> nbrRefusé { get; set; } = new List<int>();
+		public List<int> nbrEnAttente { get; set; } = new List<int>();
 	}
 }
