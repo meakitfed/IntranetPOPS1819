@@ -5124,6 +5124,7 @@
     <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
     <Content Include="Views\RH\InformationMessage.cshtml" />
     <Content Include="Views\RH\DemandeInformation.cshtml" />
+    <Content Include="Views\Collaborateurs\InfosService.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,42 +1,59 @@
 ﻿@using IntranetPOPS1819.Models
 @model Collaborateur
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-6">
-			<div id="infos" class="text-center">
-				<h1>@Model.Prenom @Model.Nom</h1>
-				<br />
-				<p>Service : @Model.Service.Nom</p>
-				<p>
-					Present :	@if (Model.isEnConge())
-					{
-						<text>non <i class="em em-cry"></i></text>
-					}
-					else
-					{
-						<text>oui</text>
-					}
-				</p>
-				<p><i class="em em-e-mail"></i> : @Model.Mail</p>
-				<p><i class="em em-telephone_receiver"></i> : @Model.Telephone</p>
-			</div>
-		</div>
-		<div class="col-lg-6">
-			
-			<img src="@Url.Content(Model.GetPpPath())" class="heightSet" >
 
-		</div>
-	</div>
-</div>
 
-<style>
-	.widthSet {
-		max-width: 64px;
-	}
+    <div class="row" style="height: 100%">
 
-	.heightSet {
-		max-height: 500px;
-	}
+        <div class="col-9 row1">
+            <div class="row text-center justify-content-center">
+                <h1 class="text-center">@Model.Prenom @Model.Nom</h1>     
+            </div>
+            <div class="row">
 
-</style>
+                <div class="col">
+
+                    <div id="infos" class="text-center">
+
+                        <br />
+                        <p>Service : @Model.Service.Nom</p>
+                        <p>
+                            Present :	@if (Model.isEnConge())
+                            {
+                                <text>non <i class="em em-cry"></i></text>
+                            }
+                            else
+                            {
+                                <text>oui</text>
+                            }
+                        </p>
+                        <p><i class="em em-e-mail"></i> : @Model.Mail</p>
+                        <p><i class="em em-telephone_receiver"></i> : @Model.Telephone</p>
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <img src="@Url.Content(Model.GetPpPath())" id="pp">
+
+                </div>
+            </div>
+
+         
+
+        </div>
+
+        <div class="col-3 row1">
+            <h2 class="row3-h">Service @Model.Service.Nom</h2>
+            <br />
+            <p><i class="em em-calendar"></i> @DateTime.Today.ToString("dd/MM/yyyy")</p>
+            <br />
+            <p class="table-bordered">Nombre de collaborateurs absents : @Model.Service.GetNombreCollaborateursEnConges()</p>
+            <p class="table-bordered">Proportion dans le service : @Model.Service.GetProportionAbsents()%</p>
+        </div>
+    </div>
+
+
+
+
