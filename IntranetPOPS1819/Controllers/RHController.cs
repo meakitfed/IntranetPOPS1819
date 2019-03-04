@@ -30,14 +30,40 @@ namespace IntranetPOPS1819.Controllers
 
             if (HttpContext.User.Identity.IsAuthenticated)
             {
+                Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
                 List<ValidationCongesViewModel> vm = new List<ValidationCongesViewModel>();
+
+                // Cas DRH
+                if (c.Chef)
+                {
+                    // Récupérer les demandes du service RH
+                    foreach(Collaborateur col in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+                    {
+                        if (col != c)
+                        {
+                            foreach (Conge con in col.Conges)
+                            {
+                                if (con.Statut == StatutConge.EnCours)
+                                    vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin });
+                            }
+                        }
+                    }
+                    // Récupérer les demandes du PDG
+                    Collaborateur chef = dal.ObtenirServiceDeType(TypeService.Direction).Chef();
+                    foreach (Conge con in chef.Conges)
+                    {
+                        if(con.Statut == StatutConge.EnCours)
+                            vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = chef.Prenom + " " + chef.Nom, Service = chef.Service.Nom, CongesRestants = chef.CongesRestants, Debut = con.Debut, Fin = con.Fin });
+                    }
+                }
+                // Récupérer les demandes des collaborateurs et chefs des autres services
                 foreach (Collaborateur col in dal.ObtenirTousLesCollaborateurs())
                 {
-                    if (!((col.Service.Type != TypeService.RessourcesHumaines) && col.Chef))
+                    if ((col.Service.Type != TypeService.RessourcesHumaines))
                     {
                         foreach (Conge con in col.Conges)
                         {
-                            if (con.Statut == StatutConge.ValideChef)
+                            if ((con.Statut == StatutConge.ValideChef) || (col.Chef && con.Statut == StatutConge.EnCours))
                                 vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin });
                         }
                     }
@@ -69,8 +95,9 @@ namespace IntranetPOPS1819.Controllers
             else
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
 
-            // Recherche du collaborateur concerné
             Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+
+            // Recherche du collaborateur concerné
             List<Collaborateur> collabs = dal.ObtenirTousLesCollaborateurs();
             int idCollab = 0;
             foreach (Collaborateur col in collabs)
@@ -90,5 +117,18 @@ namespace IntranetPOPS1819.Controllers
 
             return View();
         }
+
+        public int InfosAbsents(DateTime date)
+        {
+            IDal dal = new Dal();
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+
+            return c.Service.GetNombreCollaborateursEnConges(date);
+        }
+
+        /*public float ProportionAbsents(int nb)
+        {
+            return 100*nb /
+        }*/
     }
 }

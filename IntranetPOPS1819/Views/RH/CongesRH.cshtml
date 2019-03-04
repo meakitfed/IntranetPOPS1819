@@ -48,7 +48,7 @@
         </tr>
         <tr>
             <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
-            <td>Collaborateurs Absents : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges()</td>
+            <td>Collaborateurs Absents : <span id="test"></span></td>
         </tr>
         <tr>
             <td scope="row" id="journeesRestantes">Journées restantes : &nbsp;</td>
@@ -65,72 +65,61 @@
 
         var datepicker = $("#datePickerCongesRH").data("kendoDatePicker");
 
-        var setValue = function () {
-            datepicker.value($("#value").val());
-        };
-
-        $("#enable").click(function () {
-            datepicker.enable();
-        });
-
-        $("#disable").click(function () {
-            datepicker.enable(false);
-        });
-
-        /*$("#readonly").click(function () {
-            datepicker.readonly();
-        });*/
-
-        //open, close, value, set
 
         $("#get").click(function () {
-            alert(datepicker.value());
+            $.get("InfosAbsents", { date: datepicker.value().toISOString()}, function(data) {
+                document.getElementById("test").innerHTML += data;
+                $.get("ProportionAbsents", { date: data }, function (data2) {
+                    document.getElementById("test").innerHTML += data2;
+                });
+            });
+            
         });
     });
 
     function showDetailsRH(e) {
-                    e.preventDefault();
+        e.preventDefault();
 
-                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
-                    document.getElementById("nom").innerHTML += dataItem.Nom;
-                    document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
-                }
+        document.getElementById("nom").innerHTML += dataItem.Nom;
+        document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
+    }
 </script>
 
 <script type="text/javascript">
     function ValiderCRH(e) {
-                    var grid = this;
-                    var row = $(e.currentTarget).closest("tr");
-                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-                    grid.removeRow(row);
+        var grid = this;
+        var row = $(e.currentTarget).closest("tr");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        grid.removeRow(row);
         $.ajax({
-                    url: 'Conges_ValidationRH',
+            url: 'Conges_ValidationRH',
             data: {
-                        nb: dataItem.Id,
+                nb: dataItem.Id,
                 accepter: true
             }
-                    }).done(function () {
-                        alert('Added');
-                    });
-                }
+        }).done(function () {
+            alert('Added');
+        });
+    }
 
-                function RefuserCRH(e) {
-                    var grid = this;
-                    var row = $(e.currentTarget).closest("tr");
-                    var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-                    grid.removeRow(row);
-                    console.log(dataItem);
+    function RefuserCRH(e) {
+        var grid = this;
+        var row = $(e.currentTarget).closest("tr");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        grid.removeRow(row);
+        console.log(dataItem);
         $.ajax({
-                    url: 'Conges_ValidationRH',
+            url: 'Conges_ValidationRH',
             data: {
-                        nb: dataItem.Id,
+                nb: dataItem.Id,
                 accepter: false
             }
-                    }).done(function () {
-                        alert('Added');
-                    });
-                }
+        }).done(function () {
+            alert('Added');
+        });
+    }
 </script>
 
 <script>
@@ -148,3 +137,15 @@
                     //Implement the event handler for SaveChanges
                 }
 </script>
+
+<style>
+
+    html .k-grid tr:hover {
+        background: transparent;
+    }
+
+    html .k-grid tr.k-alt:hover {
+        background: #f1f1f1;
+    }
+
+</style>

@@ -70,6 +70,23 @@ namespace IntranetPOPS1819.Models
             else return 0;
         }
 
+        public int GetNombreCollaborateursEnConges(int d, int m, int y)
+        {
+            DateTime date = new DateTime(y, m, d);
+            int NbAbsents = 0;
+
+            if (Collaborateurs != null)
+            {
+                foreach (Collaborateur c in Collaborateurs)
+                {
+                    if (c.isEnConge(date)) NbAbsents++;
+                }
+
+                return NbAbsents;
+            }
+            else return 0;
+        }
+
         public int GetNombreCollaborateursEnConges()
         {
             return GetNombreCollaborateursEnConges(DateTime.Today);

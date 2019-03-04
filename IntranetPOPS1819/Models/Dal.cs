@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntranetPOPS1819.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -75,7 +76,18 @@ namespace IntranetPOPS1819.Models
 			}
 			return null;
 		}
-		public void EnvoiNoteDeFrais(int idService, int idCollab, int idNote)
+
+        public Collaborateur ObtenirDRH()
+        {
+            Service service = bdd.Services.FirstOrDefault(s => s.Type == TypeService.RessourcesHumaines);
+            if (service != null)
+            {
+                return service.Chef();
+            }
+            return null;
+        }
+
+        public void EnvoiNoteDeFrais(int idService, int idCollab, int idNote)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
@@ -277,8 +289,9 @@ namespace IntranetPOPS1819.Models
 
                 Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
+                AssignerChefDeService(isabelle.Id);
 
-				Service marketing = AjoutService("Marketing");
+                Service marketing = AjoutService("Marketing");
 				AssignerService(marketing.Id, nathan.Id);
 				AssignerService(marketing.Id, brian.Id);
 				AssignerChefDeService(brian.Id);
@@ -302,6 +315,11 @@ namespace IntranetPOPS1819.Models
                     AssignerMission(m.Id, marie.Id);
                     AssignerMission(m.Id, coco.Id);
                 }
+                Mission edm = AjoutMission("Etude de marché", marketing.Id);
+                Mission es = AjoutMission("Enquête satisfaction", marketing.Id);
+                AssignerMission(edm.Id, brian.Id);
+                AssignerMission(edm.Id, nathan.Id);
+                AssignerMission(es.Id, brian.Id);
 
 
                 AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
@@ -378,7 +396,7 @@ namespace IntranetPOPS1819.Models
                 bdd.SaveChanges();
             }
         }
-
+        
         public void AjoutNotif(int idCollab, Message m)
         {
             Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
@@ -420,6 +438,7 @@ namespace IntranetPOPS1819.Models
 		{
 			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == serviceId);
 			Mission m = new Mission { Nom = nom/*, Service = s */};
+            s.Missions.Add(m);
 			bdd.Missions.Add(m);
 			bdd.SaveChanges();
 			return m;
@@ -486,6 +505,7 @@ namespace IntranetPOPS1819.Models
             Mission m = bdd.Missions.FirstOrDefault(miss => miss.Id == idMission);
             Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollaborateur);
             c.Missions.Add(m);
+            m.Collaborateurs.Add(c);
             bdd.SaveChanges();
         }
 
@@ -513,6 +533,15 @@ namespace IntranetPOPS1819.Models
             Conge theConge = ObtenirConge(idConge);
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants += theConge.GetDuree();
             bdd.Conges.Remove(bdd.Conges.FirstOrDefault(c => c.Id == idConge));
+
+            bdd.SaveChanges();
+        }
+
+        public void UpdateMission(MissionsViewModel m)
+        {
+            Mission mission = bdd.Missions.FirstOrDefault(miss => miss.Id == m.Id);
+            mission.Nom = m.Nom;
+            mission.Statut = m.Statut;
 
             bdd.SaveChanges();
         }

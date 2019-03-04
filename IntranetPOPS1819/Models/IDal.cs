@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntranetPOPS1819.ViewModel;
+using System;
 using System.Collections.Generic;
 
 namespace IntranetPOPS1819.Models
@@ -14,6 +15,7 @@ namespace IntranetPOPS1819.Models
 		void AssignerChefDeService(int idCollab);
 		Collaborateur ObtenirDirecteurFinancier();
 		Collaborateur ObtenirPDG();
+        Collaborateur ObtenirDRH();
 
 		// Services
 		Service ObtenirServiceDeType(TypeService type);
@@ -28,6 +30,7 @@ namespace IntranetPOPS1819.Models
         Mission AjoutMission(string nom);
         void AssignerMission(int idMission, int idCollaborateur);
         void ChangerStatut(int id, StatutMission statut);
+        void UpdateMission(MissionsViewModel m);
 
         // Authentification
         Collaborateur Authentifier(string mail, string motDePasse);

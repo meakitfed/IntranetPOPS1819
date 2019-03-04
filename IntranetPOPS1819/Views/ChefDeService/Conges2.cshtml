@@ -53,7 +53,27 @@
 </table>
 
 <script type="text/javascript">
+    // Utilisation du datePicker
+    $(document).ready(function () {
+        $("datePickerCongesRH").kendoDatePicker()
+            .closest(".k-widget")
+            .attr("id", "datepicker_wrapper");
 
+        var datepicker = $("#datePickerCongesRH").data("kendoDatePicker");
+
+
+        $("#get").click(function () {
+            $.get("InfosAbsents", { date: datepicker.value().toISOString() }, function (data) {
+                document.getElementById("test").innerHTML += data;
+                $.get("ProportionAbsents", { date: data }, function (data2) {
+                    document.getElementById("test").innerHTML += data2;
+                });
+            });
+
+        });
+    });
+
+    // Affichage des détails
     function showDetails2(e) {
         e.preventDefault();
 
@@ -90,7 +110,7 @@
         grid.removeRow(row);
         console.log(dataItem);
         $.ajax({
-            url: 'Conges_Validation',
+            url: 'Conges_Validation2',
             data: {
                 nb: dataItem.Id,
                 accepter: false

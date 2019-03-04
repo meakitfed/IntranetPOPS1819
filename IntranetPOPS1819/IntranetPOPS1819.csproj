@@ -2839,7 +2839,9 @@
     <Compile Include="ViewModel\ChefDeServiceViewModel.cs" />
     <Compile Include="ViewModel\CongesViewModel.cs" />
     <Compile Include="ViewModel\CollaborateurViewModel.cs" />
+    <Compile Include="ViewModel\IdentiteViewModel.cs" />
     <Compile Include="ViewModel\LignesDeFraisViewModel.cs" />
+    <Compile Include="ViewModel\MissionsViewModel.cs" />
     <Compile Include="ViewModel\NouveauCollaborateurViewModel.cs" />
     <Compile Include="ViewModel\NouveauServiceViewModel.cs" />
     <Compile Include="ViewModel\OngletNoteDeFraisViewModel.cs" />
@@ -2878,6 +2880,11 @@
     <Content Include="Views\Compta\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Collaborateurs\Index.cshtml" />
     <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
+    <Content Include="Views\ChefDeService\InfosService.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MissionsViewModel.cshtml" />
+    <Content Include="Views\ChefDeService\InfosService2.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\StatutMission.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\IdentiteViewModelEditor.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

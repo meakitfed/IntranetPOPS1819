@@ -1,0 +1,121 @@
+﻿@model IntranetPOPS1819.ViewModel.ChefDeServiceViewModel
+
+<h2 class="text-center">Infos Service</h2>
+
+<p class="text-center">Missions actives</p>
+
+<ul class="list-group">
+    @(Html.Kendo().ListView<IntranetPOPS1819.ViewModel.MissionsViewModel>()
+            .Name("listView")
+            .TagName("div")
+            .ClientTemplateId("template")
+            .DataSource(dataSource => dataSource
+                .Model(model => model.Id("Id"))
+                .Create(create => create.Action("Editing_Create", "ChefDeService"))
+                .Read(read => read.Action("MissionEditing_Read", "ChefDeService"))
+                .Update(update => update.Action("MissionEditing_Update", "ChefDeService"))
+                .Destroy(destroy => destroy.Action("Editing_Destroy", "ChefDeService"))
+            )
+            .Editable()
+    )
+</ul>
+
+<div class="text-center">
+    <a class="k-button k-button-icontext k-add-button" href="#"><span class="k-icon k-i-add"></span>Nouvelle mission</a>
+</div>
+
+<script type="text/javascript">
+    $("#ModifierMission").click(function () {
+        /*$.get("InfosAbsents", { date: datepicker.value().toISOString() }, function (data) {
+            document.getElementById("test").innerHTML += data;
+            $.get("ProportionAbsents", { date: data }, function (data2) {
+                document.getElementById("test").innerHTML += data2;
+            });
+        });*/
+        console.log('dgqdf');
+    });
+</script>
+<script type="text/x-kendo-tmpl" id="template">
+    <li class="list-group-item d-flex">
+        <p>#:Nom#
+        <span class="text-right ml-auto">
+            <a class="k-button k-edit-button" href="\\#"><span class="k-icon k-i-edit"></span></a>
+            <a class="k-button k-delete-button" href="\\#"><span class="k-icon k-i-delete"></span></a>
+        </span></p>
+        <br />
+    </li>
+    <!--<li class="list-group-item d-flex">
+        <ul class="list-group d-flex">
+            <li class="list-group-item">
+                Collabo 1
+            </li>
+            <li class="list-group-item">
+                Collabo 2
+            </li>
+            <li class="list-group-item">
+                Collabo 3
+            </li>
+        </ul>
+    </li>-->
+
+</script>
+
+<script>
+    $(function() {
+        var listView = $("#listView").data("kendoListView");
+        $(".k-add-button").click(function(e) {
+            listView.add();
+            e.preventDefault();
+        });
+    });
+</script>
+
+<style>
+    .list-group {
+        max-height: 300px;
+        margin-bottom: 10px;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #example .k-listview {
+        border-width: 1px 0 0;
+        padding: 0;
+        overflow: hidden;
+        min-height: 298px;
+    }
+
+    .edit-buttons {
+        
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: right;
+        padding: 5px;
+        background-color: rgba(0,0,0,0.1);
+    }
+
+    .k-pager-wrap {
+        border-top: 0;
+    }
+
+    span.k-invalid-msg {
+        position: absolute;
+        margin-left: 6px;
+    }
+
+    .k-add-button {
+        margin-bottom: 2em;
+    }
+
+    @@media only screen and (max-width : 620px) {
+
+        .product-view {
+            width: 100%;
+        }
+
+            .product-view:nth-child(even) {
+                border-left-width: 1px;
+            }
+    }
+</style>
