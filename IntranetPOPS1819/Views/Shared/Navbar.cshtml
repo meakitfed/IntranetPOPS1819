@@ -12,99 +12,130 @@
 </script>
 
 @{
-	IDal d = new Dal();
-	Collaborateur c = d.ObtenirCollaborateur(User.Identity.Name);
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
-		<a class="navbar-brand" href="#">Intranet POPS1819</a>
-		<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-					<a class="nav-link" href="/UserPage/Profil">
-						@if (User.Identity.IsAuthenticated)
-						{
-							<div>@c.Nom @c.Prenom</div>
-						}<span class="sr-only">(current)</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/Conges/Index">Congés</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="../NoteDeFrais/Index">Notes de frais</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/Collaborateurs/Index">Collaborateurs</a>
-				</li>
-				@{
-					if (c.Service != null)
-					{
-						if (c.Chef)
-						{
-							<li class="nav-item">
-								<a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
-							</li>
-						}
-						if (c.Service.Type == TypeService.RessourcesHumaines)
-						{
-							<li class="nav-item">
-								<a class="nav-link" href="/RH/Index">Ressources humaines</a>
-							</li>
-						}
-						if (c.Service.Type == TypeService.Comptabilité)
-						{
-							<li class="nav-item">
-								<a class="nav-link" href="/Compta/Index">Comptabilité</a>
-							</li>
-						}
-					}
-				}
+    IDal d = new Dal();
+    Collaborateur c = d.ObtenirCollaborateur(User.Identity.Name);
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-fixed-top">
+    <a class="navbar-brand" href="#">Intranet POPS1819</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/UserPage/Profil">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div>@c.Nom @c.Prenom</div>
+                    }<span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Conges/Index">Congés</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../NoteDeFrais/Index">Notes de frais</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Collaborateurs/Index">Collaborateurs</a>
+            </li>
+            @{
+                if (c.Service != null)
+                {
+                    if (c.Chef)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
+                        </li>
+                    }
+                    if (c.Service.Type == TypeService.RessourcesHumaines)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/RH/Index">Ressources humaines</a>
+                        </li>
+                    }
+                    if (c.Service.Type == TypeService.Comptabilité)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Compta/Index">Comptabilité</a>
+                        </li>
+                    }
+                }
+            }
 
-				@if (c.Admin)
-				{
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nouveau...</a>
-						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="/Admin/NouveauCollabo">Collaborateur</a>
-							<a class="dropdown-item" href="/Admin/NouveauService">Service</a>
-						</div>
-					</li>
-				}
-			</ul>
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link" href="#"><i class="fas fa-question"></i></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#"><i class="fa fa-envelope"></i></a>
-				</li>
+            @if (c.Admin)
+            {
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i>@if(c.Notifications.Count() > 0){<span class="badge badge-notify">@c.Notifications.Count()</span>}</a>
-                    <div class=" dropdown-menu dropdown-menu-right scrollable-menu " aria-labelledby="navbarDropdownMenuLink">
-                        @foreach (var m in c.Notifications)
-                        {
-                            <button class="list-group-item" onclick="window.location='@m.Redirection';">
-                                <b>@m.Titre</b>
-                                <p>
-                                    <em>@m.Emetteur</em><br />
-                                    @*@m.Contenu<br />
-                                    @m.Date.ToString("dd/MM/yyyy")<br />
-                                    <em>Cliquez pour consulter</em>*@
-                                </p>
-                            </button>
-                            
-                        }
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Nouveau...</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/Admin/NouveauCollabo">Collaborateur</a>
+                        <a class="dropdown-item" href="/Admin/NouveauService">Service</a>
                     </div>
                 </li>
-				<li class="nav-item">
-					<a class="nav-link" href="/Login/Deconnexion"><i class="fas fa-sign-out-alt"></i></a>
-				</li>
-			</ul>
-		</div>
-	</nav>
-	<br />
+            }
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-question"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#msgModal" style="cursor:pointer"><i class="fa fa-envelope"></i></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i>@if (c.Notifications.Count() > 0)
+                {<span class="badge badge-notify">@c.Notifications.Count()</span>}</a>
+                <div class=" dropdown-menu dropdown-menu-right scrollable-menu " aria-labelledby="navbarDropdownMenuLink">
+                    @foreach (var m in c.Notifications)
+                    {
+                        <button class="list-group-item" onclick="window.location='@m.Redirection';">
+                            <b>@m.Titre</b>
+                            <p>
+                                <em>@m.Emetteur</em><br />
+                                @*@m.Contenu<br />
+                                    @m.Date.ToString("dd/MM/yyyy")<br />
+                                    <em>Cliquez pour consulter</em>*@
+                            </p>
+                        </button>
+
+                    }
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Login/Deconnexion"><i class="fas fa-sign-out-alt"></i></a>
+            </li>
+        </ul>
+    </div>
+    <div class="modal fade" id="msgModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Demander les informations</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col-md-12" style="margin-left:90px">
+                                <input type="text" class="form-control" id="title" placeholder="Title">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
+                                <textarea class="form-control" rows="10"></textarea>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-12" style="margin-left:90px">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <br />
 }
 
 <script type="text/javascript">

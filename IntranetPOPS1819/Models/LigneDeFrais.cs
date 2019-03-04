@@ -44,7 +44,6 @@ namespace IntranetPOPS1819.Models
 
 		public string Filename { set; get; }
 
-		[ScaffoldColumn(false)]
 		public int IdCollab { get; set; }
 	}
 

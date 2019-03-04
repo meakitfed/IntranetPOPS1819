@@ -5081,6 +5081,7 @@
     <Compile Include="Models\tmp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ChefDeServiceViewModel.cs" />
+    <Compile Include="ViewModel\ComptaViewModel.cs" />
     <Compile Include="ViewModel\CongesViewModel.cs" />
     <Compile Include="ViewModel\CollaborateurViewModel.cs" />
     <Compile Include="ViewModel\LignesDeFraisViewModel.cs" />

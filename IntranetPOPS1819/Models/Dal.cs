@@ -246,7 +246,15 @@ namespace IntranetPOPS1819.Models
 				}
 			}
 		}
-
+		public List<Collaborateur> getChefRhEtCompta()
+		{
+			List<Collaborateur> l = new List<Collaborateur>();
+			Collaborateur compta = bdd.Collaborateurs.FirstOrDefault(c => (c.Service.Type == TypeService.Comptabilité && c.Chef == true));
+			if(compta != null) l.Add(compta);
+			Collaborateur rh = bdd.Collaborateurs.FirstOrDefault(c => (c.Service.Type == TypeService.RessourcesHumaines && c.Chef == true));
+			if (compta != null) l.Add(rh);
+			return l;
+		}
 		public void AssignerChefDeService(int idCollab)
 		{
 			Collaborateur collab = bdd.Collaborateurs.FirstOrDefault(c => idCollab == c.Id);
@@ -292,6 +300,8 @@ namespace IntranetPOPS1819.Models
 
                 Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
+				AssignerChefDeService(isabelle.Id);
+
 				string Demande =
 				"Bonjour, \n" +
 				"J'ai des inquiétudes pour ce qui est du projet Parking Velizy, je n'ai toujours pas de nouvelles de l'agent commercial\n" +

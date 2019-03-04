@@ -1,7 +1,7 @@
 ﻿@using IntranetPOPS1819.Models
 @model IntranetPOPS1819.ViewModel.ChefDeServiceViewModel
 @{
-	ViewBag.Title = "Chef De Service";
+	ViewBag.Title = "Tableau de bord";
 
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -27,8 +27,8 @@
                     </div>
                     <div class="tab-pane" id="p2">
                         <div class="row">
-                            <div class="col-lg-2">
-                                @foreach (Collaborateur c in Model._Collaborateur.Service.Collaborateurs)
+                            <div class="col-lg-2 list-group">
+                                @foreach (Collaborateur c in Model.ListeCollab)
                                 {
                                     if (c.Id != Model._Collaborateur.Id)
                                     {
@@ -38,7 +38,7 @@
                                             InsertionMode = InsertionMode.Replace,
                                             UpdateTargetId = "InfoLigne",
                                             HttpMethod = "Post"
-                                        }, new { @class = "btn btn-block btn-3" })
+                                        }, new { @class = "btn btn-block btn-3 list-group-item" })
                                     }
                                 }
                             </div>

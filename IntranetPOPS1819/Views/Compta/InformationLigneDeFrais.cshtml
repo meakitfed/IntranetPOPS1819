@@ -1,5 +1,5 @@
 ﻿
-
+@model int
 @(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
 							  .Name("LigneDeFrais")
 							  .HtmlAttributes(new { style = "height: 500px" })
@@ -32,7 +32,7 @@
 										.DataSource(dataSource => dataSource
 											.Ajax()
 											.Model(model => model.Id(p => p.Id))
-											.Read(read => read.Action("LigneDeFrais_Read", "Compta"))
+											.Read(read => read.Action("LigneDeFrais_Read", "Compta", new { IdCollab = Model }))
 										)
 )
 
