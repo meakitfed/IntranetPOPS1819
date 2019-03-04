@@ -63,14 +63,12 @@
                                                                                 model.Field(c => c.Mission).DefaultValue(ViewData["defaultMission"] as IntranetPOPS1819.Models.Mission);
                                                                                 model.Id(p => p.Id);
                                                                             })
-                                                                            .Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { IdNote = Model }))
-                                                                            .Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { IdNote = Model }))
+                                                                            .Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { idNote = Model }))
+                                                                            .Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { n = Model }))
                                                                             .Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
                                                                             .Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
                                                                         )
 )
-
-
 
 <style>
     .editer {

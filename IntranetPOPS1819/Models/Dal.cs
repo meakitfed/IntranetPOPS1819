@@ -399,11 +399,14 @@ namespace IntranetPOPS1819.Models
 		public void AjoutLigneDeFrais(int idCollab, int idNote, LigneDeFrais ligne)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab);
-			if(c != null)
+			System.Diagnostics.Debug.WriteLine("AjoutLigneDeFrais");
+			if (c != null)
 			{
+				System.Diagnostics.Debug.WriteLine("c != null");
 				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
 				if(note != null)
 				{
+					System.Diagnostics.Debug.WriteLine("note != null");
 					ligne.IdCollab = idCollab;
                     ligne.IdNote = idNote;
                     note.LignesDeFrais.Add(ligne);
