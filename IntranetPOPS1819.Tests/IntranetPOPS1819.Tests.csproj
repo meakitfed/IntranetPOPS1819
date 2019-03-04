@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="CollaborateursTests.cs" />
     <Compile Include="CongesTest.cs" />
+    <Compile Include="DalTests.cs" />
     <Compile Include="MissionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

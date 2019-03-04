@@ -22,13 +22,14 @@ namespace IntranetPOPS1819.Models
 		public virtual List<NoteDeFrais> NotesDeFrais { get; set; } = new List<NoteDeFrais>();
 
 		public virtual List<Conge> Conges { get; set; } = new List<Conge>();
-        /*public int ChefRefId { get; set; }
+		public virtual List<Message> Messages { get; set; } = new List<Message>();
+		/*public int ChefRefId { get; set; }
 		[ForeignKey("ChefRefId")]
 		public virtual Collaborateur Chef { get; set; }*/
 
 
-        //Garder ? TODO
-        public int NbAbsents { get; set; }
+		//Garder ? TODO
+		public int NbAbsents { get; set; }
 
         public Collaborateur Chef()
         {
@@ -85,6 +86,11 @@ namespace IntranetPOPS1819.Models
                 return NbAbsents;
             }
             else return 0;
+        }
+
+        public float GetProportionAbsents()
+        {
+            return ((float)GetNombreCollaborateursEnConges() / (float)Collaborateurs.Count) * 100;
         }
 
         public int GetNombreCollaborateursEnConges()

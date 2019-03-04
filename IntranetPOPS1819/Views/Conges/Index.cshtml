@@ -10,106 +10,102 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
 </head>
 <body>
     @Html.Partial("../Shared/Navbar")
-    <div class="row">
-
-
-
-
-
-
-
-
-
-        <div id="recapConges" class="col-lg-2 table-bordered">
-            <h3><font size="4">Récapitulatif Congés</font></h3>
-            <br />
-
-            <p>Déjà pris cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee() jours</p>
-         
-            <div id="a-prendre">
-                <p>A prendre : @Model._Collaborateur.CongesRestants jours</p>
-            </div>
-
-            <div class="listbox-area">
-                <div id="demandesAttente" class="left-area">
-                    <span id="ss_elem">
-                        Demandes en attente : @Model._Collaborateur.GetNombreCongesEnAttente() jours
-                    </span>
-                    <select class=" table-bordered"
-                        id="conges_enattente_list"
-                        tabindex="0"
-                        role="listbox"
-                        aria-labelledby="conges_enattente"
-                        size="5">
-
-                        @foreach (var c in Model._Collaborateur.Conges)
-                        {
-                            if (c.Statut == StatutConge.EnCours  ||  c.Statut == StatutConge.ValideChef)
-                            {
-                                <option id="@c.Id" role="option">
-                                    Id: @c.Id - @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours
-                                </option>
-                            }
-                        }
-
-
-
-                    </select>
-                    
-                    <button id="supprimer" type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
+    <div>
+        <div class="container-fluid profil-layout">
+            <div class="row">
+                <div id="recapConges" class="col-md-2 row1">
+                    <h5 align="center"><b>Récapitulatif</b></h5>
+                    <h5 align="center"><b>Congés</b></h5>
                     <br />
-                </div>
-                <div id="retourSupprimer"></div>
-            </div>
 
+                    <p>Déjà pris cette année : <font size="5">@Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</font></p>
 
-
-            <br />
-            <br />
-            <br />
-            <br />
-
-            @if (@Model._Collaborateur.GetNombreCongesValidesFuturs() != 0)
-            {
-                <div class="listbox-area">
-                    <div class="left-area">
-                        <span id="ss_elem">
-                            Demandes validées : @Model._Collaborateur.GetNombreCongesValidesFuturs() jours
-                        </span>
-                        <ul class="list-group">
-
-                            @foreach (var c in Model._Collaborateur.Conges)
-                            {
-                                if (c.Statut == StatutConge.Valide)
-                                {
-                                    <li id="@c.Id">
-                                        Id: @c.Id - @c.Debut.ToString("dd/MM/yyyy") - @c.GetDuree() jours
-                                    </li>
-                                }
-                            }
-
-
-
-                        </ul>
+                    <div id="a-prendre">
+                        <p>A prendre : <font size="5">@Model._Collaborateur.CongesRestants</font></p>
                     </div>
+                    <div class="listbox-area">
+                        <div id="demandesAttente" class="left-area">
+                            <span id="ss_elem">
+                                Demandes en attente : <font size="5">@Model._Collaborateur.GetNombreCongesEnAttente()</font>
+                            </span>
+                            <br />
+                            <br />
+                            <select class=" table-bordered"
+                                    id="conges_enattente_list"
+                                    tabindex="0"
+                                    role="listbox"
+                                    aria-labelledby="conges_enattente"
+                                    size="5"
+                                    style="width:100%">
+
+                                @foreach (var c in Model._Collaborateur.Conges)
+                                {
+                                    if (c.Statut == StatutConge.EnCours || c.Statut == StatutConge.ValideChef)
+                                    {
+                                        <option id="@c.Id" role="option">
+                                            Id:@c.Id  @c.Debut.ToString("dd/MM/yy")  @c.GetDuree()j  type:@c.Type.ToString()
+                                        </option>
+                                    }
+                                }
+
+
+
+                            </select>
+
+                            <button id="supprimer" type="button" class="btn btn-secondary disabled">Supprimer cette demande</button>
+                            <br />
+                        </div>
+                        <div id="retourSupprimer"></div>
+                    </div>
+
+
+
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    @if (@Model._Collaborateur.GetNombreCongesValidesFuturs() != 0)
+                    {
+                        <div class="listbox-area">
+                            <div class="left-area">
+                                <span id="ss_elem">
+                                    Demandes validées : @Model._Collaborateur.GetNombreCongesValidesFuturs() jours
+                                </span>
+                                <ul class="list-group">
+
+                                    @foreach (var c in Model._Collaborateur.Conges)
+                                    {
+                                        if (c.Statut == StatutConge.Valide)
+                                        {
+                                            <li id="@c.Id">
+                                                Id:@c.Id  @c.Debut.ToString("dd/MM/yy")  @c.GetDuree()j  type:@c.Type.ToString()
+                                            </li>
+                                        }
+                                    }
+
+
+
+                                </ul>
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <p>Aucune demande validée pour le moment <i class="em em-thinking_face"></i> </p>
+                    }
+
+                    <br />
+
+
+
+
                 </div>
 
-            }
-            else
-            {
-                <p>Aucune demande validée pour le moment <i class="em em-thinking_face"></i> </p>
-            }
-
-            <br />
-
-
-
-
-        </div>
 
 
 
@@ -125,109 +121,108 @@
 
 
 
+                <div class="col-md-8 text-center">
+                    <div class="row2">
+                    <h2>Faire une demande de congés</h2>
+                    <div id="example" style="text-align: center;">
+                        <div class="demo-section k-content wide" style="display: inline-block;">
 
-        <div class="col-lg-8 table-bordered text-center">
-            <h2>Faire une demande de congés</h2>
-            <div id="example" style="text-align: center;">
-                <div class="demo-section k-content wide" style="display: inline-block;">
+                            <h4>Selectionnez une plage</h4>
+                            @(Html.Kendo().MultiViewCalendar()
+                                                                .Name("multiViewCalendar")
+                                                                .Selectable("range")
+                                                                //.DisableDates(DayOfWeek.Saturday, DayOfWeek.Sunday) //a decommenter si on veut faire genre qu'on est stylés mais alors y aura du boulot et on est pas nés pour ça 
+                                                                .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
+                                                        "<div class=\"en-attente\"></div>" +
+                                                        "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
+                                                        "<div class=\"valide\"></div>" +
+                                                        "# } #" +
+                                                        "#= data.value #")
+                                                    )
 
-                    <h4>Selectionnez une plage</h4>
-                    @(Html.Kendo().MultiViewCalendar()
-                                                .Name("multiViewCalendar")
-                                                .Selectable("range")
-                                                //.Culture("fr-FR")
-                                                .MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
-                                        "<div class=\"en-attente\"></div>" +
-                                        "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
-                                        "<div class=\"valide\"></div>" +
-                                        "# } #" +
-                                        "#= data.value #")
-                                    )
+                            )
+                        </div>
+                    </div>
+                 
+                    <br />
 
-                    )
+                    <div class="form-group">
+                        <label for="selectType">Sélectionnez le type de congé</label>
+                        <select class="form-control text-center" id="selectType">
+                            <option id="no">Type de congé</option>
+                            <option id="rtt">RTT</option>
+                            <option id="sans">Sans solde</option>
+                            <option id="abs">Absence</option>
+                        </select>
+                    </div>
+
+
+                    <button id="demanderConge" type="button" class="btn btn-primary">Je veux ce congé !</button>
+
+                    <br />
+
+                    <div id="retourConge"></div>
+
+                    <br />
+
+                    @*@using (Html.BeginForm())
+                        {
+                            <div>
+                                @Html.LabelFor(Model => Model._Conge.Debut)
+                                @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(Model => Model._Conge.Debut)
+                            </div>
+                            <div>
+                                @Html.LabelFor(Model => Model._Conge.Fin)
+                                @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(Model => Model._Conge.Fin)
+                            </div>
+                            <div>
+                                @Html.LabelFor(Model => Model._Conge.Type)
+                                @Html.TextBoxFor(Model => Model._Conge.Type)
+                                @Html.ValidationMessageFor(Model => Model._Conge.Type)
+                            </div>
+                            <input type="submit" value="Demander congé" />
+                        }*@
+
                 </div>
-            </div>
-            @*.MonthTemplate(month => month.Content("# if ($.inArray(+data.date, enAttente) != -1) { #" +
-        "<div class=\"enattente\" font size=\"1\">conge en attente de validation</div>" +
-        "# } #" +
-        "#= data.value #")*@
-
-
-            @*.MonthTemplate(month => month.Content(   "# if($.inArray(+data.date, enAttente) != -1){ #" +
-            "<div class='enattente'>#= data.value #</div>"
-        +"#} elseif($.inArray(+data.date, refusee) != -1){#"
-            +"<div class='refusee'>#= data.value #</div> "
-        +"#} elseif($.inArray(+data.date, validee) != -1){#"
-            +"<div class='validee'>#= data.value #</div> "
-        +"#else {#"
-            +"#= data.value #"
-        +"# } #")*@
-            <br />
-
-
-            <button id="demanderConge" type="button" class="btn btn-primary">Je veux ce congé !</button>
-
-            <br />
-
-            <div id="retourConge"></div>
-
-            <br />
-
-            @*@using (Html.BeginForm())
-            {
-                <div>
-                    @Html.LabelFor(Model => Model._Conge.Debut)
-                    @Html.EditorFor(Model => Model._Conge.Debut, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(Model => Model._Conge.Debut)
                 </div>
-                <div>
-                    @Html.LabelFor(Model => Model._Conge.Fin)
-                    @Html.EditorFor(Model => Model._Conge.Fin, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(Model => Model._Conge.Fin)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="col-md-2  row3">
+                    <h2>Aujourd'hui : </h2>
+                    <h4>@DateTime.Today.ToString("dd/MM/yyyy")</h4>
+                    <br />
+                    <h3><font size="4">Informations du service</font></h3>
+                    <br />
+
+                    <p>Nombre de demandes en attente dans le service : @Model._Collaborateur.Service.GetNombreCongesEnAttente() </p>
+                    <br />
+                    <p>Nombre de collaborateurs en congés dans le service : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count (@(@Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count)%)</p>
+
+
+
                 </div>
-                <div>
-                    @Html.LabelFor(Model => Model._Conge.Type)
-                    @Html.TextBoxFor(Model => Model._Conge.Type)
-                    @Html.ValidationMessageFor(Model => Model._Conge.Type)
-                </div>
-                <input type="submit" value="Demander congé" />
-            }*@
-
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="col-lg-2 table-bordered">
-            <h2>Aujourd'hui : </h2>
-            <h4>@DateTime.Today.ToString("dd/MM/yyyy")</h4>
-            <br />
-            <h3><font size="4">Informations du service</font></h3>
-            <br />
-
-            <p>Nombre de demandes en attente dans le service : @Model._Collaborateur.Service.GetNombreCongesEnAttente() </p>
-            <br />
-            <p>Nombre de collaborateurs en congés dans le service : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count (@(@Model._Collaborateur.Service.GetNombreCollaborateursEnConges() / @Model._Collaborateur.Service.Collaborateurs.Count)%)</p>
-
-
-
-        </div>
-</body>
+        </div>  
+    </div>
+ </body>
 
 <script>
     
@@ -294,23 +289,30 @@
             var multiViewCalendar = $("#multiViewCalendar").data().kendoMultiViewCalendar;
             var range = multiViewCalendar.selectRange();
             if (range.start && range.end) {
-                var options = {year: 'numeric', month: 'long', day: 'numeric' };
 
-                console.log(typeof (range.start.toLocaleDateString(options)))
-                console.log(range.start)
-                console.log(range.start.toLocaleDateString(options))
+                if ($("#selectType").children(":selected").attr("id") != "no") {
+                    var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
-                $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString() }, function (data) {
-                    if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
-                    else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
-                    else if (data == "ok") {
-                        $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
-                        setTimeout("location.reload(true);", 1500);
+                    console.log(typeof (range.start.toLocaleDateString(options)))
+                    console.log(range.start)
+                    console.log(range.start.toLocaleDateString(options))
 
-                        prepareElements()
-                    }
+                    $.post("DemandeConge", { Debut: range.start.toISOString(), Fin: range.end.toISOString(), type: $("#selectType").children(":selected").attr("id") }, function (data) {
+                        if (data == "errorPasAssezDeCongesRestants") $("#retourConge").html("<font color=\"red\">ERREUR : Vous n'avez pas assez de congés disponibles cher collaborateur.</font>")
+                        else if (data == "errorChevauchage") $("#retourConge").html("<font color=\"red\">ERREUR : Vous avez demandé un congé qui contient un autre congé.</font>")
+                        else if (data == "erreurTypeConge") $("#retourConge").html("<font color=\"red\">ERREUR : Il y a eu un soucis avec le type de conge.</font>")
+                        else if (data == "ok") {
+                            $("#retourConge").html("<font color=\"green\">Votre demande de congé a bien été prise en compte.</font>")
+                            setTimeout("location.reload(true);", 1500);
 
-		        });
+                            prepareElements()
+                        }
+
+                    });
+                }
+                else {
+                    $("#retourConge").html("<font color=\"red\">ERREUR : Veuillez selectionner un type de congé.</font>")
+                }
               
               
             } else {
@@ -377,7 +379,11 @@
     margin-bottom: 10px;
     overflow:scroll;
     -webkit-overflow-scrolling: touch;
-}
+    }
+
+    #selectType {
+   text-align: center;
+    }
 
 </style>
 

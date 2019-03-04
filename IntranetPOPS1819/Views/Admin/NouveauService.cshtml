@@ -1,20 +1,24 @@
 ﻿@model IntranetPOPS1819.ViewModel.NouveauServiceViewModel
 @{
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
 
 @Html.Partial("../Shared/Navbar")
-<div>
-	@using (Html.BeginForm())
-	{
-		<div>
-			@Html.LabelFor(Model => Model.Nom)
-			@Html.TextBoxFor(Model => Model.Nom)
-			@Html.ValidationMessageFor(Model => Model.Nom)
-		</div>
-		<input type="submit" value="Ajouter service" />
-	}
+<div style="height:300px;margin-top:50px">
+    @using (Html.BeginForm())
+    {
+        <div class="ns">
+            <p class="ns-p">
+                Nom de Service :
+                @Html.TextBoxFor(Model => Model.Nom)
+                @Html.ValidationMessageFor(Model => Model.Nom)
+            </p>
+        </div>
+        <div align="center">
+            <input type="submit" value="Ajouter service" />
+        </div>
+    }
 </div>
 

@@ -1,0 +1,32 @@
+﻿@using IntranetPOPS1819.Models
+@model Collaborateur
+@{
+	Message message = null;
+	<div class="row">
+		<div class="col-lg-2">
+			<br />
+			<div class="list-group">
+				@for (int i = 0; i < Model.Service.Messages.Count; i++)
+				{
+					if (message == null) { message = Model.Service.Messages[i]; }
+					@Ajax.ActionLink(Model.Service.Messages[i].Emetteur, "InformationMessage", new { id = Model.Service.Messages[i].Id }, new AjaxOptions
+					{
+						InsertionMode = InsertionMode.Replace,
+						UpdateTargetId = "InfoMessage",
+						HttpMethod = "Post"
+					}, new { @class = "list-group-item btn btn-block btn-3" })
+				}
+			</div>
+			<br />
+		</div>
+		<div id="InfoMessage" class="col-lg-10">
+			@{
+				if (message != null)
+				{
+					Html.RenderAction("InformationMessage", new { id = message.Id });
+				}
+			}
+		</div>
+	</div>
+	
+}

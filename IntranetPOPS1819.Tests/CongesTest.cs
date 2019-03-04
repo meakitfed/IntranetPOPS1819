@@ -33,7 +33,7 @@ namespace IntranetTests.Tests
             dal.AjoutConge(1, c);
             dal.ValiderConge(1, dal.ObtenirCollaborateur(1).Conges[0].Id);
             Assert.AreEqual(dal.ObtenirCollaborateur(1).Conges[0].Statut, StatutConge.Valide);
-            Assert.AreEqual(dal.ObtenirCollaborateur(1).CongesRestants, 10);
+            Assert.AreEqual(dal.ObtenirCollaborateur(1).CongesRestants, 7);
         }
     }
 }

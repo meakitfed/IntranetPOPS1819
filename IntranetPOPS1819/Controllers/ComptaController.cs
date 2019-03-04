@@ -1,4 +1,5 @@
 ﻿using IntranetPOPS1819.Models;
+using IntranetPOPS1819.ViewModel;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System;
@@ -16,7 +17,13 @@ namespace IntranetPOPS1819.Controllers
 		// GET: Compta
 		public ActionResult Index()
         {
-            return View();
+			ComptaViewModel vm = new ComptaViewModel
+			{
+				c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name),
+				Services = dal.ObtenirTousLesServices().ToList()
+			};
+				
+			return View(vm);
         }
 		
 
@@ -65,12 +72,15 @@ namespace IntranetPOPS1819.Controllers
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Refusée);
 			return Json(null, JsonRequestBehavior.AllowGet);
 		}
-		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request/*, int IdNote*/)
+		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int IdCollab)
 		{
 			List<LigneDeFrais> l = new List<LigneDeFrais>();
 			foreach (NoteDeFrais n in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais)
 			{
-				l.AddRange(n.LignesDeFrais.Where(s => (s.Statut != StatutLigneDeFrais.Validée)));
+				if(n.LignesDeFrais[0].IdCollab == IdCollab)
+				{
+					l.AddRange(n.LignesDeFrais.Where(s => (s.Statut != StatutLigneDeFrais.Validée)));
+				}
 			}
 			IQueryable<LigneDeFrais> lignedefrais = l.AsQueryable();
 			
@@ -79,13 +89,14 @@ namespace IntranetPOPS1819.Controllers
 				Nom = ligneDeFrais.Nom,
 				Somme = ligneDeFrais.Somme,
 				Type = ligneDeFrais.Type,
-				Complete = ligneDeFrais.Complete,
 				Statut = ligneDeFrais.Statut,
 				Date = ligneDeFrais.Date,
 				ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 				Filename = ligneDeFrais.Filename,
-				Mission = ligneDeFrais.Mission
-			});
+				Mission = ligneDeFrais.Mission,
+				IdCollab = ligneDeFrais.IdCollab,
+                IdNote = ligneDeFrais.IdNote,
+            });
 
 			return Json(result);
 		}
@@ -96,9 +107,9 @@ namespace IntranetPOPS1819.Controllers
 			base.Dispose(disposing);
 		}
 
-		public ActionResult InformationLigneDeFrais(/*int idNote = default(int)*/)
+		public ActionResult InformationLigneDeFrais(int IdCollab)
 		{
-			return PartialView(/*idNote*/);
+			return PartialView(IdCollab);
 		}
 	}
 }

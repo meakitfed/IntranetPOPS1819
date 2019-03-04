@@ -11,8 +11,9 @@ namespace IntranetPOPS1819.Models
         Collaborateur ObtenirCollaborateur(string idString);
         List<Collaborateur> ObtenirTousLesCollaborateurs();
         List<Collaborateur> ObtenirCollaborateursService(int id);
-        Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp);
-		void AssignerChefDeService(int idCollab);
+        Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, string tel, bool chef = false, bool admin = false);
+        Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, bool chef = false, bool admin = false);
+        void AssignerChefDeService(int idCollab);
 		Collaborateur ObtenirDirecteurFinancier();
 		Collaborateur ObtenirPDG();
         Collaborateur ObtenirDRH();
@@ -47,6 +48,7 @@ namespace IntranetPOPS1819.Models
 
 		// Congés
 		void AjoutConge(int idCollab, Conge c);
+        void AjoutConge(int idCollab, Conge c, TypeConge type);
         void ChangerStatut(int id, StatutConge s);                                      // Testé
         void EnvoiCongeChef(int idService, int idCollab, int idConge);
         void ValiderConge(int idCollab, int idConge);                                   // Testé
@@ -56,9 +58,10 @@ namespace IntranetPOPS1819.Models
 
         // Notifications
         void AjoutNotif(int idCollab, Message m);
+		void EnvoiDemandeInformation(Message m);
 
-        // BD
-        void InitializeBdd();
+		// BD
+		void InitializeBdd();
         
 	}
 }

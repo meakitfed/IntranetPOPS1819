@@ -1,13 +1,14 @@
 ﻿@using IntranetPOPS1819.Models
+@using HelperExtensionNameSpace
 @model IntranetPOPS1819.ViewModel.ChefDeServiceViewModel
 @{
-	ViewBag.Title = "Chef De Service";
+	ViewBag.Title = "Tableau de bord";
 
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <head>
-    @Styles.Render("~/Content/css")
+	@Styles.Render("~/Content/css")
 </head>
 
 @Html.Partial("../Shared/Navbar")
@@ -15,49 +16,50 @@
     int id = -1;
 <h2>@Model._Collaborateur.Service.Nom</h2>
 <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-9 table-bordered">
-                <nav class="nav nav-tabs">
-                    <a class="nav-item nav-link active" href="#p1" data-toggle="tab">Congés</a>
-                    <a class="nav-item nav-link" href="#p2" data-toggle="tab">Notes de frais</a>
-                </nav>
-                <div class="tab-content">
-                    <div class="tab-pane active" id="p1">
-                        @Html.Partial("Conges2")
-                    </div>
-                    <div class="tab-pane" id="p2">
-                        <div class="row">
-                            <div class="col-lg-2">
-                                @foreach (Collaborateur c in Model._Collaborateur.Service.Collaborateurs)
-                                {
-                                    if (c.Id != Model._Collaborateur.Id)
-                                    {
-                                        if (id == -1) { id = c.Id; };
-                                        @Ajax.ActionLink(c.Prenom + " " + c.Nom, "InformationLigneDeFraisSelection", new { idCol = c.Id }, new AjaxOptions
-                                        {
-                                            InsertionMode = InsertionMode.Replace,
-                                            UpdateTargetId = "InfoLigne",
-                                            HttpMethod = "Post"
-                                        }, new { @class = "btn btn-block btn-3" })
-                                    }
-                                }
-                            </div>
-                            <div id="InfoLigne" class="col-lg-10">
-                                @{
-                                    if (id != -1)
-                                    {
-                                        Html.RenderAction("InformationLigneDeFraisSelection", new { idCol = id });
-                                    }
-                                }
-                            </div>
-
+    <div class="row">
+        <div class="col-lg-12 table-bordered">
+            <nav class="nav nav-tabs">
+                <a class="nav-item nav-link active" href="#p1" data-toggle="tab">Congés</a>
+                <a class="nav-item nav-link" href="#p2" data-toggle="tab">Notes de frais</a>
+            </nav>
+            <div class="tab-content">
+                <div class="tab-pane active" id="p1">
+                    @Html.Partial("Conges2")
+                </div>
+                <div class="tab-pane" id="p2">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            @foreach (Collaborateur c in Model._Collaborateur.Service.Collaborateurs)
+                            {
+                            if (c.Id != Model._Collaborateur.Id)
+                            {
+                            if (id == -1) { id = c.Id; };
+                            @Ajax.ActionLink(c.Prenom + " " + c.Nom, "InformationLigneDeFraisSelection", new { idCol = c.Id }, new AjaxOptions
+                            {
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "InfoLigne",
+                            HttpMethod = "Post"
+                            }, new { @class = "btn btn-block btn-3" })
+                            }
+                            }
                         </div>
+                        <div id="InfoLigne" class="col-lg-10">
+                            @{
+                            if (id != -1)
+                            {
+                            Html.RenderAction("InformationLigneDeFraisSelection", new { idCol = id });
+                            }
+                            }
+                        </div>
+
                     </div>
                 </div>
-            </div>
-            <div class="col-sm table-bordered">
-                @Html.Partial("InfosService2")
+                <div class="col-sm table-bordered">
+                    @Html.Partial("InfosService2")
+                </div>
             </div>
         </div>
-</div>
+        
+    </div>
+	</div>
 }

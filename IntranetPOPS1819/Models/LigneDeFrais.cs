@@ -29,9 +29,6 @@ namespace IntranetPOPS1819.Models
 		[UIHint("TypeLigneDeFrais")]
 		public TypeLigneDeFrais Type { get; set; } = TypeLigneDeFrais.Autre;
 
-		[Display(Name = "Note Complète")]
-		public bool Complete { get; set; }
-
 		//public DateTime Date { get; set; }
 		[UIHint("StatutLigneDeFrais")]
 		public StatutLigneDeFrais Statut { get; set; }
@@ -47,9 +44,10 @@ namespace IntranetPOPS1819.Models
 
 		public string Filename { set; get; }
 
-		[ScaffoldColumn(false)]
 		public int IdCollab { get; set; }
-	}
+
+        public int IdNote { get; set; }
+    }
 
     public enum StatutLigneDeFrais
     {

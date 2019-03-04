@@ -11,9 +11,71 @@ namespace IntranetPOPS1819.Models
 		public DateTime Date { get; set; }
 		public bool Actif { get; set; } = false;
 		public virtual List<LigneDeFrais> LignesDeFrais { get; set; } = new List<LigneDeFrais>();
-		//public virtual Collaborateur Collaborateur { get; set; }
+        //public virtual Collaborateur Collaborateur { get; set; }
 
-		public bool EstValidéeParLeChef()
+        public int NbrRefusé()
+        {
+            int i = 0;
+            foreach (LigneDeFrais l in LignesDeFrais)
+            {
+                if (l.Statut == StatutLigneDeFrais.Refusée)
+                {
+                    i++;
+                }
+            }
+            return i;
+        }
+        public int NbrValidée()
+        {
+            int i = 0;
+            foreach (LigneDeFrais l in LignesDeFrais)
+            {
+                if (l.Statut == StatutLigneDeFrais.Validée)
+                {
+                    i++;
+                }
+            }
+            return i;
+        }
+
+
+        public int GetSommeValidee()
+        {
+            int somme = 0;
+            foreach(LigneDeFrais ligne in LignesDeFrais)
+            {
+                if (ligne.Statut == StatutLigneDeFrais.Validée) somme += ligne.Somme;
+            }
+
+            return somme;
+        }
+
+
+        public int NbrValidéeChef()
+        {
+            int i = 0;
+            foreach (LigneDeFrais l in LignesDeFrais)
+            {
+                if (l.Statut == StatutLigneDeFrais.ValidéeChef)
+                {
+                    i++;
+                }
+            }
+            return i;
+        }
+        public int NbrEnAttente()
+        {
+            int i = 0;
+            foreach (LigneDeFrais l in LignesDeFrais)
+            {
+                if (l.Statut == StatutLigneDeFrais.EnAttente)
+                {
+                    i++;
+                }
+            }
+            return i;
+        }
+        public bool EstValidéeParLeChef()
 		{
 			foreach(LigneDeFrais l in LignesDeFrais)
 			{

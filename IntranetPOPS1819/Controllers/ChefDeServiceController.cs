@@ -29,9 +29,18 @@ namespace IntranetPOPS1819.Controllers
             //Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
 			LigneDeFrais ligne = dal.bdd.LigneDeFrais.FirstOrDefault(l => l.Id == Id);
-			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
-			//TODO
 			Collaborateur col = dal.bdd.Collaborateurs.FirstOrDefault(c => c.Id == ligne.IdCollab);
+			System.Diagnostics.Debug.WriteLine("Ligne du collaborateur " + col.Nom + " " + col.Prenom + " du service " + col.Service.Nom + " et chef ? " + col.Chef);
+			if ((col.Service.Type == TypeService.Comptabilité || col.Service.Type == TypeService.RessourcesHumaines) && col.Chef)
+			{
+				dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Validée);
+			}
+			else
+			{
+				dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
+			}
+			//TODO
+			
 			foreach(NoteDeFrais n in col.NotesDeFrais)
 			{
 				if (n.LignesDeFrais.Contains(ligne))
@@ -74,15 +83,25 @@ namespace IntranetPOPS1819.Controllers
                     Nom = ligneDeFrais.Nom,
                     Somme = ligneDeFrais.Somme,
                     Type = ligneDeFrais.Type,
-                    Complete = ligneDeFrais.Complete,
                     Statut = ligneDeFrais.Statut,
                     Date = ligneDeFrais.Date,
                     ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
                     Filename = ligneDeFrais.Filename,
-                    Mission = ligneDeFrais.Mission
-                });
+                    Mission = ligneDeFrais.Mission,
+					IdCollab = ligneDeFrais.IdCollab,
+                    IdNote = ligneDeFrais.IdNote,
+				});
 
                 return Json(result);
+        }
+
+        public ActionResult GetInfoNote(int idNote, int idCol)
+        {
+            Dal dal = new Dal();
+            NoteDeFrais note = dal.bdd.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
+            Collaborateur col = dal.ObtenirCollaborateur(idCol);
+
+            return Json(new { nomCol = col.Nom, prenomCol = col.Prenom, date = note.Actif, sommeValidee = note.GetSommeValidee() });
         }
 
 		protected override void Dispose(bool disposing)
@@ -96,6 +115,27 @@ namespace IntranetPOPS1819.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				vm.ListeCollab = vm._Collaborateur.Service.Collaborateurs;
+				if(vm._Collaborateur.Service.Type == TypeService.Direction && vm._Collaborateur.Chef)
+				{
+					vm.ListeCollab.AddRange(dal.getChefRhEtCompta());
+				}
+				foreach (Collaborateur c in vm.ListeCollab)
+				{
+					int a = 0;
+					int b = 0;
+					foreach (NoteDeFrais n in vm._Collaborateur.Service.NotesDeFrais)
+					{
+						if(c.NotesDeFrais.Contains(n))
+						{
+							a += n.NbrRefusé();
+							b += n.NbrEnAttente();
+						}
+					}
+					vm.nbrRefusé.Add(a);
+					vm.nbrEnAttente.Add(b);
+				}
+				
                 vm.Missions = new List<MissionsViewModel>();
 
                 IEnumerable<SelectListItem> collabosList =

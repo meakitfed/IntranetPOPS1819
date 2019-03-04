@@ -175,6 +175,41 @@ namespace IntranetPOPS1819.Models
             return liste;
         }
 
+        public int GetSommeValideeCeMois()
+        {
+            int somme = 0;
+            foreach (NoteDeFrais note in NotesDeFrais)
+            {
+                if (note.Date.Month == DateTime.Today.Month)
+                {
+                    foreach (LigneDeFrais ligne in note.LignesDeFrais)
+                    {
+                        if (ligne.Statut == StatutLigneDeFrais.Validée) somme += ligne.Somme;
+                    }
+                }
+
+            }
+            return somme;
+        }
+
+        public int GetNombreNotesDeFraisValidees()
+        {
+            int nb = 0;
+
+            foreach (NoteDeFrais note in NotesDeFrais)
+            {
+                if (note.Statut == StatutNote.Validée) nb += 1;
+            }
+
+            return nb;
+        }
+
+        public string GetPpPath()
+        {
+            int nb = Id % 14;
+            return "~/Content/images/collaborateurs/col" + nb + ".jpg";
+        }
+
         public bool isEnConge(System.DateTime date)
         {
             if (Conges != null)
@@ -200,6 +235,42 @@ namespace IntranetPOPS1819.Models
 
             return nb;
         }
+
+        public string RoleToString()
+        {
+            string rst = "";
+            if (this.Chef)
+                rst += "Chef de service";
+            else
+                rst += "Collaborateur";
+
+            if (this.Admin)
+                rst += ", Administrateur";
+
+            return rst;
+        }
+
+		public string CircleInformationNoteDeFrais(string s, int attente, int refusé, int validéeChef, int validée)
+		{
+			
+			if (attente != 0)
+			{
+				s += "   <span class='orange'>" + attente + "</span>";
+			}
+			if (refusé != 0)
+			{
+				s += "<span class='red'>" + refusé + "</span>";
+			}
+			if (validéeChef != 0)
+			{
+				s += "  <span class='green'>" + validéeChef + "</span>";
+			}
+			if (validée != 0)
+			{
+				s += "<span class='green2'>" + validée + "</span>";
+			}
+			return s;
+		}
     }
 }
 

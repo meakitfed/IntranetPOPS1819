@@ -54,13 +54,14 @@ namespace IntranetPOPS1819.Controllers
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
 					Somme = ligneDeFrais.Somme,
-					Complete = ligneDeFrais.Complete,
 					Statut = ligneDeFrais.Statut,
 					ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
-					Mission = new Mission {
+					IdCollab = ligneDeFrais.IdCollab,
+                    IdNote = ligneDeFrais.IdNote,
+                    Mission = new Mission {
 						Id = ligneDeFrais.Mission.Id,
 						Nom = ligneDeFrais.Mission.Nom,
 						Statut = ligneDeFrais.Mission.Statut,
@@ -83,26 +84,27 @@ namespace IntranetPOPS1819.Controllers
 					.Where(x => x.Value.Errors.Count > 0)
 					.Select(x => new { x.Key, x.Value.Errors })
 					.ToArray();
-
+				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 				if (ModelState.IsValid)
 				{
 					dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
-					Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-					
-					var entity = new LigneDeFrais
-					{
-						Nom = ligneDeFrais.Nom,
-						Somme = ligneDeFrais.Somme,
-						Complete = ligneDeFrais.Complete,
-						Statut = ligneDeFrais.Statut,
-						ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
-						Filename = ligneDeFrais.Filename,
-						Date = ligneDeFrais.Date,
-						Type = ligneDeFrais.Type,
-						Mission = ligneDeFrais.Mission,
-					};
+
+                    var entity = new LigneDeFrais
+                    {
+                        Nom = ligneDeFrais.Nom,
+                        Somme = ligneDeFrais.Somme,
+                        Statut = ligneDeFrais.Statut,
+                        ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
+                        Filename = ligneDeFrais.Filename,
+                        Date = ligneDeFrais.Date,
+                        Type = ligneDeFrais.Type,
+                        Mission = ligneDeFrais.Mission,
+                        IdCollab = ligneDeFrais.IdCollab,
+                        IdNote = ligneDeFrais.IdNote,
+                    };
 					dal.AjoutLigneDeFrais(c.Id, IdNote, entity);
 					ligneDeFrais.Id = entity.Id;
+					ligneDeFrais.IdCollab = entity.IdCollab;
 				}
 				else
 				{
@@ -115,6 +117,14 @@ namespace IntranetPOPS1819.Controllers
 						System.Diagnostics.Debug.WriteLine(v);
 					}
 				}
+				/*foreach(HttpPostedFileBase f in Session["RESUMEFILE"] as List<HttpPostedFileBase>)
+				{
+					DirectoryInfo di = Directory.CreateDirectory(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id));
+					f.SaveAs(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id + "/" + f.FileName));
+					System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + f.FileName + "length" + f.ContentLength);
+				}
+				Session.Remove("RESUMEFILE");*/
+
 				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create envoie des données");
 				return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
 			}
@@ -124,6 +134,7 @@ namespace IntranetPOPS1819.Controllers
 		[AcceptVerbs(HttpVerbs.Post)]
 		public ActionResult LigneDeFrais_Update([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
 		{
+			
 			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_update");
 			if (ModelState.IsValid)
 			{
@@ -132,17 +143,26 @@ namespace IntranetPOPS1819.Controllers
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
 					Somme = ligneDeFrais.Somme,
-					Complete = ligneDeFrais.Complete,
 					Statut = ligneDeFrais.Statut,
 					ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
-				};
+					IdCollab = ligneDeFrais.IdCollab,
+                    IdNote = ligneDeFrais.IdNote,
+                };
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.Entry(entity).State = EntityState.Modified;
 				dal.bdd.SaveChanges();
 				dal.ChangerMissionLigneDeFrais(ligneDeFrais.Id, ligneDeFrais.Mission.Id);
+				System.Diagnostics.Debug.WriteLine("Check Statut de la ligne de frais :" +  entity.Statut.ToString());
+				System.Diagnostics.Debug.WriteLine("Check IdCollab de la ligne de frais :" + entity.IdCollab);
+				if (entity.Statut == StatutLigneDeFrais.Refusée)
+				{
+					System.Diagnostics.Debug.WriteLine("Changement Statut de Refusé à EnAttente après édition");
+					dal.ChangerStatutLigneDeFrais(entity.Id, StatutLigneDeFrais.EnAttente);
+				}
+				
 			}
 			else
 			{
@@ -170,14 +190,15 @@ namespace IntranetPOPS1819.Controllers
 					Id = ligneDeFrais.Id,
 					Nom = ligneDeFrais.Nom,
 					Somme = ligneDeFrais.Somme,
-					Complete = ligneDeFrais.Complete,
 					Statut = ligneDeFrais.Statut,
 					ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
 					Mission = ligneDeFrais.Mission,
-				};
+					IdCollab = ligneDeFrais.IdCollab,
+                    IdNote = ligneDeFrais.IdNote,
+                };
 
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.LigneDeFrais.Remove(entity);
@@ -206,36 +227,6 @@ namespace IntranetPOPS1819.Controllers
 			System.Diagnostics.Debug.WriteLine("Passage dans Index GET NoteDeFraisControlleur evnoie des données");
 			return View(vm);
 		}
-
-		/*[HttpPost]
-		public ActionResult Index(OngletNoteDeFraisViewModel vm)
-		{
-			if (HttpContext.User.Identity.IsAuthenticated)
-			{
-				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				System.Diagnostics.Debug.WriteLine("Passage dans Index HttpPost NoteDeFraisControlleur");
-				//TODO valider le form?
-				System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
-				vm._Frais.Mission = dal.GetMission(vm._IdMission);
-				foreach (NoteDeFrais n in vm._Collaborateur.NotesDeFrais)
-				{
-					if(n.Id == vm._IdNoteDeFrais)
-					{
-						dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
-						if (vm._Frais.Complete)
-						{
-							dal.EnvoiNoteDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
-							//Message notif = new Message(TypeMessage.NotifLigneAller, vm._Collaborateur.Prenom + vm._Collaborateur.Nom + " - " + vm._Collaborateur.Service.Nom, vm._Frais);
-                            //dal.AjoutNotif(vm._Collaborateur.Service.Chef().Id, notif);
-							
-						}
-						return View(vm);
-					}
-				}
-				return View(vm);
-			}
-			return View();
-		}*/
 
 		public ActionResult InformationLigneDeFrais(int IdNote)
 		{
@@ -274,15 +265,6 @@ namespace IntranetPOPS1819.Controllers
 						Value = ((int)m.Id).ToString()
 					});
 				}
-				//TODO prendre que certaines missions ici
-				/*foreach (var m in c.AnciennesMissions)
-				{
-					listMission.Add(new SelectListItem()
-					{
-						Text = m.Nom,
-						Value = ((int)m.Id).ToString()
-					});
-				}*/
 				ViewData["ListMission"] = listMission;
 				if(c.Missions.Count != 0)
 				{
@@ -300,6 +282,7 @@ namespace IntranetPOPS1819.Controllers
 				}
 				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote);
 				ViewData["IsComplete"] = (note.Statut != StatutNote.Brouillon);
+				ViewData["IsOld"] = (DateTime.Now.Subtract(note.Date).Days / (365.25 / 12)) > 2;
 			}
 			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur envoie des données");
 			return PartialView(IdNote);
@@ -341,11 +324,12 @@ namespace IntranetPOPS1819.Controllers
 					{
 						files.Add(newFile);
 					}
-					HttpContext.Session[sessionKey] = files;
+					Session[sessionKey] = files;
 					if (newFile != null)
 						filename = Path.GetFileName(newFile.FileName);
 				}
 			}
+
 			System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + filename);
 			return Json(new { Type = "Upload", FileName = filename }, JsonRequestBehavior.AllowGet);
 		}
