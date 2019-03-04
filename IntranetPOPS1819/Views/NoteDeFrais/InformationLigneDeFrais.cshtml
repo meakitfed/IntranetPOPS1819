@@ -97,7 +97,7 @@
 		$('#EnvoyerNote').addClass('Disabled');
 		$('#AddLigne').addClass('Disabled');
 		$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
-			alert('La note de frais a été envoyé');
+			alert('La note de frais a été envoyée');
 			console.log(data);
 		});
 	});
@@ -156,7 +156,7 @@
 		$.each(e.files, function (index, value) {
 			var allowedExtensions = ".doc|.docx|.pdf|.png|.jpg";
 			if (allowedExtensions.indexOf(value.extension.toLowerCase()) < 0) {
-				alert('This file is not allowed. Check file type.');
+				alert("Ce type de fichier n'est pas supporté.");
 				e.preventDefault();
 			}
 		});
@@ -164,10 +164,10 @@
 	function onUploadSuccessResumeFile(e) {
 		switch (e.response.Type.toString().toLowerCase()) {
 			case "upload":
-				alert('Your resume file has been uploaded successfully.');
+				alert('Le fichier a été uploadé avec succès.');
 				break;
 			case "remove":
-				alert('Your resume file has been removed successfully.');
+				alert('Le fichier a bien été supprimé.');
 				break;
 		}
 	}
