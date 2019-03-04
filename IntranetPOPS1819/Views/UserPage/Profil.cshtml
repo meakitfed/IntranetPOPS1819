@@ -22,7 +22,7 @@
                 <div class="col-md-2 row1 text-center">
                     <h2 class="row1-h">@Model._Collaborateur.Nom @Model._Collaborateur.Prenom</h2>
                     
-                    <img src="@Url.Content(Model._Collaborateur.GetPpPath())" id="pp">
+                    <img src="@Url.Content(Model._Collaborateur.GetPpPath())" id="pp" class="rounded border border-dark">
                     <br />
                     <p>
                         Service : @if (@Model._Collaborateur.Service != null)
@@ -67,3 +67,7 @@
     </div>
 </body>
 </html>
+
+<style>
+    
+</style>
