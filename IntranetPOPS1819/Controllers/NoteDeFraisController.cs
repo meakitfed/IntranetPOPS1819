@@ -59,6 +59,7 @@ namespace IntranetPOPS1819.Controllers
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
+					IdCollab = ligneDeFrais.IdCollab,
 					Mission = new Mission {
 						Id = ligneDeFrais.Mission.Id,
 						Nom = ligneDeFrais.Mission.Nom,
@@ -97,9 +98,11 @@ namespace IntranetPOPS1819.Controllers
 						Date = ligneDeFrais.Date,
 						Type = ligneDeFrais.Type,
 						Mission = ligneDeFrais.Mission,
+						IdCollab = ligneDeFrais.IdCollab,
 					};
 					dal.AjoutLigneDeFrais(c.Id, IdNote, entity);
 					ligneDeFrais.Id = entity.Id;
+					ligneDeFrais.IdCollab = entity.IdCollab;
 				}
 				else
 				{
@@ -112,13 +115,13 @@ namespace IntranetPOPS1819.Controllers
 						System.Diagnostics.Debug.WriteLine(v);
 					}
 				}
-				foreach(HttpPostedFileBase f in Session["RESUMEFILE"] as List<HttpPostedFileBase>)
+				/*foreach(HttpPostedFileBase f in Session["RESUMEFILE"] as List<HttpPostedFileBase>)
 				{
 					DirectoryInfo di = Directory.CreateDirectory(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id));
 					f.SaveAs(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id + "/" + f.FileName));
 					System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + f.FileName + "length" + f.ContentLength);
 				}
-				Session.Remove("RESUMEFILE");
+				Session.Remove("RESUMEFILE");*/
 
 				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create envoie des données");
 				return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
@@ -129,6 +132,7 @@ namespace IntranetPOPS1819.Controllers
 		[AcceptVerbs(HttpVerbs.Post)]
 		public ActionResult LigneDeFrais_Update([DataSourceRequest]DataSourceRequest request, LigneDeFrais ligneDeFrais)
 		{
+			
 			System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_update");
 			if (ModelState.IsValid)
 			{
@@ -142,11 +146,20 @@ namespace IntranetPOPS1819.Controllers
 					Filename = ligneDeFrais.Filename,
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
+					IdCollab = ligneDeFrais.IdCollab,
 				};
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.Entry(entity).State = EntityState.Modified;
 				dal.bdd.SaveChanges();
 				dal.ChangerMissionLigneDeFrais(ligneDeFrais.Id, ligneDeFrais.Mission.Id);
+				System.Diagnostics.Debug.WriteLine("Check Statut de la ligne de frais :" +  entity.Statut.ToString());
+				System.Diagnostics.Debug.WriteLine("Check IdCollab de la ligne de frais :" + entity.IdCollab);
+				if (entity.Statut == StatutLigneDeFrais.Refusée)
+				{
+					System.Diagnostics.Debug.WriteLine("Changement Statut de Refusé à EnAttente après édition");
+					dal.ChangerStatutLigneDeFrais(entity.Id, StatutLigneDeFrais.EnAttente);
+				}
+				
 			}
 			else
 			{
@@ -180,6 +193,7 @@ namespace IntranetPOPS1819.Controllers
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
 					Mission = ligneDeFrais.Mission,
+					IdCollab = ligneDeFrais.IdCollab,
 				};
 
 				dal.bdd.LigneDeFrais.Attach(entity);

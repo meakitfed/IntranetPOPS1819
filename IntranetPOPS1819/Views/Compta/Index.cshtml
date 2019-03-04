@@ -1,4 +1,7 @@
-﻿@using IntranetPOPS1819.Models
+﻿@using HelperExtensionNameSpace
+@using IntranetPOPS1819.Models
+@using IntranetPOPS1819.ViewModel
+@model ComptaViewModel
 @{
 	ViewBag.Title = "Service Comptabilité";
 
@@ -11,20 +14,47 @@
 
 @Html.Partial("../Shared/Navbar")
 @{
-	int firstNote = -1;
+	int firstCollab = -1;
 	<div>
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-2 table-bordered">
+					<div class="list-group">
+						@foreach (Service s in Model.Services)
+						{
+							<button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(@("service" + s.Id)); return false;">@s.Nom</button>
+							<div id="@("service" + s.Id)" style="display:none;">
+								@foreach (Collaborateur c in s.Collaborateurs)
+								{
+									if (firstCollab == -1) { firstCollab = c.Id; }
+									if (c.Id != Model.c.Id)
+									{
+										@Ajax.RawActionLink(string.Format(c.Nom + c.Prenom), "InformationLigneDeFrais", "Compta", new { IdCollab = c.Id }, new AjaxOptions
+									   {
+										   InsertionMode = InsertionMode.Replace,
+										   UpdateTargetId = "InfoNoteActive",
+										   HttpMethod = "Post"
+									   }, new { @class = "btn btn-block btn-3 list-group-item" })
+									}
+
+								}
+							</div>
+						}
+					</div>
 				</div>
 				<div class="col-lg-12 table-bordered">
-						<div>
-							@Html.Partial("InformationLigneDeFrais")
-						</div>
+					<div id="InfoNoteActive">
+						@{
+							if (firstCollab != -1)
+							{
+								Html.RenderAction("InformationLigneDeFrais", new { IdCollab = firstCollab });
+							}
+						}
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 }
 
 

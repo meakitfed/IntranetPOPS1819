@@ -97,7 +97,7 @@
 		$('#EnvoyerNote').addClass('Disabled');
 		$('#AddLigne').addClass('Disabled');
 		$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
-			alert('updated');
+			alert('La note de frais a été envoyé');
 			console.log(data);
 		});
 	});
@@ -110,31 +110,11 @@
 
 		function onSaveChanges(e) {
 		//Implement the event handler for SaveChanges
-		@{/*
-				Dal d = new Dal();
-				Mission m = d.GetMission(ViewBag["ListMission"]);
-				//set the required field value
-				<text>
-				// Put your javascript code here
-				e.model.set("Mission");
-				</text>
-		*/}
-	}
+			
+		}
 
 	function onEdit(e) {
 
-		//check if record is new
-		if (e.model.isNew()) {
-			@{/*
-				Dal d = new Dal();
-				Mission m = d.GetMission(ViewBag["ListMission"]);
-				//set the required field value
-				<text>
-				// Put your javascript code here
-				e.model.set("Mission");
-				</text>*/
-			}
-		}
 	}
 
 	function onDataBound(e) {
