@@ -25,13 +25,7 @@ namespace IntranetPOPS1819.Controllers
 			return PartialView(col);
 		}
 
-        public ActionResult InfosService(int idService)
-        {
-            IDal dal = new Dal();
-            Service serv = dal.ObtenirTousLesServices().FirstOrDefault(s => s.Id == idService);
-
-            return PartialView(serv);
-        }
+       
     }
 
 
