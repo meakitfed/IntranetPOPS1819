@@ -69,14 +69,14 @@
                     var row = $(e.currentTarget).closest("tr");
                     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
                     grid.removeRow(row);
-        $.ajax({
-                    url: 'Conges_ValidationRH',
-            data: {
-                        nb: dataItem.Id,
-                accepter: true
-            }
+                    $.ajax({
+                        url: 'Conges_ValidationRH',
+                        data: {
+                            nb: dataItem.Id,
+                            accepter: true
+                        }
                     }).done(function () {
-                        alert('Added');
+                        alert('Le congé a été validé. Bravo !');
                     });
                 }
 
@@ -86,14 +86,14 @@
                     var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
                     grid.removeRow(row);
                     console.log(dataItem);
-        $.ajax({
-                    url: 'Conges_ValidationRH',
-            data: {
-                        nb: dataItem.Id,
-                accepter: false
-            }
+                    $.ajax({
+                        url: 'Conges_ValidationRH',
+                        data: {
+                            nb: dataItem.Id,
+                            accepter: false
+                        }
                     }).done(function () {
-                        alert('Added');
+                        alert('Le congé a été refusé');
                     });
                 }
 </script>

@@ -60,7 +60,8 @@ namespace IntranetPOPS1819.Controllers
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
 					IdCollab = ligneDeFrais.IdCollab,
-					Mission = new Mission {
+                    IdNote = ligneDeFrais.IdNote,
+                    Mission = new Mission {
 						Id = ligneDeFrais.Mission.Id,
 						Nom = ligneDeFrais.Mission.Nom,
 						Statut = ligneDeFrais.Mission.Statut,
@@ -88,18 +89,19 @@ namespace IntranetPOPS1819.Controllers
 				{
 					dal.MiseAJourNotesDeFrais(HttpContext.User.Identity.Name);
 
-					var entity = new LigneDeFrais
-					{
-						Nom = ligneDeFrais.Nom,
-						Somme = ligneDeFrais.Somme,
-						Statut = ligneDeFrais.Statut,
-						ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
-						Filename = ligneDeFrais.Filename,
-						Date = ligneDeFrais.Date,
-						Type = ligneDeFrais.Type,
-						Mission = ligneDeFrais.Mission,
-						IdCollab = ligneDeFrais.IdCollab,
-					};
+                    var entity = new LigneDeFrais
+                    {
+                        Nom = ligneDeFrais.Nom,
+                        Somme = ligneDeFrais.Somme,
+                        Statut = ligneDeFrais.Statut,
+                        ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
+                        Filename = ligneDeFrais.Filename,
+                        Date = ligneDeFrais.Date,
+                        Type = ligneDeFrais.Type,
+                        Mission = ligneDeFrais.Mission,
+                        IdCollab = ligneDeFrais.IdCollab,
+                        IdNote = ligneDeFrais.IdNote,
+                    };
 					dal.AjoutLigneDeFrais(c.Id, IdNote, entity);
 					ligneDeFrais.Id = entity.Id;
 					ligneDeFrais.IdCollab = entity.IdCollab;
@@ -147,7 +149,8 @@ namespace IntranetPOPS1819.Controllers
 					Date = ligneDeFrais.Date,
 					Type = ligneDeFrais.Type,
 					IdCollab = ligneDeFrais.IdCollab,
-				};
+                    IdNote = ligneDeFrais.IdNote,
+                };
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.Entry(entity).State = EntityState.Modified;
 				dal.bdd.SaveChanges();
@@ -194,7 +197,8 @@ namespace IntranetPOPS1819.Controllers
 					Type = ligneDeFrais.Type,
 					Mission = ligneDeFrais.Mission,
 					IdCollab = ligneDeFrais.IdCollab,
-				};
+                    IdNote = ligneDeFrais.IdNote,
+                };
 
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.LigneDeFrais.Remove(entity);

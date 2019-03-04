@@ -388,7 +388,8 @@ namespace IntranetPOPS1819.Models
 				if(note != null)
 				{
 					ligne.IdCollab = idCollab;
-					note.LignesDeFrais.Add(ligne);
+                    ligne.IdNote = idNote;
+                    note.LignesDeFrais.Add(ligne);
 					bdd.LigneDeFrais.Add(ligne);
 					System.Diagnostics.Debug.WriteLine("Création ligne de frais dans la BDD");
 					bdd.SaveChanges();

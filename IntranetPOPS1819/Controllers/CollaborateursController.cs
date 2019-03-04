@@ -24,6 +24,8 @@ namespace IntranetPOPS1819.Controllers
 
 			return PartialView(col);
 		}
+
+       
     }
 
 

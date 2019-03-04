@@ -95,7 +95,8 @@ namespace IntranetPOPS1819.Controllers
 				Filename = ligneDeFrais.Filename,
 				Mission = ligneDeFrais.Mission,
 				IdCollab = ligneDeFrais.IdCollab,
-			});
+                IdNote = ligneDeFrais.IdNote,
+            });
 
 			return Json(result);
 		}

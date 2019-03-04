@@ -1,6 +1,6 @@
 ﻿@using IntranetPOPS1819.Models
 @model int
-		@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
+@(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
                               .Name("LigneDeFrais")
                               .HtmlAttributes(new { style = "height: 500px" })
                               .Columns(columns =>
@@ -22,7 +22,7 @@
                                     "#= Mission.Nom #"
                                 );
                                   columns.Bound(c => c.Type);
-                                  columns.Command(command => { command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
+                                  columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetails"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
                               })
                                         .Sortable(sortable =>
                                         {
@@ -34,53 +34,73 @@
                                             .Model(model => model.Id(p => p.Id))
                                             .Read(read => read.Action("LigneDeFrais_Read", "ChefDeService", new { idCol = Model }))
                                         )
-		)
+)
+
+<br />
+
+<div class="table-bordered">
+    <p id="nom"></p>
+    <p id="note"></p>
+    <p id="somme"></p>
+</div>
 
 <script type="text/javascript">
-	function Valider(e) {
-		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-		console.log(dataItem);
-		var grid = $("#LigneDeFrais").data("kendoGrid");
-		var items = grid.dataSource.data();
-		for (var i = 0; i < items.length; i++) {
-			if (dataItem.Id == items[i].Id) {
-				items[i].set("Statut", 2);
-			}
-		}
-		$.ajax({
-			url: 'ValiderLigne',
-			data: { id: dataItem.Id }
-		})
-	}
 
-	function Refuser(e) {
-		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-		console.log(dataItem);
-		var grid = $("#LigneDeFrais").data("kendoGrid");
-		var items = grid.dataSource.data();
-		for (var i = 0; i < items.length; i++) {
-			if (dataItem.Id == items[i].Id) {
-				items[i].set("Statut", 0);
-			}
-		}
-		$.ajax({
-			url: 'RefuserLigne',
-			data: { id: dataItem.Id }
-		})
-	}
+    function showDetails(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $.get()
+        document.getElementById("nom").innerHTML = 'Nom : &nbsp;' + dataItem.Nom;
+        document.getElementById("journeesRestantes").innerHTML = 'Journées restantes: &nbsp;' + dataItem.CongesRestants + '&nbsp; jours';
+    }
+</script>
+
+<script type="text/javascript">
+    function Valider(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        console.log(dataItem);
+        var grid = $("#LigneDeFrais").data("kendoGrid");
+        var items = grid.dataSource.data();
+        for (var i = 0; i < items.length; i++) {
+            if (dataItem.Id == items[i].Id) {
+                items[i].set("Statut", 2);
+            }
+        }
+        $.ajax({
+            url: 'ValiderLigne',
+            data: { id: dataItem.Id }
+        })
+    }
+
+    function Refuser(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        console.log(dataItem);
+        var grid = $("#LigneDeFrais").data("kendoGrid");
+        var items = grid.dataSource.data();
+        for (var i = 0; i < items.length; i++) {
+            if (dataItem.Id == items[i].Id) {
+                items[i].set("Statut", 0);
+            }
+        }
+        $.ajax({
+            url: 'RefuserLigne',
+            data: { id: dataItem.Id }
+        })
+    }
 </script>
 <script>
 
-	function onSave(e) {
-		//Implement the event handler for Save
-	}
+    function onSave(e) {
+        //Implement the event handler for Save
+    }
 
-	function onSaveChanges(e) {
-		//Implement the event handler for SaveChanges
-	}
+    function onSaveChanges(e) {
+        //Implement the event handler for SaveChanges
+    }
 
-	function onDataBinding(e) {
-		//Implement the event handler for DataBinding
-	}
+    function onDataBinding(e) {
+        //Implement the event handler for DataBinding
+    }
 
 </script>
