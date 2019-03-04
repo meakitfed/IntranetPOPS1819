@@ -19,35 +19,17 @@
 				<div class="list-group">
 					@while (d >= Model._Collaborateur.NotesDeFrais[0].Date.Year && a >= 0)
 					{
-					<button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
+					<button class="btn btn-block btn-1 list-group-item" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
 					<div id=@(("Année" + d)) style="display:none;">
 						@while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
 						{
-							string s = Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM");
-
-							if (Model._Collaborateur.NotesDeFrais[a].NbrEnAttente() != 0)
-							{
-								s += "   <span class='orange'>" + Model._Collaborateur.NotesDeFrais[a].NbrEnAttente() + "</span>";
-							}
-							if (Model._Collaborateur.NotesDeFrais[a].NbrRefusé() != 0)
-							{
-								s += "<span class='red'>" + Model._Collaborateur.NotesDeFrais[a].NbrRefusé() + "</span>";
-							}
-							if (Model._Collaborateur.NotesDeFrais[a].NbrValidéeChef() != 0)
-							{
-								s += "  <span class='green'>" + Model._Collaborateur.NotesDeFrais[a].NbrValidéeChef() + "</span>";
-							}
-							if (Model._Collaborateur.NotesDeFrais[a].NbrValidée() != 0)
-							{
-								s += "<span class='green2'>" + Model._Collaborateur.NotesDeFrais[a].NbrValidée() + "</span>";
-							}
+							string s = Model._Collaborateur.CircleInformationNoteDeFrais(Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM"), Model._Collaborateur.NotesDeFrais[a].NbrEnAttente(), Model._Collaborateur.NotesDeFrais[a].NbrRefusé(), Model._Collaborateur.NotesDeFrais[a].NbrValidéeChef(), Model._Collaborateur.NotesDeFrais[a].NbrValidée());
 							@Ajax.RawActionLink(string.Format(s), "InformationLigneDeFrais", "NoteDeFrais", new { IdNote = Model._Collaborateur.NotesDeFrais[a].Id }, new AjaxOptions
-					   {
-						   //Model._Collaborateur.NotesDeFrais[a].Date.ToString("MMMM") + "<div class='numberCircle'>"+ Model._Collaborateur.NotesDeFrais[a].NbrEnAttente() + "</div>"
-						   InsertionMode = InsertionMode.Replace,
-						   UpdateTargetId = "InfoNoteActive",
-						   HttpMethod = "Post"
-					   }, new { @class = "btn btn-block btn-3 list-group-item" })
+							{
+								InsertionMode = InsertionMode.Replace,
+								UpdateTargetId = "InfoNoteActive",
+								HttpMethod = "Post"
+							}, new { @class = "btn btn-block btn-3 list-group-item" })
 							a--;
 						}
 					</div>

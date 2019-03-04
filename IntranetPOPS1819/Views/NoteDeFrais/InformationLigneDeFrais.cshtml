@@ -94,7 +94,7 @@
 </style>
 <script type="text/javascript">
 	var test = '@ViewData["IsComplete"]';
-	if (test == 'True') {
+	if (test == 'True' || '@ViewData["IsOld"]' == 'True') {
 		$('#EnvoyerNote').addClass('Disabled');
 		$('#AddLigne').addClass('Disabled');
 	}

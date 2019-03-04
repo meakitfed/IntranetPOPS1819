@@ -249,6 +249,28 @@ namespace IntranetPOPS1819.Models
 
             return rst;
         }
+
+		public string CircleInformationNoteDeFrais(string s, int attente, int refusé, int validéeChef, int validée)
+		{
+			
+			if (attente != 0)
+			{
+				s += "   <span class='orange'>" + attente + "</span>";
+			}
+			if (refusé != 0)
+			{
+				s += "<span class='red'>" + refusé + "</span>";
+			}
+			if (validéeChef != 0)
+			{
+				s += "  <span class='green'>" + validéeChef + "</span>";
+			}
+			if (validée != 0)
+			{
+				s += "<span class='green2'>" + validée + "</span>";
+			}
+			return s;
+		}
     }
 }
 

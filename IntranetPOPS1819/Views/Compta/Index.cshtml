@@ -20,9 +20,12 @@
 			<div class="row">
 				<div class="col-lg-2 table-bordered">
 					<div class="list-group">
+						<br />
+						<h2 class="text-center">Services</h2>
+						<br />
 						@foreach (Service s in Model.Services)
 						{
-							<button class="btn btn-block btn-1" href="" onclick="javascript:toggleVisibility(@("service" + s.Id)); return false;">@s.Nom</button>
+							<button class="btn btn-block btn-1 list-group-item" href="" onclick="javascript:toggleVisibility(('service' + @s.Id)); return false;">@s.Nom</button>
 							<div id="@("service" + s.Id)" style="display:none;">
 								@foreach (Collaborateur c in s.Collaborateurs)
 								{
@@ -42,7 +45,7 @@
 						}
 					</div>
 				</div>
-				<div class="col-lg-12 table-bordered">
+				<div class="col-lg-10 table-bordered">
 					<div id="InfoNoteActive">
 						@{
 							if (firstCollab != -1)

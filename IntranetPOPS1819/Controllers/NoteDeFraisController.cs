@@ -228,36 +228,6 @@ namespace IntranetPOPS1819.Controllers
 			return View(vm);
 		}
 
-		/*[HttpPost]
-		public ActionResult Index(OngletNoteDeFraisViewModel vm)
-		{
-			if (HttpContext.User.Identity.IsAuthenticated)
-			{
-				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				System.Diagnostics.Debug.WriteLine("Passage dans Index HttpPost NoteDeFraisControlleur");
-				//TODO valider le form?
-				System.Diagnostics.Debug.WriteLine("Form pour créer une ligne de frais accepté");
-				vm._Frais.Mission = dal.GetMission(vm._IdMission);
-				foreach (NoteDeFrais n in vm._Collaborateur.NotesDeFrais)
-				{
-					if(n.Id == vm._IdNoteDeFrais)
-					{
-						dal.AjoutLigneDeFrais(vm._Collaborateur.Id, vm._IdNoteDeFrais, vm._Frais);
-						if (vm._Frais.Complete)
-						{
-							dal.EnvoiNoteDeFraisChefService(vm._Collaborateur.Service.Id, vm._Collaborateur.Id, vm._Frais.Id);
-							//Message notif = new Message(TypeMessage.NotifLigneAller, vm._Collaborateur.Prenom + vm._Collaborateur.Nom + " - " + vm._Collaborateur.Service.Nom, vm._Frais);
-                            //dal.AjoutNotif(vm._Collaborateur.Service.Chef().Id, notif);
-							
-						}
-						return View(vm);
-					}
-				}
-				return View(vm);
-			}
-			return View();
-		}*/
-
 		public ActionResult InformationLigneDeFrais(int IdNote)
 		{
 			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur");
@@ -295,15 +265,6 @@ namespace IntranetPOPS1819.Controllers
 						Value = ((int)m.Id).ToString()
 					});
 				}
-				//TODO prendre que certaines missions ici
-				/*foreach (var m in c.AnciennesMissions)
-				{
-					listMission.Add(new SelectListItem()
-					{
-						Text = m.Nom,
-						Value = ((int)m.Id).ToString()
-					});
-				}*/
 				ViewData["ListMission"] = listMission;
 				if(c.Missions.Count != 0)
 				{
@@ -321,6 +282,7 @@ namespace IntranetPOPS1819.Controllers
 				}
 				NoteDeFrais note = c.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote);
 				ViewData["IsComplete"] = (note.Statut != StatutNote.Brouillon);
+				ViewData["IsOld"] = (DateTime.Now.Subtract(note.Date).Days / (365.25 / 12)) > 2;
 			}
 			System.Diagnostics.Debug.WriteLine("Passage dans InformationLigneDeFrais Get NoteDeFraisControlleur envoie des données");
 			return PartialView(IdNote);
