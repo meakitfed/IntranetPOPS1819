@@ -39,6 +39,7 @@
 <br />
 
 <div class="table-bordered">
+    <h3>Détails</h3>
     <p id="nom"></p>
     <p id="note"></p>
     <p id="somme"></p>
@@ -50,9 +51,12 @@
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $.get()
-        document.getElementById("nom").innerHTML = 'Nom : &nbsp;' + dataItem.Nom;
-        document.getElementById("journeesRestantes").innerHTML = 'Journées restantes: &nbsp;' + dataItem.CongesRestants + '&nbsp; jours';
+        $.get("GetInfoNote", { idNote: dataItem.idNote, idCol: dataItem.idCol }, function (data) {
+
+            document.getElementById("nom").html('Nom : &nbsp;' + data.prenomCol + " " + data.nomCol)
+            document.getElementById("note").html( 'Note du : &nbsp;' + data.date)
+            document.getElementById("somme").html('Somme validée : &nbsp;' + dataItem.sommeValidee)
+        })
     }
 </script>
 
