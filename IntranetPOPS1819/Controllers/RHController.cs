@@ -74,7 +74,7 @@ namespace IntranetPOPS1819.Controllers
                         foreach (Conge con in col.Conges)
                         {
                             if ((con.Statut == StatutConge.ValideChef) || (col.Chef && con.Statut == StatutConge.EnCours))
-                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin });
+                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, CongesPris = congesPris, Debut = con.Debut, Fin = con.Fin });
                         }
                     }
                 }

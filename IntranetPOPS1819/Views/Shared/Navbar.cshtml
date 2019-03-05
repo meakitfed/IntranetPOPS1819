@@ -31,7 +31,7 @@
             @{
                 if (c.Service != null)
                 {
-                    if (c.Chef)
+                    if (c.Chef && c.Service.Type != TypeService.RessourcesHumaines && c.Service.Type != TypeService.Comptabilité)
                     {
                         <li class="nav-item">
                             <a class="nav-link" href="../ChefDeService/Index">Tableau de bord</a>

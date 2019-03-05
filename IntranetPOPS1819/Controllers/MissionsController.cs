@@ -41,57 +41,65 @@ namespace IntranetPOPS1819.Controllers
             List<MissionsViewModel> missions = new List<MissionsViewModel>();
             foreach (Mission m in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Missions)
             {
-                List<IdentiteViewModel> collabos = new List<IdentiteViewModel>();
-                foreach (Collaborateur c in m.Collaborateurs)
-                    collabos.Add(new IdentiteViewModel { Nom = c.Prenom + " " + c.Nom, Id = c.Id });
-
-                missions.Add(new MissionsViewModel { Id = m.Id, Nom = m.Nom, Collaborateurs = collabos });
+                
+                missions.Add(new MissionsViewModel { Id = m.Id, Nom = m.Nom });
             }
-            if (missions.Count() > 0)
-            {
-                Debug.WriteLine(missions[0].Collaborateurs.Count() + " collabos associés à cette mission");
-
-                missions[0].Collabs.Add("Bob");
-                missions[0].Collabs.Add("Hnery");
-            }
-            IQueryable<MissionsViewModel> liste = missions.AsQueryable();
+            
+            IQueryable<Mission> liste = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Missions.AsQueryable();
 
             DataSourceResult result = liste.ToDataSourceResult(request, data => new
             {
                 data.Id,
                 data.Nom,
-                data.Statut,
-                data.Collaborateurs,
-                data.Collabs
+                data.Statut
             });
 
             return Json(result);
         }
 
-        public ActionResult MissionsEditingCreate(MissionsViewModel m)
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult MissionEditing_Create([DataSourceRequest] DataSourceRequest request, MissionsViewModel m)
         {
+            IDal dal = new Dal();
+            
+            dal.AjoutMission(m.Nom, dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.Id);
 
+            return Json(new[] { m }.ToDataSourceResult(request, ModelState));
 
-            return View();
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult MissionEditing_Update([DataSourceRequest] DataSourceRequest request, MissionsViewModel m)
         {
             Debug.WriteLine("Passage update");
-            Debug.WriteLine(m.Temp.Count());
-            foreach (SelectListItem c in m.Temp)
-            {
-                if (c == null) Debug.WriteLine("suicide");
-                else
-                    Debug.WriteLine(c.Text + c.Value);
-            }
 
             IDal dal = new Dal();
 
             dal.UpdateMission(m);
 
-            return View();
+            return Json(new[] { m }.ToDataSourceResult(request, ModelState));
+        }
+
+        public ActionResult MissionEditing_Distroy([DataSourceRequest] DataSourceRequest request, MissionsViewModel m)
+        {
+            Debug.WriteLine("Passage update");
+
+            IDal dal = new Dal();
+
+            dal.SupprimerMission(m.Id);
+
+            return Json(new[] { m }.ToDataSourceResult(request, ModelState));
+        }
+
+        public ActionResult Mission_Accomplie([DataSourceRequest] DataSourceRequest request, MissionsViewModel m, string nb)
+        {
+            Debug.WriteLine(nb);
+
+            IDal dal = new Dal();
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            dal.ChangerStatut(Convert.ToInt32(nb), StatutMission.Terminée);
+            Debug.WriteLine(dal.GetMission(Convert.ToInt32(nb)).Nom + " " + dal.GetMission(Convert.ToInt32(nb)).Statut);
+            return Json(new[] { m }.ToDataSourceResult(request, ModelState));
         }
 
         public JsonResult GetCollaborateurs(string text)
@@ -105,8 +113,6 @@ namespace IntranetPOPS1819.Controllers
                     Id = c.Id,
                     Nom = c.Nom
                 });
-
-                Debug.WriteLine(collabos.Count());
 
                 return Json(collabos, JsonRequestBehavior.AllowGet);
             }
