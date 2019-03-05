@@ -36,7 +36,33 @@
 										)
 )
 
+<div class="modal fade" id="msgModalRefusNote" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Demander les informations</h4>
+			</div>
+			<form id="messageRefus" method="POST">
+				<div class="modal-body">
+					<div class="form-row">
+						<div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
+							<textarea class="form-control" rows="10" id="texteMessageRefus"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="col-md-12" style="margin-left:90px">
+						<button type="submit" id="submitForm" class="btn btn-primary">Refuser</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Fermer</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
+	var dataOFSelectedLine;
 	function Valider(e) {
 		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 		console.log(dataItem);
@@ -54,20 +80,44 @@
 	}
 
 	function Refuser(e) {
-		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-		console.log(dataItem);
-		var grid = $("#LigneDeFrais").data("kendoGrid");
-		var items = grid.dataSource.data();
-		for (var i = 0; i < items.length; i++) {
-			if (dataItem.Id == items[i].Id) {
-				items[i].set("Statut", 0);
-			}
-		}
-		$.ajax({
-			url: 'RefuserLigne',
-			data: { id: dataItem.Id }
-		})
+		dataOFSelectedLine = this.dataItem($(e.currentTarget).closest("tr"));
+		$('#msgModalRefusNote').modal('show');
 	}
+
+	$('#messageRefus').on('submit', function (e) {
+		e.preventDefault();
+		var texte = document.getElementById('texteMessageRefus');
+		if (texte.value != "") {
+			console.log(dataOFSelectedLine);
+			var grid = $("#LigneDeFrais").data("kendoGrid");
+			var items = grid.dataSource.data();
+			for (var i = 0; i < items.length; i++) {
+				if (dataOFSelectedLine.Id == items[i].Id) {
+					items[i].set("Statut", 0);
+				}
+			}
+			$.ajax({
+				url: 'RefuserLigne',
+				data: { id: dataOFSelectedLine.Id, message: texte.value }
+			})
+		}
+		else {
+			console.log(dataOFSelectedLine);
+			var grid = $("#LigneDeFrais").data("kendoGrid");
+			var items = grid.dataSource.data();
+			for (var i = 0; i < items.length; i++) {
+				if (dataOFSelectedLine.Id == items[i].Id) {
+					items[i].set("Statut", 0);
+				}
+			}
+			$.ajax({
+				url: 'RefuserLigne',
+				data: { id: dataOFSelectedLine.Id }
+			})
+		}
+		$('#msgModalRefusNote').modal('hide');
+	});
+
 </script>
 <script>
 

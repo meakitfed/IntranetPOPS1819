@@ -106,7 +106,7 @@
         <div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="modal-title">Demander les informations</h4>
+					<h4 class="modal-title">Demande d'informations</h4>
 				</div>
 				<form id="demandeInfo" action="/onlinejson/test.php" method="POST">
 					<div class="modal-body">
@@ -114,11 +114,13 @@
 						<div class="form-row">
 							<div class="col-md-12" style="margin-left:90px">
 								<input name="Titre" type="text" class="form-control" id="titleDemandeInfo" placeholder="Title">
+								<span id="cd-error-title" style="color: red">Il manque un titre</span>
 							</div>
 						</div>
 						<div class="form-row">
 							<div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
 								<textarea class="form-control" rows="10" id="texteDemandeInfo"></textarea>
+								<span id="cd-error-message" style="color: red">La demande d'information est vide</span>
 							</div>
 						</div>
 
@@ -138,12 +140,15 @@
     <br />
 }
 <script type="text/javascript">
+	var error = document.getElementById('cd-error-title');
+	error.style.display = 'none';
+	var error = document.getElementById('cd-error-message');
+	error.style.display = 'none';
     function lire(e) {
         console.log("bite");
         var dataItem = this.dataItem($(e.currentTarget).closest("div"));
         console.log(dataItem);
     }
-
 
     function retirerNotif(idNoti, redirection) {
         $.post('@Url.RouteUrl(new {controller = "UserPage", action = "RetirerNotif" })', { idNotif: idNoti }, function (data) {
@@ -154,15 +159,41 @@
 </script>
 
 <script type="text/javascript">
+	
 	$('#demandeInfo').on('submit', function (e) {
 		e.preventDefault();
 
 		var title = document.getElementById('titleDemandeInfo');
 		var texte = document.getElementById('texteDemandeInfo');
-		
-		$.post('/UserPage/SubmitDemandeInfo', { DemandeInformation: texte.value, DemandeTitre: title.value }, function (data) {
-
-		   });
+		if (title.value != "" && texte.value != "") {
+			$.post('/UserPage/SubmitDemandeInfo', { DemandeInformation: texte.value, DemandeTitre: title.value }, function (data) {
+				$('#msgModal').modal('hide');
+				var error = document.getElementById('cd-error-title');
+				error.style.display = 'none';
+				var error = document.getElementById('cd-error-message');
+				error.style.display = 'none';
+				title.value = '';
+				texte.value = '';
+			});
+		}
+		else {
+			if (title.value == "") {
+				var error = document.getElementById('cd-error-title');
+				error.style.display = '';
+			}
+			else {
+				var error = document.getElementById('cd-error-title');
+				error.style.display = 'none';
+			}
+			if (texte.value == "") {
+				var error = document.getElementById('cd-error-message');
+				error.style.display = '';
+			}
+			else {
+				var error = document.getElementById('cd-error-message');
+				error.style.display = 'none';
+			}
+		}
 	});
 </script>
 
