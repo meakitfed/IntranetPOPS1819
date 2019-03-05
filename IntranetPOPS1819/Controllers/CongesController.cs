@@ -71,6 +71,8 @@ namespace IntranetPOPS1819.Controllers
                 {
                     if (col.Service.Type == TypeService.RessourcesHumaines)
                         dal.AjoutNotif(dal.ObtenirPDG().Id, notif);
+                    else if (col.Service.Type == TypeService.Direction)
+                        dal.AjoutNotif(dal.ObtenirDRH().Id, notif);
                     else
                     {
                         foreach (Collaborateur c in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))

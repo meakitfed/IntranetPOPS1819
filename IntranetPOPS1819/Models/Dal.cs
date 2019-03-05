@@ -318,7 +318,8 @@ namespace IntranetPOPS1819.Models
 				Collaborateur jean = AjoutCollaborateur("Monrant", "Jean", "jean@gmail.com", "mdp", "06 28 15 32 25");
 				Collaborateur luc = AjoutCollaborateur("Baton", "Luc", "luc@gmail.com", "mdp", "06 13 47 32 89");
                 Collaborateur john = AjoutCollaborateur("Licencié", "John", "john@gmail.com", "mdp", "06 65 54 54 54");
-				
+                Collaborateur jeanne = AjoutCollaborateur("Jean", "Jeanne", "jeanne@gmail.com", "jeanne", "06 65 54 54 54");
+
                 //création services
                 Service direction = AjoutService("Direction", TypeService.Direction);
                 AssignerService(direction.Id, marie.Id);
@@ -335,8 +336,9 @@ namespace IntranetPOPS1819.Models
 				AssignerService(rh.Id, isabelle.Id);
                 AssignerChefDeService(isabelle.Id);
                 AssignerService(rh.Id, john.Id);
+                AssignerService(rh.Id, jeanne.Id);
 
-				string Demande =
+                string Demande =
 				"Bonjour, \n" +
 				"J'ai des inquiétudes pour ce qui est du projet Parking Velizy, je n'ai toujours pas de nouvelles de l'agent commercial\n" +
 				"Serait-il possible de prendre contact par un autre biais ?\n" +
@@ -361,10 +363,10 @@ namespace IntranetPOPS1819.Models
 				MiseAJourNotesDeFrais(jean.Id);
 				MiseAJourNotesDeFrais(luc.Id);
                 MiseAJourNotesDeFrais(john.Id);
+                MiseAJourNotesDeFrais(jeanne.Id);
 
-
-				//tout le monde se voit assigner toutes les missions
-				List<Mission> Missions = new List<Mission>();
+                //tout le monde se voit assigner toutes les missions
+                List<Mission> Missions = new List<Mission>();
 				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
 				for (int j = 0; j < labelsMission.Length; j++)
 				{

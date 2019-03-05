@@ -29,15 +29,19 @@ namespace IntranetPOPS1819.Models
             {
                 case TypeMessage.NotifCongeAller:
                     Titre = "Demande de congés";
-                    Contenu = "\nDu " + o.Debut + " au " + (o).Fin;
+                    //Contenu = "\nDu " + o.Debut + " au " + (o).Fin;
                     if ((o).Statut == StatutConge.EnCours)
+                    {
+                        Contenu = "";
                         Redirection = "/ChefDeService/Index";
+                    }
                     else
                         Redirection = "/RH/Index";
                     break;
                 case TypeMessage.NotifCongeRetour:
                     Titre = "Votre demande de congés";
-                    Contenu = "Du " + o.Debut + " au " + (o).Fin + "\n" + (o).Statut;
+                    Contenu = o.Statut.ToString();
+                    Redirection = "/Conges/Index";
                     break;
                 default:
                     throw new HttpUnhandledException();

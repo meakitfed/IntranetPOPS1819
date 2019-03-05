@@ -47,26 +47,30 @@ namespace IntranetPOPS1819.Controllers
                     {
                         if (col != c)
                         {
+                            float[] congesPris = new float[3] { col.GetNombreRTTPrisCetteAnnee(), col.GetNombreSansSoldePrisCetteAnnee(), col.GetNombreAbsencesPrisCetteAnnee() };
                             foreach (Conge con in col.Conges)
                             {
                                 if (con.Statut == StatutConge.EnCours)
-                                    vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin });
+                                    vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, CongesPris = congesPris, Debut = con.Debut, Fin = con.Fin });
                             }
                         }
                     }
                     // Récupérer les demandes du PDG
                     Collaborateur chef = dal.ObtenirServiceDeType(TypeService.Direction).Chef();
+                    float[] congesPrisChef = new float[3] { chef.GetNombreRTTPrisCetteAnnee(), chef.GetNombreSansSoldePrisCetteAnnee(), chef.GetNombreAbsencesPrisCetteAnnee() };
                     foreach (Conge con in chef.Conges)
                     {
-                        if(con.Statut == StatutConge.EnCours)
-                            vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = chef.Prenom + " " + chef.Nom, Service = chef.Service.Nom, CongesRestants = chef.CongesRestants, Debut = con.Debut, Fin = con.Fin });
+                        Debug.WriteLine("Statut avant validation : " + con.Type);
+                        if (con.Statut == StatutConge.EnCours)
+                            vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = chef.Prenom + " " + chef.Nom, Service = chef.Service.Nom, CongesRestants = chef.CongesRestants, CongesPris = congesPrisChef, Debut = con.Debut, Fin = con.Fin });
                     }
                 }
                 // Récupérer les demandes des collaborateurs et chefs des autres services
                 foreach (Collaborateur col in dal.ObtenirTousLesCollaborateurs())
                 {
-                    if ((col.Service.Type != TypeService.RessourcesHumaines))
+                    if ((col.Service.Type != TypeService.RessourcesHumaines) && ((col != dal.ObtenirPDG())))
                     {
+                        float[] congesPris = new float[3] { col.GetNombreRTTPrisCetteAnnee(), col.GetNombreSansSoldePrisCetteAnnee(), col.GetNombreAbsencesPrisCetteAnnee() };
                         foreach (Conge con in col.Conges)
                         {
                             if ((con.Statut == StatutConge.ValideChef) || (col.Chef && con.Statut == StatutConge.EnCours))
@@ -83,7 +87,8 @@ namespace IntranetPOPS1819.Controllers
                     data.Type,
                     data.Nom,
                     data.Service,
-                    data.CongesRestants
+                    data.CongesRestants,
+                    data.CongesPris
                 });
 
                 return Json(result);
@@ -101,7 +106,7 @@ namespace IntranetPOPS1819.Controllers
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Valide);
             else
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
-
+            Debug.WriteLine("Statut après validation : " + dal.ObtenirConge(Convert.ToInt32(nb)).Type);
             Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 
             // Recherche du collaborateur concerné
@@ -125,12 +130,11 @@ namespace IntranetPOPS1819.Controllers
             return View();
         }
 
-        public int InfosAbsents(DateTime date)
+        public int InfosAbsents(DateTime date, string text)
         {
             IDal dal = new Dal();
-            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 
-            return c.Service.GetNombreCollaborateursEnConges(date);
+            return dal.ObtenirTousLesServices().FirstOrDefault(serv => text.Contains(serv.Nom) == true).GetNombreCollaborateursEnConges(date);
         }
 
         public string ProportionAbsents(DateTime date, string text)
