@@ -188,7 +188,7 @@ namespace IntranetPOPS1819.Controllers
 
         public ActionResult Conges_Read2([DataSourceRequest]DataSourceRequest request)
         {
-            System.Diagnostics.Debug.WriteLine("Passage dans Conges_Read");
+            Debug.WriteLine("Passage dans Conges_Read");
 
             if (HttpContext.User.Identity.IsAuthenticated)
             {
@@ -198,18 +198,21 @@ namespace IntranetPOPS1819.Controllers
                 {
                     if (col != c)
                     {
+                        float[] congesPris = new float[3] { col.GetNombreRTTPrisCetteAnnee(), col.GetNombreSansSoldePrisCetteAnnee(), col.GetNombreAbsencesPrisCetteAnnee() };
+
                         foreach (Conge con in col.Conges)
                         {
                             if (con.Statut == StatutConge.EnCours)
-                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin});
+                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, CongesPris = congesPris, Debut = con.Debut, Fin = con.Fin});
                         }
                     }
                 }
                 Collaborateur drh = dal.ObtenirDRH();
                 foreach (Conge con in drh.Conges)
                 {
+                    float[] congesPris = new float[3] { drh.GetNombreRTTPrisCetteAnnee(), drh.GetNombreSansSoldePrisCetteAnnee(), drh.GetNombreAbsencesPrisCetteAnnee() };
                     if (con.Statut == StatutConge.EnCours)
-                        vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = drh.Prenom + " " + drh.Nom, Service = drh.Service.Nom, CongesRestants = drh.CongesRestants, Debut = con.Debut, Fin = con.Fin });
+                        vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = drh.Prenom + " " + drh.Nom, Service = drh.Service.Nom, CongesRestants = drh.CongesRestants, CongesPris = congesPris, Debut = con.Debut, Fin = con.Fin });
                 }
                 IQueryable<ValidationCongesViewModel> demandes = vm.AsQueryable();
                 DataSourceResult result = demandes.ToDataSourceResult(request, data => new {
@@ -219,7 +222,8 @@ namespace IntranetPOPS1819.Controllers
                     data.Type,
                     data.Nom,
                     data.Service,
-                    data.CongesRestants
+                    data.CongesRestants,
+                    data.CongesPris
                 });
 
                 return Json(result);
