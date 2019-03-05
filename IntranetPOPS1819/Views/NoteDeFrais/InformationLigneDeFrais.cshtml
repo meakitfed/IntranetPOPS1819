@@ -2,37 +2,38 @@
 @using IntranetPOPS1819.Models
 
 @(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
-                                      .Name("grid")
-                                      .HtmlAttributes(new { style = "height: 500px" })
-                                      .Columns(columns =>
-                                      {
-                                          columns.Bound(c => c.Nom);
-                                          columns.Bound(c => c.Somme);
-                                          columns.Bound(c => c.Mission).ClientTemplate(
-                                                "# if (Mission != null) { #" +
-                                                "<div>#= Mission.Nom #</div>" +
-                                                "#} else {#" +
-                                                "<div> </div>" +
-                                                "# } #"
-                                            );
-                                          columns.Bound(c => c.Statut).ClientTemplate(
-                                            "# if (Statut == 1){ #" +
-                                            "<font color=\"DarkOrange\">En Attente</font>" +
-                                        "# }else if(Statut == 2){ #" +
-                                            "<font color=\"ForestGreen\">Validée par le chef</font>" +
-                                        "# }else if(Statut == 3){ #" +
-                                            "<font color=\"ForestGreen\">Validée</font>" +
-                                        "# }else{ #" +
-                                            "<font color=\"FireBrick\">Refusée</font>" + "# } #"
-                                            );
-                                          columns.Bound(c => c.Type);
-                                          columns.Bound(c => c.Date);
-                                          columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
-                                          columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
-                                          columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);
-                                      })
-                                            .ToolBar(toolbar =>
-                                            toolbar.Template(@<text>
+									  .Name("grid")
+									  .HtmlAttributes(new { style = "height: 500px" })
+									  .Columns(columns =>
+									  {
+										  columns.Bound(c => c.Nom);
+										  columns.Bound(c => c.Somme);
+										  columns.Bound(c => c.Mission).ClientTemplate(
+												"# if (Mission != null) { #" +
+												"<div>#= Mission.Nom #</div>" +
+												"#} else {#" +
+												"<div> </div>" +
+												"# } #"
+											);
+										  columns.Bound(c => c.Statut).ClientTemplate(
+											"# if (Statut == 1){ #" +
+											"<font color=\"DarkOrange\">En Attente</font>" +
+										"# }else if(Statut == 2){ #" +
+											"<font color=\"ForestGreen\">Validée par le chef</font>" +
+										"# }else if(Statut == 3){ #" +
+											"<font color=\"ForestGreen\">Validée</font>" +
+										"# }else{ #" +
+											"<font color=\"FireBrick\">Refusée</font>" + "# } #"
+											);
+										  columns.Bound(c => c.Type);
+										  columns.Bound(c => c.Date);
+										  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
+										  columns.Command(command => command.Custom("Détail du refus").Click("showDetailRefus").HtmlAttributes(new { @class = "detailRefus" }).Visible("editVisible")).Width(100);
+										  columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
+										  columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);
+									  })
+											.ToolBar(toolbar =>
+											toolbar.Template(@<text>
                                                 <div>
                                                     <button class="k-button k-button-icontext k-grid-add" id="AddLigne" href="#"><span class="k-icon k-add"></span>Ajouter une ligne de frais</button>
                                                     <button class="k-button k-button-icontext" id="EnvoyerNote">Envoyer la note de frais</button>
@@ -70,6 +71,28 @@
                                                                         )
 )
 
+												<div class="modal fade" id="msgModalRefusNote" role="dialog">
+													<div class="modal-dialog">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h4 class="modal-title">Détail du refus de la ligne de frais</h4>
+															</div>
+																<div class="modal-body">
+																	<div class="form-row">
+																		<div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
+																			<textarea class="form-control" rows="10" id="texteMessageRefus" disabled></textarea>
+																		</div>
+																	</div>
+																</div>
+																<div class="modal-footer">
+																	<div class="col-md-12" style="margin-left:90px">
+																		<button type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Fermer</button>
+																	</div>
+																</div>
+														</div>
+													</div>
+												</div>
+
 <style>
     .editer {
         background-color: #ffc107;
@@ -90,6 +113,13 @@
         box-shadow: none;
     }
 </style>
+
+<script>
+	function editVisible(dataItem) {
+		// hide the Edit button for the item with ProductID=1
+		return dataItem.Statut == 0;
+	}
+</script>
 <script type="text/javascript">
 	var test = '@ViewData["IsComplete"]';
 	if (test == 'True' || '@ViewData["IsOld"]' == 'True') {
@@ -106,8 +136,22 @@
 	});
 </script>
 <script>
-
-    function onSave(e) {
+	function showDetailRefus(e) {
+		e.preventDefault();
+		
+		var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+		var texte = document.getElementById('texteMessageRefus');
+		if (dataItem.Commentaire != "") {
+			texte.value = dataItem.Commentaire;
+		}
+		else {
+			texte.value = "Il n'y a pas d'explication pour le refus de cette ligne de frais";
+		}
+		$('#msgModalRefusNote').modal('show');
+		
+	}
+	function onSave(e) {
+		console.log(e)
         //Implement the event handler for Save
     }
 
@@ -129,12 +173,15 @@
             var currentUid = gridData[i].uid;
 
             if (gridData[i].Statut == 2 || gridData[i].Statut == 3) {
-                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+				var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+				
                 var editButton = $(currenRow).find(".k-grid-edit");
-                var deleteButton = $(currenRow).find(".k-grid-delete");
+				var deleteButton = $(currenRow).find(".k-grid-delete");
+				var detailRefus = $(currenRow).find(".detailRefus");
 
                 editButton.hide();
-                deleteButton.hide();
+				deleteButton.hide();
+				detailRefus.hide();
             }
         }
     }

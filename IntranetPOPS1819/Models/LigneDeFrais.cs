@@ -47,6 +47,8 @@ namespace IntranetPOPS1819.Models
 		public int IdCollab { get; set; }
 
         public int IdNote { get; set; }
+
+		public string Commentaire { get; set; } = "";
     }
 
     public enum StatutLigneDeFrais

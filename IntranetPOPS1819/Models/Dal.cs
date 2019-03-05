@@ -264,7 +264,20 @@ namespace IntranetPOPS1819.Models
 				collab.Chef = true;
 			}
 		}
-
+		public void EnleverNoteDeFraisDuService(int IdNote, int IdService)
+		{
+			Service s = bdd.Services.FirstOrDefault(serv => serv.Id == IdService);
+			NoteDeFrais n = bdd.NotesDeFrais.FirstOrDefault(note => note.Id == IdNote);
+			s.NotesDeFrais.Remove(n);
+			bdd.SaveChanges();
+		}
+		public void MessageDeRefusLigneDefrais(int IdLigne, string message)
+		{
+			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(l => l.Id == IdLigne);
+			ligne.Commentaire = message;
+			System.Diagnostics.Debug.WriteLine("Attribution d'une message de refus à la ligne " + ligne.Nom + " : " + message);
+			bdd.SaveChanges();
+		}
 		public void EnvoiDemandeInformation(Message m)
 		{
 			Service service = bdd.Services.FirstOrDefault(c => TypeService.RessourcesHumaines == c.Type);

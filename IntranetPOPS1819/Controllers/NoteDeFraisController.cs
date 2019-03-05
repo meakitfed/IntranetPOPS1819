@@ -61,6 +61,7 @@ namespace IntranetPOPS1819.Controllers
 					Type = ligneDeFrais.Type,
 					IdCollab = ligneDeFrais.IdCollab,
                     IdNote = ligneDeFrais.IdNote,
+					Commentaire = ligneDeFrais.Commentaire,
                     Mission = new Mission {
 						Id = ligneDeFrais.Mission.Id,
 						Nom = ligneDeFrais.Mission.Nom,
@@ -101,7 +102,8 @@ namespace IntranetPOPS1819.Controllers
                         Mission = ligneDeFrais.Mission,
                         IdCollab = ligneDeFrais.IdCollab,
                         IdNote = ligneDeFrais.IdNote,
-                    };
+						Commentaire = ligneDeFrais.Commentaire,
+					};
 					System.Diagnostics.Debug.WriteLine("Creationd e la ligne dans la BD, Idnote : " + n);
 					dal.AjoutLigneDeFrais(c.Id, n, entity);
 					ligneDeFrais.Id = entity.Id;
@@ -152,7 +154,8 @@ namespace IntranetPOPS1819.Controllers
 					Type = ligneDeFrais.Type,
 					IdCollab = ligneDeFrais.IdCollab,
                     IdNote = ligneDeFrais.IdNote,
-                };
+					Commentaire = ligneDeFrais.Commentaire,
+				};
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.Entry(entity).State = EntityState.Modified;
 				dal.bdd.SaveChanges();
@@ -200,7 +203,8 @@ namespace IntranetPOPS1819.Controllers
 					Mission = ligneDeFrais.Mission,
 					IdCollab = ligneDeFrais.IdCollab,
                     IdNote = ligneDeFrais.IdNote,
-                };
+					Commentaire = ligneDeFrais.Commentaire,
+				};
 
 				dal.bdd.LigneDeFrais.Attach(entity);
 				dal.bdd.LigneDeFrais.Remove(entity);

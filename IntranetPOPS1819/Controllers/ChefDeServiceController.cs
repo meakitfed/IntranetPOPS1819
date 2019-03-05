@@ -27,10 +27,10 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult ValiderLigne(int Id)
 		{
-            //Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
 			LigneDeFrais ligne = dal.bdd.LigneDeFrais.FirstOrDefault(l => l.Id == Id);
-			Collaborateur col = dal.bdd.Collaborateurs.FirstOrDefault(c => c.Id == ligne.IdCollab);
+			Collaborateur col = dal.bdd.Collaborateurs.FirstOrDefault(co => co.Id == ligne.IdCollab);
 			System.Diagnostics.Debug.WriteLine("Ligne du collaborateur " + col.Nom + " " + col.Prenom + " du service " + col.Service.Nom + " et chef ? " + col.Chef);
 			if ((col.Service.Type == TypeService.Comptabilité || col.Service.Type == TypeService.RessourcesHumaines) && col.Chef)
 			{
@@ -40,6 +40,7 @@ namespace IntranetPOPS1819.Controllers
 			{
 				dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
 			}
+
 			//TODO
 			
 			foreach(NoteDeFrais n in col.NotesDeFrais)
@@ -50,6 +51,7 @@ namespace IntranetPOPS1819.Controllers
 					{
 						System.Diagnostics.Debug.WriteLine("Envoi de la note, elle est bien validée par le chef" + Id);
 						dal.EnvoiNoteDeFrais(col.Service.Id, col.Id, n.Id);
+						dal.EnleverNoteDeFraisDuService(n.Id, c.Service.Id);
 						return Json(null, JsonRequestBehavior.AllowGet);
 					}
 					else
@@ -63,10 +65,11 @@ namespace IntranetPOPS1819.Controllers
 			return null;
 		}
 
-		public ActionResult RefuserLigne(int Id)
+		public ActionResult RefuserLigne(int Id, string message = "")
 		{
 			System.Diagnostics.Debug.WriteLine("Refuser La ligne" + Id);
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Refusée);
+			dal.MessageDeRefusLigneDefrais(Id, message);
 			return Json(null, JsonRequestBehavior.AllowGet);
 		}
 		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int idCol)
@@ -91,6 +94,7 @@ namespace IntranetPOPS1819.Controllers
                     Mission = ligneDeFrais.Mission,
 					IdCollab = ligneDeFrais.IdCollab,
                     IdNote = ligneDeFrais.IdNote,
+					Commentaire = ligneDeFrais.Commentaire,
 				});
 
                 return Json(result);

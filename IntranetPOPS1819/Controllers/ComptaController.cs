@@ -53,6 +53,7 @@ namespace IntranetPOPS1819.Controllers
 						if (n.EstValidée())
 						{
 							dal.EnvoiNoteDeFrais(col.Service.Id, col.Id, n.Id);
+							dal.EnleverNoteDeFraisDuService(n.Id, dal.ObtenirServiceDeType(TypeService.Comptabilité).Id);
 							return Json(null, JsonRequestBehavior.AllowGet);
 						}
 						else
@@ -66,10 +67,11 @@ namespace IntranetPOPS1819.Controllers
 			return Json(null, JsonRequestBehavior.AllowGet);
 		}
 
-		public ActionResult RefuserLigne(int Id)
+		public ActionResult RefuserLigne(int Id, string message = "")
 		{
 			System.Diagnostics.Debug.WriteLine("Refuser La ligne" + Id);
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Refusée);
+			dal.MessageDeRefusLigneDefrais(Id, message);
 			return Json(null, JsonRequestBehavior.AllowGet);
 		}
 		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int IdCollab)
@@ -96,7 +98,8 @@ namespace IntranetPOPS1819.Controllers
 				Mission = ligneDeFrais.Mission,
 				IdCollab = ligneDeFrais.IdCollab,
                 IdNote = ligneDeFrais.IdNote,
-            });
+				Commentaire = ligneDeFrais.Commentaire,
+			});
 
 			return Json(result);
 		}
