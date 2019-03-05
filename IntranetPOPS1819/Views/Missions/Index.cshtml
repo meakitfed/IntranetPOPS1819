@@ -1,4 +1,4 @@
-﻿
+﻿@using IntranetPOPS1819.ViewModel
 @{
     ViewBag.Title = "Missions";
 
@@ -11,56 +11,82 @@
 
 @Html.Partial("../Shared/Navbar")
 @{
-    int id = -1;
     <h2><!--TODO--></h2>
     <div class="container-fluid">
         <div class="row">
 
-            <p class="text-center">Missions actives</p>
+            <h2>Missions actives</h2>
 
-            @(Html.Kendo().Grid<IntranetPOPS1819.ViewModel.MissionsViewModel>()
-                            .Name("GridMissions")
-                            .Columns(columns =>
-                            {
-                                columns.Bound(m => m.Nom).ClientTemplate(
-                                                        "# if (Statut == 1){ #" +
-                                                        "<font color=\"ForestGreen\">#=Nom#</font>" +
-                                                    "# }else if(Statut == 2){ #" +
-                                                        "<font color=\"FireBrick\">#=Nom#</font>" +
-                                                    "# }else{ #" +
-                                                        "<font color=\"Black\">#=Nom#</font>" + "# } #"
-                                                        ); ;
-                                columns.Command(command => { command.Edit().Text(" "); command.Destroy().Text(" "); });
-                            })
-                            .Events(e => e.Edit("grid_edit"))
-                            .Scrollable()
-                            .ToolBar(toolbar => toolbar.Create())
-                            .Editable(editable => editable.Mode(GridEditMode.PopUp))
-                            .Sortable()
-                            .DataSource(dataSource => dataSource
-                                .Ajax()
-                                .PageSize(20)
-                                .Model(model => model.Id(m => m.Id))
-                                .Create(update => update.Action("EditingPopup_Create", "Grid"))
-                                .Read(read => read.Action("MissionEditing_Read", "Missions"))
-                                .Update(update => update.Action("MissionEditing_Update", "Missions"))
-                                .Destroy(update => update.Action("EditingPopup_Destroy", "Grid"))
-                            )
-            )
-        </div>
+            @(Html.Kendo().Grid<IntranetPOPS1819.ViewModel.MissionsViewModel>
+    ()
+    .Name("GridMissions")
+    .Columns(columns =>
+    {
+        columns.Bound(m => m.Nom);
+        columns.Bound(m => m.Statut);
+        columns.Command(command => { command.Edit().Text(" Modifier").HtmlAttributes(new { @class = "btn btn-light" }); command.Custom("Accomplie").Click("validerMission").Text(" Mission accomplie !").HtmlAttributes(new { @class = "btn btn-success" }); command.Destroy().Text(" Annuler").HtmlAttributes(new { @class = "btn btn-danger" }); });
+    })
+    .Events(e => e.Edit("grid_edit"))
+    .Scrollable()
+    .ToolBar(toolbar => toolbar.Create().Text("Nouvelle mission"))
+    .Editable(editable => editable.Mode(GridEditMode.PopUp))
+    .Sortable()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(20)
+        .Model(model => {
+            model.Id(m => m.Id);
+            model.Field(i => i.Id).Editable(false);
+        })
+        .Create(create => create.Action("MissionEditing_Create", "Missions", new MissionsViewModel()))
+        .Read(read => read.Action("MissionEditing_Read", "Missions"))
+        .Update(update => update.Action("MissionEditing_Update", "Missions"))
+        .Destroy(update => update.Action("MissionEditing_Distroy", "Missions"))
+    )
+    )
+</div>
     </div>
-    }
-            <script>
-                function grid_edit(e) {
-                    var editForm = e.container;
-                    var model = e.model
+}
 
-                    editForm.model = model;
-                    editForm.find("label_id").model = model;
-                    console.log(model.Id);
-                    /*for (var i = 0; i < model.Collaborateurs.length; i++) {
-                        document.getElementById("Collaborateurs").innerHTML += '<option id="assigne" value="' + i + '">' + model.Collaborateurs[i].Nom + '</option>';
-                    }
-                    document.getElementById("listeCollabos").model = model;*/
+    <script type="text/javascript">
+        function validerMission(e) {
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+            console.log(dataItem.Id);
+            $.ajax({
+                url: 'Mission_Accomplie',
+                data: {
+                    nb: dataItem.Id
                 }
-            </script>
+            }).done(function () {
+                alert('Congé validé');
+            });
+        }
+
+        function error_handler(e) {
+            if (e.errors) {
+                var message = "Errors:\n";
+                $.each(e.errors, function (key, value) {
+                    if ('errors' in value) {
+                        $.each(value.errors, function () {
+                            message += this + "\n";
+                        });
+                    }
+                });
+                alert(message);
+            }
+        }
+    </script>
+<script>
+    function grid_edit(e) {
+        /*var editForm = e.container;
+        var model = e.model
+
+        editForm.model = model;
+        editForm.find("label_id").model = model;
+        console.log(model.Id);
+        for (var i = 0; i < model.Collaborateurs.length; i++) {
+            document.getElementById("Collaborateurs").innerHTML += '<option id="assigne" value="' + i + '">' + model.Collaborateurs[i].Nom + '</option>';
+        }
+        document.getElementById("listeCollabos").model = model;*/
+    }
+</script>

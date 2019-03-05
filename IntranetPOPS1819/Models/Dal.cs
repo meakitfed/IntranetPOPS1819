@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -590,6 +591,12 @@ namespace IntranetPOPS1819.Models
             bdd.SaveChanges();
         }
 
+        public void SupprimerMission(int id)
+        {
+            bdd.Missions.Remove(bdd.Missions.FirstOrDefault(m => m.Id == id));
+            bdd.SaveChanges();
+        }
+
         public void ValiderConge(int idCollab, int idConge)
         {
             Conge conge = bdd.Collaborateurs.First(col => col.Id == idCollab).Conges.FirstOrDefault(con => con.Id == idConge);
@@ -664,7 +671,7 @@ namespace IntranetPOPS1819.Models
         {
             Mission mission = bdd.Missions.FirstOrDefault(miss => miss.Id == m.Id);
             mission.Nom = m.Nom;
-            mission.Statut = m.Statut;
+            //mission.Statut = m.Statut;
 
             bdd.SaveChanges();
         }
