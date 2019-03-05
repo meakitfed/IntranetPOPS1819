@@ -78,7 +78,7 @@ namespace IntranetPOPS1819.Controllers
                         foreach (Conge con in col.Conges)
                         {
                             if ((con.Statut == StatutConge.ValideChef) || (col.Chef && con.Statut == StatutConge.EnCours))
-                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin });
+                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, CongesPris = congesPris, Debut = con.Debut, Fin = con.Fin });
                         }
                     }
                 }
@@ -105,11 +105,19 @@ namespace IntranetPOPS1819.Controllers
         {
             IDal dal = new Dal();
             System.Diagnostics.Debug.WriteLine("Passage dans validationRH");
+            bool refus;
             // Modification du statut du congé
             if (accepter)
+            {
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Valide);
+                refus = false;
+            }
             else
+            {
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
+                refus = true;
+            }
+                
             Debug.WriteLine("Statut après validation : " + dal.ObtenirConge(Convert.ToInt32(nb)).Type);
             Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 
@@ -126,6 +134,12 @@ namespace IntranetPOPS1819.Controllers
                         break;
                     }
                 }
+            }
+
+            //On rend ses congés au collaborateur
+            if (refus && dal.ObtenirConge(Convert.ToInt32(nb)).Type == TypeConge.RTT)
+            {
+                dal.AjouterCongesRestants(idCollab,  dal.ObtenirConge(Convert.ToInt32(nb)).GetDuree());
             }
 
             // Envois de notifications

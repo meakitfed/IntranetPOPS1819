@@ -14,8 +14,5 @@ namespace IntranetPOPS1819.ViewModel
         public int Id { get; set; }
         public string Nom { get; set; }
         public StatutMission Statut { get; set; }
-        public List<IdentiteViewModel> Collaborateurs { get; set; } = new List<IdentiteViewModel>();
-        public IEnumerable<SelectListItem> Temp { get; set; } = new List<SelectListItem>();
-        public List<string> Collabs { get; set; } = new List<string>();
     }
 }

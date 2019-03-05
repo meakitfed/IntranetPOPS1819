@@ -26,7 +26,7 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult Index()
 		{
-			bool connected = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+		    bool connected = System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
 			if(connected)
 			{
 				return Redirect("/UserPage/Profil");

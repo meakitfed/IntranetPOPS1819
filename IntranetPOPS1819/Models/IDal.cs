@@ -34,6 +34,7 @@ namespace IntranetPOPS1819.Models
         void AssignerMission(int idMission, int idCollaborateur);
         void ChangerStatut(int id, StatutMission statut);
         void UpdateMission(MissionsViewModel m);
+        void SupprimerMission(int id);
 
         // Authentification
         Collaborateur Authentifier(string mail, string motDePasse);
@@ -57,6 +58,7 @@ namespace IntranetPOPS1819.Models
         void ModifierCongesRestant(int id, float jours);                                // Testé
         Conge ObtenirConge(int id);
         void SupprimerDemandeConge(int idCollab, int idConge);
+        void AjouterCongesRestants(int idCollab, int nbConges);
 
         // Notifications
         void AjoutNotif(int idCollab, Message m);

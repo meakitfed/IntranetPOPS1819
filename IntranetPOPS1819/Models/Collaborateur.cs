@@ -115,7 +115,7 @@ namespace IntranetPOPS1819.Models
 			{
 				foreach (Conge c in Conges)
 				{
-                    if (c.Statut == StatutConge.EnCours) nb += c.Fin.Subtract(c.Debut).Days;
+                    if (c.Statut == StatutConge.EnCours) nb += c.GetDuree();
                 }
 				return nb;
 			}
@@ -130,6 +130,22 @@ namespace IntranetPOPS1819.Models
                 foreach (Conge c in Conges)
                 {
                     if (c.Statut == StatutConge.EnCours  ||  c.Statut == StatutConge.ValideChef)
+                        for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
+                            allDates.Add(date);
+                }
+                return allDates;
+            }
+            return allDates;
+        }
+
+        public List<DateTime> GetTousJoursCongesRefuses()
+        {
+            List<DateTime> allDates = new List<DateTime>();
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Statut == StatutConge.Refuse)
                         for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
                             allDates.Add(date);
                 }

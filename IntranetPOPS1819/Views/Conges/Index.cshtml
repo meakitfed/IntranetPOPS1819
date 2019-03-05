@@ -23,16 +23,16 @@
                     <p>Déjà pris cette année :  <font size="5">@Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</font></p>
 
                     <div id="a-prendre">
-                        <p>A prendre :  <font size="5">@Model._Collaborateur.CongesRestants</font></p>
+                        <p>A prendre :  <font size="5">@Model._Collaborateur.CongesRestants (RTT)</font></p>
                     </div>
                     <div class="listbox-area">
                         <div id="demandesAttente" class="left-area">
                             <span id="ss_elem">
-                                Demandes en attente :  <font size="5">@Model._Collaborateur.GetNombreCongesEnAttente()</font>
+                                Demandes en attente :  <font size="5">@Model._Collaborateur.GetNombreCongesEnAttente() jours</font>
                             </span>
                             <br />
                             <br />
-                            <select class=" table-bordered"
+                            <select class=" table-bordered form-control"
                                     id="conges_enattente_list"
                                     tabindex="0"
                                     role="listbox"
@@ -44,9 +44,9 @@
                                 {
                                     if (c.Statut == StatutConge.EnCours || c.Statut == StatutConge.ValideChef)
                                     {
-                                        <option id="@c.Id" role="option">
-                                            Id:@c.Id  @c.Debut.ToString("dd/MM/yy")  @c.GetDuree()j  type:@c.Type.ToString()
-                                        </option>
+                                <option id="@c.Id" role="option">
+                                    @c.Type.ToString().Substring(0,3) : du @c.Debut.ToString("dd/MM/yy") au @c.Fin.ToString("dd/MM/yy")
+                                </option>
                                     }
                                 }
 
@@ -135,8 +135,11 @@
                                                         "<div class=\"en-attente\"></div>" +
                                                         "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
                                                         "<div class=\"valide\"></div>" +
+                                                        "# } else if ($.inArray(+data.date, estRefuse) != -1) {#" +
+                                                        "<div class=\"refuse\"></div>" +
                                                         "# } #" +
                                                         "#= data.value #")
+                                                        
                                                     )
 
                             )
@@ -242,8 +245,8 @@
     var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
     var estValide = rawValide.map(x => parseInt(x.substring(6, 19)))
 
-    var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
-    var estValide = rawValide.map(x => parseInt(x.substring(6,19)))
+    var rawRefuse = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesRefuses() ));
+    var estRefuse = rawRefuse.map(x => parseInt(x.substring(6, 19)))
 
     @*
     var temp = @Html.Raw(Json.Encode(Model._Collaborateur.GetJSONTousJoursCongesEnAttente() ));
@@ -316,6 +319,7 @@
 
                             prepareElements()
                         }
+                        else $("#retourConge").html("<font color=\"red\">" + data + "</font>")
 
                     });
                 }

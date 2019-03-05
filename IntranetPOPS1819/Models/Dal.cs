@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -405,6 +406,7 @@ namespace IntranetPOPS1819.Models
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 3, 12), Fin = new DateTime(2019, 3, 15), Statut = StatutConge.Refuse });
 
                 SupprimerCollaborateur(john.Id);
 			}
@@ -471,7 +473,7 @@ namespace IntranetPOPS1819.Models
             c.Type = TypeConge.Defaut;
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.Conges.Add(c);
-            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
+            if (c.Type == TypeConge.RTT) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
             bdd.SaveChanges();
         }
 
@@ -480,7 +482,7 @@ namespace IntranetPOPS1819.Models
             c.Type = type;
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.Conges.Add(c);
-            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
+            if (c.Type == TypeConge.RTT) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
             bdd.SaveChanges();
         }
 
@@ -564,6 +566,13 @@ namespace IntranetPOPS1819.Models
 			return m;
 		}
 
+        public void AjouterCongesRestants(int idCollab, int nbConges)
+        {
+            Collaborateur col = ObtenirCollaborateur(idCollab);
+            col.CongesRestants += nbConges;
+            bdd.SaveChanges();
+        }
+
 		public Mission AjoutMission(string nom)
 		{
 			Mission m = new Mission { Nom = nom };
@@ -594,6 +603,12 @@ namespace IntranetPOPS1819.Models
         public void ChangerStatut(int id, StatutMission s)
         {
             bdd.Missions.FirstOrDefault(m => m.Id == id).Statut = s;
+            bdd.SaveChanges();
+        }
+
+        public void SupprimerMission(int id)
+        {
+            bdd.Missions.Remove(bdd.Missions.FirstOrDefault(m => m.Id == id));
             bdd.SaveChanges();
         }
 
@@ -661,7 +676,7 @@ namespace IntranetPOPS1819.Models
         public void SupprimerDemandeConge(int idCollab, int idConge)
         {
             Conge theConge = ObtenirConge(idConge);
-            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants += theConge.GetDuree();
+            if (theConge.Type == TypeConge.RTT) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants += theConge.GetDuree();
             bdd.Conges.Remove(bdd.Conges.FirstOrDefault(c => c.Id == idConge));
 
             bdd.SaveChanges();
@@ -671,7 +686,7 @@ namespace IntranetPOPS1819.Models
         {
             Mission mission = bdd.Missions.FirstOrDefault(miss => miss.Id == m.Id);
             mission.Nom = m.Nom;
-            mission.Statut = m.Statut;
+            //mission.Statut = m.Statut;
 
             bdd.SaveChanges();
         }

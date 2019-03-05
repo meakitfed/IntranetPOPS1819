@@ -5134,10 +5134,7 @@
     <Content Include="Views\Compta\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Collaborateurs\Index.cshtml" />
     <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MissionsViewModel.cshtml" />
     <Content Include="Views\ChefDeService\InfosService2.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\StatutMission.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\IdentiteViewModelEditor.cshtml" />
     <Content Include="Views\RH\InformationMessage.cshtml" />
     <Content Include="Views\RH\DemandeInformation.cshtml" />
     <Content Include="Views\Missions\Index.cshtml" />
