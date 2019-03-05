@@ -42,7 +42,10 @@
             <td scope="row" id="service">Nom : &nbsp;</td>
         </tr>
         <tr>
-            <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
+            <td scope="row">
+                Congés pris cette année : <br />
+                <span id="congesPris"></span>
+            </td>
             <td>
                 <!-- TODO : DatePicker -->
                 @(Html.Kendo().DatePicker()
@@ -74,7 +77,7 @@
 
 
         $("#get").click(function () {
-            $.get("InfosAbsents", { date: datepicker.value().toISOString()}, function(data) {
+            $.get("InfosAbsents", { date: datepicker.value().toISOString(), text: document.getElementById("service").innerText}, function(data) {
                 document.getElementById("test").innerHTML += data;
                 
             });
@@ -91,6 +94,7 @@
 
         document.getElementById("nom").innerHTML = 'Nom : &nbsp; ' + dataItem.Nom;
         document.getElementById("service").innerHTML = 'Nom : &nbsp; ' + dataItem.Service;
+        document.getElementById("congesPris").innerHTML = '&nbsp; RTT : &nbsp;' + dataItem.CongesPris[0] + '<br />&nbsp; Sans solde : &nbsp;' + dataItem.CongesPris[1] + '<br />&nbsp; Absences : &nbsp;' + dataItem.CongesPris[2];
         document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
     }
 </script>

@@ -7,6 +7,7 @@
                 columns.Bound(c => c.Nom);
                 columns.Bound(c => c.Debut);
                 columns.Bound(c => c.Fin);
+                columns.Bound(c => c.Type);
                 columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetails2"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("ValiderC2"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("RefuserC2"); }).Width(300);
             })
             .Editable(editable => editable.Mode(GridEditMode.InLine)
