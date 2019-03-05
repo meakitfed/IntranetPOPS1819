@@ -212,7 +212,7 @@ namespace IntranetPOPS1819.Models
 
         public string GetLamePpPath()
         {
-            int nb = Id % 3;
+            int nb = Id % 9;
             return "~/Content/images/collaborateurs/lamer" + nb + ".jpg";
         }
 
