@@ -85,7 +85,8 @@ namespace IntranetPOPS1819.Controllers
                 }
                 else
                     dal.AjoutNotif(col.Service.Chef().Id, notif);
-                dal.AjoutConge(col.Id, conge);
+
+                dal.AjoutConge(col.Id, conge, typeConge);
             }
 
             return validite.ToString();

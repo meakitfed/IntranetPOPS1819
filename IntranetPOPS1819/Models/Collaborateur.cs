@@ -115,7 +115,7 @@ namespace IntranetPOPS1819.Models
 			{
 				foreach (Conge c in Conges)
 				{
-                    if (c.Statut == StatutConge.EnCours) nb += c.Fin.Subtract(c.Debut).Days;
+                    if (c.Statut == StatutConge.EnCours) nb += c.GetDuree();
                 }
 				return nb;
 			}

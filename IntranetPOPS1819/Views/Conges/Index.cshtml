@@ -28,11 +28,11 @@
                     <div class="listbox-area">
                         <div id="demandesAttente" class="left-area">
                             <span id="ss_elem">
-                                Demandes en attente :  <font size="5">@Model._Collaborateur.GetNombreCongesEnAttente()</font>
+                                Demandes en attente :  <font size="5">@Model._Collaborateur.GetNombreCongesEnAttente() jours</font>
                             </span>
                             <br />
                             <br />
-                            <select class=" table-bordered"
+                            <select class=" table-bordered form-control"
                                     id="conges_enattente_list"
                                     tabindex="0"
                                     role="listbox"
@@ -44,9 +44,9 @@
                                 {
                                     if (c.Statut == StatutConge.EnCours || c.Statut == StatutConge.ValideChef)
                                     {
-                                        <option id="@c.Id" role="option">
-                                            Id:@c.Id  @c.Debut.ToString("dd/MM/yy")  @c.GetDuree()j  type:@c.Type.ToString()
-                                        </option>
+                                <option id="@c.Id" role="option">
+                                    @c.Type.ToString().Substring(0,3) : du @c.Debut.ToString("dd/MM/yy") au @c.Fin.ToString("dd/MM/yy")
+                                </option>
                                     }
                                 }
 
