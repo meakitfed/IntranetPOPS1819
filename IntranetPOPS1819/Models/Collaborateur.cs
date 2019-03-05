@@ -28,6 +28,7 @@ namespace IntranetPOPS1819.Models
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
+        public bool Licencie { get; set; } = false;
         //[RegularExpression(@"^0[0-9]{9}$")]
 		public string Telephone { get; set; }
 
@@ -65,7 +66,49 @@ namespace IntranetPOPS1819.Models
 			return 0;
 		}
 
-		public int GetNombreCongesEnAttente()
+        public int GetNombreRTTPrisCetteAnnee()
+        {
+            int nb = 0;
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Debut.Year == DateTime.Now.Year && c.Statut == StatutConge.Valide && c.Type == TypeConge.RTT) nb += c.Fin.Subtract(c.Debut).Days;
+                }
+                return nb;
+            }
+            return 0;
+        }
+
+        public int GetNombreSansSoldePrisCetteAnnee()
+        {
+            int nb = 0;
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Debut.Year == DateTime.Now.Year && c.Statut == StatutConge.Valide && c.Type == TypeConge.SansSolde) nb += c.Fin.Subtract(c.Debut).Days;
+                }
+                return nb;
+            }
+            return 0;
+        }
+
+        public int GetNombreAbsencesPrisCetteAnnee()
+        {
+            int nb = 0;
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Debut.Year == DateTime.Now.Year && c.Statut == StatutConge.Valide && c.Type == TypeConge.Absence) nb += c.Fin.Subtract(c.Debut).Days;
+                }
+                return nb;
+            }
+            return 0;
+        }
+
+        public int GetNombreCongesEnAttente()
 		{
 			int nb = 0;
 			if (Conges != null)
@@ -208,6 +251,12 @@ namespace IntranetPOPS1819.Models
         {
             int nb = Id % 14;
             return "~/Content/images/collaborateurs/col" + nb + ".jpg";
+        }
+
+        public string GetLamePpPath()
+        {
+            int nb = Id % 9;
+            return "~/Content/images/collaborateurs/lamer" + nb + ".jpg";
         }
 
         public bool isEnConge(System.DateTime date)

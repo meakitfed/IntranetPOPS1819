@@ -177,6 +177,15 @@
     <Content Include="Content\images\collaborateurs\col7.jpg" />
     <Content Include="Content\images\collaborateurs\col8.jpg" />
     <Content Include="Content\images\collaborateurs\col9.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer0.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer1.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer2.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer3.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer4.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer5.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer6.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer7.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer8.jpg" />
     <Content Include="Content\images\green.png" />
     <Content Include="Content\images\orange.jpg" />
     <Content Include="Content\images\red.png" />
@@ -5059,6 +5068,7 @@
     <Compile Include="Controllers\CongesController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MissionsController.cs" />
     <Compile Include="Controllers\NoteDeFraisController.cs" />
     <Compile Include="Controllers\RHController.cs" />
     <Compile Include="Controllers\UserPageController.cs" />
@@ -5084,7 +5094,9 @@
     <Compile Include="ViewModel\ComptaViewModel.cs" />
     <Compile Include="ViewModel\CongesViewModel.cs" />
     <Compile Include="ViewModel\CollaborateurViewModel.cs" />
+    <Compile Include="ViewModel\IdentiteViewModel.cs" />
     <Compile Include="ViewModel\LignesDeFraisViewModel.cs" />
+    <Compile Include="ViewModel\MissionsViewModel.cs" />
     <Compile Include="ViewModel\NouveauCollaborateurViewModel.cs" />
     <Compile Include="ViewModel\NouveauServiceViewModel.cs" />
     <Compile Include="ViewModel\OngletNoteDeFraisViewModel.cs" />
@@ -5110,7 +5122,6 @@
     <Content Include="Views\NoteDeFrais\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Grid\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\StatutLigneDeFrais.cshtml" />
-    <Content Include="Views\ChefDeService\Conges.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTemplate.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ResumeFileUrl.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TypeLigneDeFrais.cshtml" />
@@ -5123,8 +5134,13 @@
     <Content Include="Views\Compta\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Collaborateurs\Index.cshtml" />
     <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MissionsViewModel.cshtml" />
+    <Content Include="Views\ChefDeService\InfosService2.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\StatutMission.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\IdentiteViewModelEditor.cshtml" />
     <Content Include="Views\RH\InformationMessage.cshtml" />
     <Content Include="Views\RH\DemandeInformation.cshtml" />
+    <Content Include="Views\Missions\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

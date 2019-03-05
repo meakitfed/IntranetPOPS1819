@@ -4,9 +4,8 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace IntranetPOPS1819.Controllers
@@ -144,6 +143,7 @@ namespace IntranetPOPS1819.Controllers
 					vm.nbrEnAttente.Add(b);
 				}
 				
+                
 				return View(vm);
 			}
 			return View();
@@ -156,6 +156,7 @@ namespace IntranetPOPS1819.Controllers
 
         public void ValiderConges(int idConge)
         {
+            Debug.WriteLine("Pas inutile");
             dal.ChangerStatut(idConge, StatutConge.Valide);
 
             Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
@@ -176,82 +177,10 @@ namespace IntranetPOPS1819.Controllers
                 dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(idConge)));
             }
         }
-        /*
-        public ActionResult Conges_Read([DataSourceRequest]DataSourceRequest request)
-        {
-            System.Diagnostics.Debug.WriteLine("Passage dans Conges_Read");
-
-            if (HttpContext.User.Identity.IsAuthenticated)
-            {
-                Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-                List<Conge> conges = new List<Conge>();
-                foreach(Collaborateur col in dal.ObtenirCollaborateursService(c.Service.Id))
-                {
-                    if(col != c)
-                    {
-                        foreach (Conge con in col.Conges)
-                        {
-                            if (con.Statut == StatutConge.EnCours)
-                            {
-                                conges.Add(con);
-                            }
-                        }
-                    }
-                }
-                IQueryable<Conge> demandes = conges.AsQueryable();
-                DataSourceResult result = demandes.ToDataSourceResult(request, conge => new {
-                    conge.Id,
-                    conge.Debut,
-                    conge.Fin,
-                    conge.Statut
-                });
-
-                return Json(result);
-            }
-            return null;
-
-        }
-        public ActionResult Conges_Validation(string nb, bool accepter)
-        {
-            System.Diagnostics.Debug.WriteLine("Passage dans la fonction de validation");
-            System.Diagnostics.Debug.WriteLine(accepter);
-
-            if (accepter)
-                dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.ValideChef);
-            else
-                dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
-
-            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-            List<Collaborateur> collabs = dal.ObtenirCollaborateursService(c.Service.Id);
-            int idCollab = 0;
-            foreach (Collaborateur col in collabs)
-            {
-                foreach(Conge con in col.Conges)
-                {
-                    if(con.Id == Convert.ToInt32(nb))
-                    {
-                        System.Diagnostics.Debug.WriteLine(col.Id);
-                        idCollab = col.Id;
-                        break;
-                    }
-                } 
-            }
-            System.Diagnostics.Debug.WriteLine(dal.ObtenirCollaborateur(2).Nom);
-
-            dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
-            foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
-            {
-                dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
-            }
-
-            System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
-
-            return View();
-        }*/
 
         public ActionResult Conges_Read2([DataSourceRequest]DataSourceRequest request)
         {
-            System.Diagnostics.Debug.WriteLine("Passage dans Conges_Read");
+            Debug.WriteLine("Passage dans Conges_Read");
 
             if (HttpContext.User.Identity.IsAuthenticated)
             {
@@ -261,21 +190,32 @@ namespace IntranetPOPS1819.Controllers
                 {
                     if (col != c)
                     {
+                        float[] congesPris = new float[3] { col.GetNombreRTTPrisCetteAnnee(), col.GetNombreSansSoldePrisCetteAnnee(), col.GetNombreAbsencesPrisCetteAnnee() };
+
                         foreach (Conge con in col.Conges)
                         {
                             if (con.Statut == StatutConge.EnCours)
-                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, Debut = con.Debut, Fin = con.Fin});
+                                vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = col.Prenom + " " + col.Nom, Service = col.Service.Nom, CongesRestants = col.CongesRestants, CongesPris = congesPris, Debut = con.Debut, Fin = con.Fin});
                         }
                     }
+                }
+                Collaborateur drh = dal.ObtenirDRH();
+                foreach (Conge con in drh.Conges)
+                {
+                    float[] congesPris = new float[3] { drh.GetNombreRTTPrisCetteAnnee(), drh.GetNombreSansSoldePrisCetteAnnee(), drh.GetNombreAbsencesPrisCetteAnnee() };
+                    if (con.Statut == StatutConge.EnCours)
+                        vm.Add(new ValidationCongesViewModel { Id = con.Id, Nom = drh.Prenom + " " + drh.Nom, Service = drh.Service.Nom, CongesRestants = drh.CongesRestants, CongesPris = congesPris, Debut = con.Debut, Fin = con.Fin });
                 }
                 IQueryable<ValidationCongesViewModel> demandes = vm.AsQueryable();
                 DataSourceResult result = demandes.ToDataSourceResult(request, data => new {
                     data.Id,
                     data.Debut,
                     data.Fin,
+                    data.Type,
                     data.Nom,
                     data.Service,
-                    data.CongesRestants
+                    data.CongesRestants,
+                    data.CongesPris
                 });
 
                 return Json(result);
@@ -294,7 +234,7 @@ namespace IntranetPOPS1819.Controllers
 
             // Recherche du collaborateur concerné
             Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-            List<Collaborateur> collabs = dal.ObtenirCollaborateursService(c.Service.Id);
+            List<Collaborateur> collabs = dal.ObtenirTousLesCollaborateurs();
             int idCollab = 0;
             foreach (Collaborateur col in collabs)
             {
@@ -307,19 +247,45 @@ namespace IntranetPOPS1819.Controllers
                     }
                 }
             }
-            System.Diagnostics.Debug.WriteLine(dal.ObtenirConge(Convert.ToInt32(nb)).Statut);
 
             // Envois de notifications
-            dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
-            if (dal.ObtenirConge(Convert.ToInt32(nb)).Statut == StatutConge.ValideChef)
+            if(dal.ObtenirCollaborateur(idCollab).Service != c.Service)
             {
-                foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+                dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Valide);
+                dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + " " + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+            }
+            else
+            {
+                dal.AjoutNotif(idCollab, new Message(TypeMessage.NotifCongeRetour, c.Prenom + " " + c.Nom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+                if (dal.ObtenirConge(Convert.ToInt32(nb)).Statut == StatutConge.ValideChef)
                 {
-                    dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+                    foreach (Collaborateur rh in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+                    {
+                        dal.AjoutNotif(rh.Id, new Message(TypeMessage.NotifCongeAller, dal.ObtenirCollaborateur(idCollab).Nom + " " + dal.ObtenirCollaborateur(idCollab).Prenom + " - " + c.Service.Nom, dal.ObtenirConge(Convert.ToInt32(nb))));
+                    }
                 }
             }
+            
             return View();
         }
 
+        public int InfosAbsents(DateTime date)
+        {
+            IDal dal = new Dal();
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+
+            return c.Service.GetNombreCollaborateursEnConges(date);
+        }
+
+        public string ProportionAbsents(DateTime date, string text)
+        {
+            Debug.WriteLine(text);
+            IDal dal = new Dal();
+            Service s = dal.ObtenirTousLesServices().FirstOrDefault(serv => text.Contains(serv.Nom) == true);
+            int num = s.GetNombreCollaborateursEnConges(date), den = s.Collaborateurs.Count();
+
+            return num + " / " + den + "(" + (num / den) + "% )";
+
+        }
     }
 }

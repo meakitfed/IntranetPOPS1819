@@ -7,7 +7,7 @@
 
         <div class="col-9 row1">
             <div class="row text-center justify-content-center">
-                <h1 class="text-center">@Model.Prenom @Model.Nom</h1>     
+                <h1 class="text-center">@Model.Prenom @Model.Nom</h1>
             </div>
             <div class="row">
 
@@ -31,23 +31,58 @@
                         <p><i class="em em-telephone_receiver"></i> : @Model.Telephone</p>
                     </div>
 
+
+
                 </div>
 
                 <div class="col">
 
-                    <img src="@Url.Content(Model.GetPpPath())" id="pp" class="rounded border border-dark">
+                    <img src="@Url.Content(Model.GetLamePpPath())" id="pp" class="rounded border border-dark">
 
                 </div>
             </div>
+            @{
+                IDal d = new Dal();
+                Collaborateur loggedInUser = d.ObtenirCollaborateur(User.Identity.Name);
+                List<Service> services = d.ObtenirTousLesServices();
+                if (loggedInUser.Admin)
+                {
+                    <br />
+                    <br />
+                    <br />
 
-         
+                    <div class="row justify-content-center">
+                        <div id="actions">
+                            <select id="serviceSelect" class="selectpicker">
+                                <option id="noselect">Nouveau service</option>
+                                @foreach (Service s in services)
+                                {
+                                    <option id="@s.Id">@s.Nom</option>
+                                }
+                            </select>
+                            <button type="button" class="btn-dark" onclick="changer()">Changer de service</button>
+
+                            <div id="retour-changement"></div>
+
+                            <br />
+                            <br />
+                            <br />
+
+                            <button type="button" class="btn-danger" onclick="licencier()">Licencier !</button>
+                            <div id="retour-licencier"></div>
+                        </div>
+                    </div>
+                }
+            }
+
+
 
         </div>
 
         <div class="col-3 row1">
             <h2 class="row3-h">Service @Model.Service.Nom</h2>
             <br />
-            <p><i class="em em-calendar"></i> @DateTime.Today.ToString("dd/MM/yyyy")</p>
+            <p><span class="glyphicon glyphicon-calendar"></span> @DateTime.Today.ToString("dd/MM/yyyy")</p>
             <br />
             <p class="table-bordered">Nombre de collaborateurs absents : @Model.Service.GetNombreCollaborateursEnConges()</p>
             <p class="table-bordered">Proportion dans le service : @Model.Service.GetProportionAbsents()%</p>
@@ -55,5 +90,32 @@
     </div>
 
 
+<script>
+    function changer() {
+        var id = $("#serviceSelect").children(":selected").attr("id");
 
+        if (id == "noselect") $("#retour-changement").html("<font color='red'>Veuillez sélectionner un service</font>")
+        else {
+            $.post("ChangerService", { idCol: @Model.Id, idSer: id }, function (data) {
+                if (data == 0) {
+                    $("#retour-changement").html('<font color="green">Le changement de service a été très bien pris en compte')
+                    setTimeout("location.reload(true);", 1500);
+                }
+                else
+                    $("#retour-changement").html("<font color='red'>Il y a eu des erreurs</font>")
+            })
+        } 
+    }
+
+    function licencier() {
+        $.post("Licencier", { idCol: @Model.Id}, function (data) {
+            if (data == 0) {
+                $("#retour-licencier").html('<font color="green">Au revoir @Model.Prenom @Model.Nom <i class="em em-wave"></i></font>')
+                setTimeout("location.reload(true);", 1500);
+            }
+            else
+                $("#retour-licencier").html("<font color='red'>Une erreur inopinée s'est produite</font>")
+        })
+    }
+</script>
 

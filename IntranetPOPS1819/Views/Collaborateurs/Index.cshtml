@@ -26,13 +26,17 @@
 									<button class="list-group-item btn btn-block btn-1 " onclick="javascript:toggleVisibility(('service' + @service.Id)); return false;">@service.Nom</button>
 									<span id=@(("service" + service.Id)) style="display:none;">
 										@foreach (Collaborateur col in service.Collaborateurs)
-										{
-											@Ajax.ActionLink(col.Nom, "InformationsCollaborateur", new { idCol = col.Id }, new AjaxOptions
-										   {
-											   InsertionMode = InsertionMode.Replace,
-											   UpdateTargetId = "InfoCollaborateurActif",
-											   HttpMethod = "Post"
-										   }, new { @class = "list-group-item btn btn-block btn-3 btn-list-intranet" })
+                                        {
+                                            if(!col.Licencie)
+                                            {
+
+											    @Ajax.ActionLink(col.Nom, "InformationsCollaborateur", new { idCol = col.Id }, new AjaxOptions
+										       {
+											       InsertionMode = InsertionMode.Replace,
+											       UpdateTargetId = "InfoCollaborateurActif",
+											       HttpMethod = "Post"
+										       }, new { @class = "list-group-item btn btn-block btn-3 btn-list-intranet" })
+                                            }
                                       
 										}
 									</span>

@@ -20,9 +20,9 @@
         <div class="container-fluid profil-layout">
             <div class="row">
                 <div class="col-md-2 row1 text-center">
-                    <h2 class="row1-h">@Model._Collaborateur.Nom @Model._Collaborateur.Prenom</h2>
+                    <h2 class="row1-h">@Model._Collaborateur.Prenom @Model._Collaborateur.Nom</h2>
                     
-                    <img src="@Url.Content(Model._Collaborateur.GetPpPath())" id="pp" class="rounded border border-dark">
+                    <img src="@Url.Content(Model._Collaborateur.GetLamePpPath())" id="pp" class="rounded border border-dark">
                     <br />
                     <p>
                         Service : @if (@Model._Collaborateur.Service != null)
@@ -35,14 +35,18 @@
                 <div class="col-md-8">
                     <div class="row2">
                         <h1 class="row2-h">Récapitulatif</h1>
+                        <br />
+                        <br />
+                        <br />
+
                         <div class="row row2-1">
                             <div class="col-2 col-lg-6 text-center">
                                 <h3>Congés</h3>
                                 <br />
-                                <p>Consommés cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</p>
-                                <p>Restants : @Model._Collaborateur.CongesRestants</p>
-                                <p>En attente : @Model._Collaborateur.GetNombreCongesEnAttente()</p>
-                                <p>Validés : @Model._Collaborateur.GetNombreCongesValidesFuturs()</p>
+                                <p>Consommés cette année : @Model._Collaborateur.GetNombreCongesPrisCetteAnnee() jours</p>
+                                <p>Restants : @Model._Collaborateur.CongesRestants jours</p>
+                                <p>En attente : @Model._Collaborateur.GetNombreCongesEnAttente() jours</p>
+                                <p>Validés : @Model._Collaborateur.GetNombreCongesValidesFuturs() jours</p>
                             </div>
                             <div class="col col-lg-6 text-center">
                                 <h3>Notes de frais</h3>
@@ -57,7 +61,7 @@
                 <div class="col-md-2 row3">
                     <h2 class="row3-h">Service @Model._Collaborateur.Service.Nom</h2>
                     <br />
-                    <p><i class="em em-calendar"></i> @DateTime.Today.ToString("dd/MM/yyyy")</p>
+                    <p><span class="glyphicon glyphicon-calendar"></span> @DateTime.Today.ToString("dd/MM/yyyy")</p>
                     <br />
                     <p class="table-bordered">Nombre de collaborateurs absents : @Model._Collaborateur.Service.GetNombreCollaborateursEnConges()</p>
                     <p class="table-bordered">Proportion dans le service : @Model._Collaborateur.Service.GetProportionAbsents()%</p>

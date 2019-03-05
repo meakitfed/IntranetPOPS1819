@@ -1,0 +1,29 @@
+﻿@(Html.Kendo().DropDownList()
+            .Name("Collaborateurs") // The name of the widget should be the same as the name of the property.
+            .DataValueField("Id") // The value of the dropdown is taken from the EmployeeID property.
+            .DataTextField("Nom") // The text of the items is taken from the EmployeeName property.
+            .BindTo((System.Collections.IEnumerable)ViewData["collabos"]) // A list of all employees which is populated in the controller.
+)
+
+@*@(Html.Kendo().Grid<IntranetPOPS1819.ViewModel.IdentiteViewModel>()
+                .Name("GridCollabos")
+                .Columns(columns =>
+                {
+                    columns.Bound(m => m.Nom);
+                    columns.Command(command => { command.Edit().Text(" "); command.Destroy().Text(" "); });
+                })
+                .Scrollable()
+                //.ToolBar(toolbar => toolbar.Create())
+                //.Editable(editable => editable.Mode(GridEditMode.PopUp))
+                .Sortable()
+                .DataSource(dataSource => dataSource
+                    .Ajax()
+                    .PageSize(20)
+                    .Model(model => model.Id(m => m.Id))
+                    /*.Create(update => update.Action("EditingPopup_Create", "Grid"))
+                    .Read(read => read.Action("MissionEditing_Read", "ChefDeService"))
+                    .Update(update => update.Action("MissionEditing_Update", "ChefDeService"))
+                    .Destroy(update => update.Action("EditingPopup_Destroy", "Grid"))*/
+                )
+
+    )*@

@@ -1,6 +1,7 @@
 ﻿using IntranetPOPS1819.Models;
 using IntranetPOPS1819.ViewModel;
 using System;
+using System.Diagnostics;
 using System.Web.Mvc;
 namespace IntranetPOPS1819.Controllers
 {
@@ -15,7 +16,12 @@ namespace IntranetPOPS1819.Controllers
             {
                 vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             }
-            
+            foreach(Conge c in vm._Collaborateur.Conges)
+            {
+                if (c.Statut == StatutConge.Refuse) Debug.WriteLine("Refusé");
+                if(c.Statut == StatutConge.ValideChef) Debug.WriteLine("Validé");
+            }
+                
             return View(vm);
         }
 
@@ -61,9 +67,21 @@ namespace IntranetPOPS1819.Controllers
 
             if (HttpContext.User.Identity.IsAuthenticated && validite == ValiditeConge.ok)
             {
-                dal.AjoutNotif(col.Service.Chef().Id, notif);
-                dal.AjoutConge(col.Id, conge, typeConge);
-                dal.EnvoiCongeChef(col.Service.Id, col.Id, conge.Id);
+                if (col.Chef)
+                {
+                    if (col.Service.Type == TypeService.RessourcesHumaines)
+                        dal.AjoutNotif(dal.ObtenirPDG().Id, notif);
+                    else
+                    {
+                        foreach (Collaborateur c in dal.ObtenirCollaborateursService(dal.ObtenirServiceDeType(TypeService.RessourcesHumaines).Id))
+                        {
+                            dal.AjoutNotif(c.Id, notif);
+                        }
+                    }
+                }
+                else
+                    dal.AjoutNotif(col.Service.Chef().Id, notif);
+                dal.AjoutConge(col.Id, conge);
             }
 
             return validite.ToString();

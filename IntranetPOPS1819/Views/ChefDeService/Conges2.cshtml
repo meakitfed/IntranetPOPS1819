@@ -33,34 +33,68 @@
     <thead>
         <tr>
             <th scope="col" class="text-center">Collaborateur</th>
-            <th scope="col" class="text-center">Service @Model._Collaborateur.Service.Nom</th>
+            <th scope="col" class="text-center">Service</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td scope="row" id="nom">Nom : &nbsp;</td>
-            <td></td>
+            <td scope="row" id="service">Nom : &nbsp;</td>
         </tr>
         <tr>
-            <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
-            <td></td>
+            <td scope="row">Congés pris cette année : <br />
+                <span id="congesPris"></span>
+            </td>
+            <td>
+                @(Html.Kendo().DatePicker()
+                       .Name("datePickerCongesRH")
+                       .Value(DateTime.Today)
+                )
+                <button id="get" class="k-button">Consulter</button>
+            </td>
         </tr>
         <tr>
             <td scope="row" id="journeesRestantes">Journées restantes : &nbsp;</td>
+            <td>Collaborateurs Absents : <span id="test"></span></td>
+        </tr>
+        <tr>
             <td></td>
+            <td>Proportion dans le service : <span id="propAbs"></span></td>
         </tr>
     </tbody>
 </table>
 
 <script type="text/javascript">
+    // Utilisation du datePicker
+    $(document).ready(function () {
+        $("datePickerCongesRH").kendoDatePicker()
+            .closest(".k-widget")
+            .attr("id", "datepicker_wrapper");
 
+        var datepicker = $("#datePickerCongesRH").data("kendoDatePicker");
+
+
+        $("#get").click(function () {
+            $.get("InfosAbsents", { date: datepicker.value().toISOString() }, function (data) {
+                document.getElementById("test").innerHTML += data;
+
+            });
+            $.get("ProportionAbsents", { date: datepicker.value().toISOString(), text: document.getElementById("service").innerText }, function (data2) {
+                document.getElementById("propAbs").innerHTML += data2;
+            });
+        });
+    });
+
+    // Affichage des détails
     function showDetails2(e) {
         e.preventDefault();
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
-        document.getElementById("nom").innerHTML = 'Nom : &nbsp;' + dataItem.Nom;
-        document.getElementById("journeesRestantes").innerHTML = 'Journées restantes: &nbsp;' + dataItem.CongesRestants + '&nbsp; jours';
+        document.getElementById("nom").innerHTML = 'Nom : &nbsp; ' + dataItem.Nom;
+        document.getElementById("service").innerHTML = 'Nom : &nbsp; ' + dataItem.Service;
+        document.getElementById("congesPris").innerHTML = '&nbsp; RTT : &nbsp;' + dataItem.CongesPris[0] + '<br />&nbsp; Sans solde : &nbsp;' + dataItem.CongesPris[1] + '<br />&nbsp; Absences : &nbsp;' + dataItem.CongesPris[2];
+        document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
     }
 </script>
 
@@ -90,7 +124,7 @@
         grid.removeRow(row);
         console.log(dataItem);
         $.ajax({
-            url: 'Conges_Validation',
+            url: 'Conges_Validation2',
             data: {
                 nb: dataItem.Id,
                 accepter: false

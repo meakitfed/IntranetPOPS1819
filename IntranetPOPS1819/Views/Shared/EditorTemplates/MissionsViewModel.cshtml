@@ -1,0 +1,48 @@
+﻿@using IntranetPOPS1819.ViewModel
+@model IntranetPOPS1819.ViewModel.MissionsViewModel
+
+<div class="product-view" id="label_id">
+
+    
+    <dl>
+        <dt>Nom</dt>
+        <dd>
+            @Html.LabelFor(m => m.Nom)
+            @Html.EditorFor(m => m.Nom)
+            <span data-for="Nom" class="k-invalid-msg"></span>
+            <br />
+            @Html.LabelFor(m => m.Statut)
+            @Html.EditorFor(m => m.Statut, "")
+            <span data-for="Statut" class="k-invalid-msg"></span>
+            <br />
+            <p>Collaborateurs assignés : </p>
+            @Html.EditorFor(m => m.Temp, (IEnumerable<SelectListItem>)ViewData["collabos"])
+
+            <!--<div class="test">
+                <select id="Collaborateurs" multiple="multiple" name="Collaborateurs">
+
+                </select>
+            </div>-->
+            
+            
+            
+            <!--<select id="listeCollabos" class="mdb-select md-form colorful-select dropdown-primary" multiple searchable="Search here.."></select>
+    -->
+            @{ <div id="listeCollabos"></div> }
+
+        </dd>
+
+    </dl>
+</div>
+
+<script type="text/javascript">
+    console.log(document.getElementById("label_id"));
+    
+
+</script>
+
+<style>
+    #assigne{
+        color: forestgreen;
+    }
+</style>

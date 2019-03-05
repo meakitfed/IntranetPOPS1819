@@ -1,4 +1,5 @@
 ﻿@model IntranetPOPS1819.ViewModel.NouveauCollaborateurViewModel
+@using IntranetPOPS1819.Models
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -34,7 +35,27 @@
             <p>
         </div>
         <div align="center">
-            <input type="submit" value="Ajouter collabo" />
+            <p>
+                Service :
+                @Html.DropDownListFor(Model => Model.Service, (new Dal()).ObtenirTousLesServices().Select(serv => new SelectListItem()
+               {
+                   Text = serv.Nom,
+                   Value = serv.Id.ToString()
+               }))
+                @Html.ValidationMessageFor(Model => Model.Service)
+            </p>
+        </div>
+        <div align="center">
+            <input type="submit" value="Ajouter collabo" onclick="confirmation()" />
+        </div>
+        <div align="center">
+            <p id="confirmMessage"></p>
         </div>
     }
 </div>
+
+<script type="text/javascript">
+    function confirmation() {
+        alert("Le collaborateur a bien été ajouté.");
+    }
+</script>
