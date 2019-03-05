@@ -8,16 +8,15 @@
 }
 
 <head>
-	@Styles.Render("~/Content/css")
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.css">
 </head>
-
 @Html.Partial("../Shared/Navbar")
 @{
     int id = -1;
 <h2>@Model._Collaborateur.Service.Nom</h2>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-9 table-bordered">
+        <div class="col-lg-12 table-bordered">
             <nav class="nav nav-tabs">
                 <a class="nav-item nav-link active" href="#p1" data-toggle="tab">Congés</a>
                 <a class="nav-item nav-link" href="#p2" data-toggle="tab">Notes de frais</a>
@@ -57,9 +56,7 @@
                 
             </div>
         </div>
-        <div class="col-sm table-bordered">
-            @Html.Partial("InfosService2")
-        </div>
     </div>
 	</div>
 }
+

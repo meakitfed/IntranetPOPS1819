@@ -1,16 +1,6 @@
 ﻿@using IntranetPOPS1819.Models
 
 
-
-<script language="C#" runat="server">
-
-    void LinkButton_Click(Object sender, EventArgs e)
-    {
-       Label1.Text="You clicked the link button";
-    }
-
-</script>
-
 @{
     IDal d = new Dal();
     Collaborateur c = d.ObtenirCollaborateur(User.Identity.Name);
@@ -20,7 +10,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav">
             <li class="nav-item active">
                 <a class="nav-link" href="/UserPage/Profil">
                     @if (User.Identity.IsAuthenticated)
@@ -44,7 +34,13 @@
                     if (c.Chef)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" href="../ChefDeService/Index">Mon Service</a>
+                            <a class="nav-link" href="../ChefDeService/Index">Tableau de bord</a>
+                        </li>
+                    }
+                    if (c.Chef)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="../Missions/Index">Missions</a>
                         </li>
                     }
                     if (c.Service.Type == TypeService.RessourcesHumaines)
@@ -73,7 +69,7 @@
                 </li>
             }
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav navbar-right">
             <li class="nav-item">
                 <a class="nav-link" href="#"><i class="fas fa-question"></i></a>
             </li>

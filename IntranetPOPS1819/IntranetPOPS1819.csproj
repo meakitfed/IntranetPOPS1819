@@ -5068,6 +5068,7 @@
     <Compile Include="Controllers\CongesController.cs" />
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MissionsController.cs" />
     <Compile Include="Controllers\NoteDeFraisController.cs" />
     <Compile Include="Controllers\RHController.cs" />
     <Compile Include="Controllers\UserPageController.cs" />
@@ -5139,6 +5140,7 @@
     <Content Include="Views\Shared\EditorTemplates\IdentiteViewModelEditor.cshtml" />
     <Content Include="Views\RH\InformationMessage.cshtml" />
     <Content Include="Views\RH\DemandeInformation.cshtml" />
+    <Content Include="Views\Missions\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
