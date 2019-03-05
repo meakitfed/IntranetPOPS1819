@@ -392,6 +392,7 @@ namespace IntranetPOPS1819.Models
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 3, 12), Fin = new DateTime(2019, 3, 15), Statut = StatutConge.Refuse });
 
                 SupprimerCollaborateur(john.Id);
 			}
@@ -549,6 +550,13 @@ namespace IntranetPOPS1819.Models
 			bdd.SaveChanges();
 			return m;
 		}
+
+        public void AjouterCongesRestants(int idCollab, int nbConges)
+        {
+            Collaborateur col = ObtenirCollaborateur(idCollab);
+            col.CongesRestants += nbConges;
+            bdd.SaveChanges();
+        }
 
 		public Mission AjoutMission(string nom)
 		{

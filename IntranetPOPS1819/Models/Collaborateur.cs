@@ -138,6 +138,22 @@ namespace IntranetPOPS1819.Models
             return allDates;
         }
 
+        public List<DateTime> GetTousJoursCongesRefuses()
+        {
+            List<DateTime> allDates = new List<DateTime>();
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Statut == StatutConge.Refuse)
+                        for (DateTime date = c.Debut.Date; date <= c.Fin.Date; date = date.AddDays(1))
+                            allDates.Add(date);
+                }
+                return allDates;
+            }
+            return allDates;
+        }
+
 
         public ValiditeConge isCongeValide(Conge c)
         {

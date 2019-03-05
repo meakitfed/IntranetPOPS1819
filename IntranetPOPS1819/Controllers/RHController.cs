@@ -101,11 +101,19 @@ namespace IntranetPOPS1819.Controllers
         {
             IDal dal = new Dal();
             System.Diagnostics.Debug.WriteLine("Passage dans validationRH");
+            bool refus;
             // Modification du statut du congé
             if (accepter)
+            {
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Valide);
+                refus = false;
+            }
             else
+            {
                 dal.ChangerStatut(Convert.ToInt32(nb), StatutConge.Refuse);
+                refus = true;
+            }
+                
             Debug.WriteLine("Statut après validation : " + dal.ObtenirConge(Convert.ToInt32(nb)).Type);
             Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 
@@ -122,6 +130,12 @@ namespace IntranetPOPS1819.Controllers
                         break;
                     }
                 }
+            }
+
+            //On rend ses congés au collaborateur
+            if (refus)
+            {
+                dal.AjouterCongesRestants(idCollab,  dal.ObtenirConge(Convert.ToInt32(nb)).GetDuree());
             }
 
             // Envois de notifications

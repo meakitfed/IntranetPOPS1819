@@ -16,10 +16,10 @@
 				@{
 					int a = Model._Collaborateur.NotesDeFrais.Count - 1;
 					int d = DateTime.Now.Year;
-				<div class="list-group">
+				<div class="list-group list-group-mine">
 					@while (d >= Model._Collaborateur.NotesDeFrais[0].Date.Year && a >= 0)
 					{
-					<button class="btn btn-block btn-1 list-group-item" href="" onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
+					<button class="btn btn-block list-group-item btn-1" href=""  onclick="javascript:toggleVisibility(('Année' + @d)); return false;">@Model._Collaborateur.NotesDeFrais[a].Date.Year</button>
 					<div id=@(("Année" + d)) style="display:none;">
 						@while (a >= 0 && @Model._Collaborateur.NotesDeFrais[a].Date.Year == d)
 						{

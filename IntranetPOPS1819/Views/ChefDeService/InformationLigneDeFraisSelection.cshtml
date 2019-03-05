@@ -97,7 +97,10 @@
     }
 
 	function Refuser(e) {
+		
 		dataOFSelectedLine = this.dataItem($(e.currentTarget).closest("tr"));
+		console.log(dataOFSelectedLine);
+
 		$('#msgModalRefusNote').modal('show');
 	}
 

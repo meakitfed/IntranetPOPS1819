@@ -39,36 +39,37 @@
                                                     <button class="k-button k-button-icontext" id="EnvoyerNote">Envoyer la note de frais</button>
                                                 </div>
                                             </text>)
-                                                                )
-                                                                        .Editable(editable => editable.Mode(GridEditMode.InLine))
-                                                                        .Sortable(sortable =>
-                                                                        {
-                                                                            sortable.SortMode(GridSortMode.SingleColumn);
-                                                                        })
-                                                                        .Scrollable(scrollable => scrollable.Height("auto"))
-                                                                        .Events(events =>
-                                                                        {
-                                                                            events.Save("onSave");
-                                                                            events.SaveChanges("onSaveChanges");
-                                                                            events.Edit("onEdit");
-                                                                            events.DataBound("onDataBound");
-                                                                            events.DataBinding("onDataBinding");
-                                                                        })
-                                                                        .DataSource(dataSource => dataSource
-                                                                            .Ajax()
-                                                                            .Model(model =>
-                                                                            {
-                                                                                model.Field(c => c.Date).DefaultValue(DateTime.Today);
-                                                                                model.Field(c => c.Somme).DefaultValue(0);
-                                                                                model.Field(c => c.Statut).DefaultValue(IntranetPOPS1819.Models.StatutLigneDeFrais.EnAttente).Editable(false);
-                                                                                model.Field(c => c.Mission).DefaultValue(ViewData["defaultMission"] as IntranetPOPS1819.Models.Mission);
-                                                                                model.Id(p => p.Id);
-                                                                            })
-                                                                            .Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { idNote = Model }))
-                                                                            .Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { n = Model }))
-                                                                            .Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
-                                                                            .Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
-                                                                        )
+																)
+																		.Editable(editable => editable.Mode(GridEditMode.InLine))
+																		.Sortable(sortable =>
+																		{
+																			sortable.SortMode(GridSortMode.SingleColumn);
+																		})
+																		.Scrollable(scrollable => scrollable.Height("auto"))
+																		.Events(events =>
+																		{
+																			events.Save("onSave");
+																			events.SaveChanges("onSaveChanges");
+																			events.Edit("onEdit");
+																			events.DataBound("onDataBound");
+																			events.DataBinding("onDataBinding");
+																		})
+																		.DataSource(dataSource => dataSource
+																			.Ajax()
+																			.Model(model =>
+																			{
+																				model.Field(c => c.Type).DefaultValue(IntranetPOPS1819.Models.TypeLigneDeFrais.Autre);
+																				model.Field(c => c.Date).DefaultValue(DateTime.Today);
+																				model.Field(c => c.Somme).DefaultValue(0);
+																				model.Field(c => c.Statut).DefaultValue(IntranetPOPS1819.Models.StatutLigneDeFrais.EnAttente).Editable(false);
+																				model.Field(c => c.Mission).DefaultValue(ViewData["defaultMission"] as IntranetPOPS1819.Models.Mission);
+																				model.Id(p => p.Id);
+																			})
+																			.Read(read => read.Action("LigneDeFrais_Read", "NoteDeFrais", new { idNote = Model }))
+																			.Create(create => create.Action("LigneDeFrais_Create", "NoteDeFrais", new { n = Model }))
+																			.Update(update => update.Action("LigneDeFrais_Update", "NoteDeFrais"))
+																			.Destroy(destroy => destroy.Action("LigneDeFrais_Destroy", "NoteDeFrais"))
+																		)
 )
 
 												<div class="modal fade" id="msgModalRefusNote" role="dialog">
@@ -127,12 +128,20 @@
 		$('#AddLigne').addClass('Disabled');
 	}
 	$('#EnvoyerNote').click(function () {
-		$('#EnvoyerNote').addClass('Disabled');
-		$('#AddLigne').addClass('Disabled');
-		$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
-			alert('La note de frais a été envoyée');
+		
+		var grid = $("#grid").data("kendoGrid");
+		var items = grid.dataSource.data();
+		if (items.length == 0) {
+			alert('Il n\y a pas de lignes de frais dans cette note. Action impossible.');
+		}
+		else {
+			$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
+				alert('La note de frais a été envoyée');
+				$('#EnvoyerNote').addClass('Disabled');
+				$('#AddLigne').addClass('Disabled');
 			console.log(data);
 		});
+		}
 	});
 </script>
 <script>
