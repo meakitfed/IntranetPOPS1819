@@ -23,7 +23,7 @@
                     <p>Déjà pris cette année :  <font size="5">@Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</font></p>
 
                     <div id="a-prendre">
-                        <p>A prendre :  <font size="5">@Model._Collaborateur.CongesRestants</font></p>
+                        <p>A prendre :  <font size="5">@Model._Collaborateur.CongesRestants (RTT)</font></p>
                     </div>
                     <div class="listbox-area">
                         <div id="demandesAttente" class="left-area">
@@ -135,8 +135,11 @@
                                                         "<div class=\"en-attente\"></div>" +
                                                         "# } else if ($.inArray(+data.date, estValide) != -1) {#" +
                                                         "<div class=\"valide\"></div>" +
+                                                        "# } else if ($.inArray(+data.date, estRefuse) != -1) {#" +
+                                                        "<div class=\"refuse\"></div>" +
                                                         "# } #" +
                                                         "#= data.value #")
+                                                        
                                                     )
 
                             )
@@ -242,8 +245,8 @@
     var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
     var estValide = rawValide.map(x => parseInt(x.substring(6, 19)))
 
-    var rawValide = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesValides() ));
-    var estValide = rawValide.map(x => parseInt(x.substring(6,19)))
+    var rawRefuse = @Html.Raw(Json.Encode(Model._Collaborateur.GetTousJoursCongesRefuses() ));
+    var estRefuse = rawRefuse.map(x => parseInt(x.substring(6, 19)))
 
     @*
     var temp = @Html.Raw(Json.Encode(Model._Collaborateur.GetJSONTousJoursCongesEnAttente() ));
