@@ -210,6 +210,12 @@ namespace IntranetPOPS1819.Models
             return "~/Content/images/collaborateurs/col" + nb + ".jpg";
         }
 
+        public string GetLamePpPath()
+        {
+            int nb = Id % 3;
+            return "~/Content/images/collaborateurs/lamer" + nb + ".jpg";
+        }
+
         public bool isEnConge(System.DateTime date)
         {
             if (Conges != null)

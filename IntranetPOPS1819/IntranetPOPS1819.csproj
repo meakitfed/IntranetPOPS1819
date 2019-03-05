@@ -177,6 +177,9 @@
     <Content Include="Content\images\collaborateurs\col7.jpg" />
     <Content Include="Content\images\collaborateurs\col8.jpg" />
     <Content Include="Content\images\collaborateurs\col9.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer0.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer1.jpg" />
+    <Content Include="Content\images\collaborateurs\lamer2.jpg" />
     <Content Include="Content\images\green.png" />
     <Content Include="Content\images\orange.jpg" />
     <Content Include="Content\images\red.png" />
