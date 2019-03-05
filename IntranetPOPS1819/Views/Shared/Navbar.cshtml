@@ -81,12 +81,13 @@
                 <a class="nav-link" data-toggle="modal" data-target="#msgModal" style="cursor:pointer"><i class="fa fa-envelope"></i></a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i>@if (c.Notifications.Count() > 0)
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i>
+                @if (c.Notifications.Count() > 0)
                 {<span class="badge badge-notify">@c.Notifications.Count()</span>}</a>
                 <div class=" dropdown-menu dropdown-menu-right scrollable-menu " aria-labelledby="navbarDropdownMenuLink">
                     @foreach (var m in c.Notifications)
                     {
-                        <button class="list-group-item" onclick="window.location='@m.Redirection';">
+                        <button class="list-group-item" onclick="retirerNotif(@m.Id, '@m.Redirection')">
                             <b>@m.Titre</b>
                             <p>
                                 <em>@m.Emetteur</em><br />
@@ -104,46 +105,69 @@
             </li>
         </ul>
     </div>
+
     <div class="modal fade" id="msgModal" role="dialog">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Demander les informations</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-row">
-                            <div class="col-md-12" style="margin-left:90px">
-                                <input type="text" class="form-control" id="title" placeholder="Title">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
-                                <textarea class="form-control" rows="10"></textarea>
-                            </div>
-                        </div>
-                        
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="col-md-12" style="margin-left:90px">
-                        <button type="submit" class="btn btn-primary">Envoyer</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Fermer</button>
-                    </div>
-                </div>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Demander les informations</h4>
+				</div>
+				<form id="demandeInfo" action="/onlinejson/test.php" method="POST">
+					<div class="modal-body">
+
+						<div class="form-row">
+							<div class="col-md-12" style="margin-left:90px">
+								<input name="Titre" type="text" class="form-control" id="titleDemandeInfo" placeholder="Title">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
+								<textarea class="form-control" rows="10" id="texteDemandeInfo"></textarea>
+							</div>
+						</div>
+
+
+					</div>
+					<div class="modal-footer">
+						<div class="col-md-12" style="margin-left:90px">
+							<button type="submit" id="submitForm" class="btn btn-primary">Envoyer</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Fermer</button>
+						</div>
+					</div>
+				</form>
             </div>
         </div>
     </div>
 </nav>
     <br />
 }
-
 <script type="text/javascript">
     function lire(e) {
         console.log("bite");
         var dataItem = this.dataItem($(e.currentTarget).closest("div"));
         console.log(dataItem);
     }
+
+
+    function retirerNotif(idNoti, redirection) {
+        $.post('@Url.RouteUrl(new {controller = "UserPage", action = "RetirerNotif" })', { idNotif: idNoti }, function (data) {
+            if (data != 0) alert("Des erreures ont été comises")
+            else window.location.href = redirection;
+        })
+    }
+</script>
+
+<script type="text/javascript">
+	$('#demandeInfo').on('submit', function (e) {
+		e.preventDefault();
+
+		var title = document.getElementById('titleDemandeInfo');
+		var texte = document.getElementById('texteDemandeInfo');
+		
+		$.post('/UserPage/SubmitDemandeInfo', { DemandeInformation: texte.value, DemandeTitre: title.value }, function (data) {
+
+		   });
+	});
 </script>
 
 <style>

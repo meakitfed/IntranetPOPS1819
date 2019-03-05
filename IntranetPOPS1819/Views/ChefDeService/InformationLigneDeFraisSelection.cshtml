@@ -40,22 +40,20 @@
 
 <div class="table-bordered">
     <h3>Détails</h3>
-    <p id="nom"></p>
-    <p id="note"></p>
-    <p id="somme"></p>
+    <div id="details"></div>
 </div>
 
 <script type="text/javascript">
 
     function showDetails(e) {
         e.preventDefault();
+        //console.log("abaaba")
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-        $.get("GetInfoNote", { idNote: dataItem.idNote, idCol: dataItem.idCol }, function (data) {
-
-            document.getElementById("nom").html('Nom : &nbsp;' + data.prenomCol + " " + data.nomCol)
-            document.getElementById("note").html( 'Note du : &nbsp;' + data.date)
-            document.getElementById("somme").html('Somme validée : &nbsp;' + dataItem.sommeValidee)
+        console.log(dataItem.IdCollab, dataItem.IdNote)
+        $.get("GetInfoNote", { idNote: dataItem.IdNote, idCol: dataItem.IdCollab }, function (data) {
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            $("#details").html('<p>Nom : &nbsp;' + data.prenomCol + " " + data.nomCol + "</p>" + '<p>Date note de frais : &nbsp;' + new Date(parseInt(data.date.substr(6))).toLocaleDateString("fr-FR", options) + "</p>" + '<p>Somme validée : &nbsp;' + data.sommeValidee + "</p>")
         })
     }
 </script>

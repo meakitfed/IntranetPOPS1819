@@ -29,15 +29,18 @@
 							<div id="@("service" + s.Id)" style="display:none;">
 								@foreach (Collaborateur c in s.Collaborateurs)
 								{
-									if (firstCollab == -1) { firstCollab = c.Id; }
 									if (c.Id != Model.c.Id)
 									{
-										@Ajax.RawActionLink(string.Format(c.Nom + c.Prenom), "InformationLigneDeFrais", "Compta", new { IdCollab = c.Id }, new AjaxOptions
-									   {
-										   InsertionMode = InsertionMode.Replace,
-										   UpdateTargetId = "InfoNoteActive",
-										   HttpMethod = "Post"
-									   }, new { @class = "btn btn-block btn-3 list-group-item" })
+										if ((c.Service.Type == TypeService.Direction && c.Chef && Model.c.Chef) || (c.Service.Type == TypeService.Direction && !c.Chef) || c.Service.Type != TypeService.Direction)
+										{
+											if (firstCollab == -1) { firstCollab = c.Id; }
+											@Ajax.RawActionLink(string.Format(c.Nom + c.Prenom), "InformationLigneDeFrais", "Compta", new { IdCollab = c.Id }, new AjaxOptions
+										   {
+											   InsertionMode = InsertionMode.Replace,
+											   UpdateTargetId = "InfoNoteActive",
+											   HttpMethod = "Post"
+										   }, new { @class = "btn btn-block btn-3 list-group-item" })
+										}
 									}
 
 								}

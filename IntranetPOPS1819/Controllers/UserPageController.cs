@@ -8,8 +8,8 @@ using System.Web.Mvc;
 
 namespace IntranetPOPS1819.Controllers
 {
-    public class UserPageController : Controller
-    {
+	public class UserPageController : Controller
+	{
 		private IDal dal;
 
 		public UserPageController() : this(new Dal())
@@ -22,6 +22,18 @@ namespace IntranetPOPS1819.Controllers
 			dal = dalIoc;
 		}
 
+		public int SubmitDemandeInfo(string DemandeInformation, string DemandeTitre)
+		{
+			System.Diagnostics.Debug.WriteLine(DemandeTitre + DemandeInformation);
+			if (HttpContext.User.Identity.IsAuthenticated)
+			{
+				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				dal.EnvoiDemandeInformation(new Message { Contenu = DemandeInformation, Emetteur = c.Prenom + " " + c.Nom });
+				return 1;
+			}
+			return 0;
+		}
+
 		[Authorize]
 		public ActionResult Profil()
         {
@@ -31,6 +43,13 @@ namespace IntranetPOPS1819.Controllers
                 viewModel._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
             }
             return View(viewModel);
+        }
+
+        public int RetirerNotif(int idNotif)
+        {
+            IDal dal = new Dal();
+            System.Diagnostics.Debug.WriteLine("ceci est un message des extra-terrestres");
+            return dal.SupprimerNotif(idNotif);
         }
     }
 }
