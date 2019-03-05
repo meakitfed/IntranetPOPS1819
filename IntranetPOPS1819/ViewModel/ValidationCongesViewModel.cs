@@ -8,6 +8,7 @@ namespace IntranetPOPS1819.ViewModel
         public string Nom { get; set; }
         public string Service { get; set; }
         public float CongesRestants { get; set; }
+        public float[] CongesPris { get; set; }
 
         // Congé
         public int Id { get; set; }

@@ -42,14 +42,15 @@
             <td scope="row" id="service">Nom : &nbsp;</td>
         </tr>
         <tr>
-            <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
+            <td scope="row">Congés pris cette année : <br />
+                <span id="congesPris"></span>
+            </td>
             <td>
-                <!-- TODO : DatePicker -->
                 @(Html.Kendo().DatePicker()
-                                    .Name("datePickerCongesRH")
-                                    .Value(DateTime.Today)
+                       .Name("datePickerCongesRH")
+                       .Value(DateTime.Today)
                 )
-                <button id="get" class="k-button">Get</button>
+                <button id="get" class="k-button">Consulter</button>
             </td>
         </tr>
         <tr>
@@ -92,6 +93,7 @@
 
         document.getElementById("nom").innerHTML = 'Nom : &nbsp; ' + dataItem.Nom;
         document.getElementById("service").innerHTML = 'Nom : &nbsp; ' + dataItem.Service;
+        document.getElementById("congesPris").innerHTML = '&nbsp; RTT : &nbsp;' + dataItem.CongesPris[0] + '<br />&nbsp; Sans solde : &nbsp;' + dataItem.CongesPris[1] + '<br />&nbsp; Absences : &nbsp;' + dataItem.CongesPris[2];
         document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
     }
 </script>

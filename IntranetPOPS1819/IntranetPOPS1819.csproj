@@ -5121,7 +5121,6 @@
     <Content Include="Views\NoteDeFrais\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Grid\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\StatutLigneDeFrais.cshtml" />
-    <Content Include="Views\ChefDeService\Conges.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTemplate.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\ResumeFileUrl.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\TypeLigneDeFrais.cshtml" />

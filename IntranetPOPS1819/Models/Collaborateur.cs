@@ -66,7 +66,49 @@ namespace IntranetPOPS1819.Models
 			return 0;
 		}
 
-		public int GetNombreCongesEnAttente()
+        public int GetNombreRTTPrisCetteAnnee()
+        {
+            int nb = 0;
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Debut.Year == DateTime.Now.Year && c.Statut == StatutConge.Valide && c.Type == TypeConge.RTT) nb += c.Fin.Subtract(c.Debut).Days;
+                }
+                return nb;
+            }
+            return 0;
+        }
+
+        public int GetNombreSansSoldePrisCetteAnnee()
+        {
+            int nb = 0;
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Debut.Year == DateTime.Now.Year && c.Statut == StatutConge.Valide && c.Type == TypeConge.SansSolde) nb += c.Fin.Subtract(c.Debut).Days;
+                }
+                return nb;
+            }
+            return 0;
+        }
+
+        public int GetNombreAbsencesPrisCetteAnnee()
+        {
+            int nb = 0;
+            if (Conges != null)
+            {
+                foreach (Conge c in Conges)
+                {
+                    if (c.Debut.Year == DateTime.Now.Year && c.Statut == StatutConge.Valide && c.Type == TypeConge.Absence) nb += c.Fin.Subtract(c.Debut).Days;
+                }
+                return nb;
+            }
+            return 0;
+        }
+
+        public int GetNombreCongesEnAttente()
 		{
 			int nb = 0;
 			if (Conges != null)
