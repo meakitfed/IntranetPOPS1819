@@ -127,12 +127,20 @@
 		$('#AddLigne').addClass('Disabled');
 	}
 	$('#EnvoyerNote').click(function () {
-		$('#EnvoyerNote').addClass('Disabled');
-		$('#AddLigne').addClass('Disabled');
-		$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
-			alert('La note de frais a été envoyée');
+		
+		var grid = $("#grid").data("kendoGrid");
+		var items = grid.dataSource.data();
+		if (items.length == 0) {
+			alert('Il n\y a pas de lignes de frais dans cette note. Action impossible.');
+		}
+		else {
+			$.post( "EnvoyerNote", {IdNote: "@Model"}, function( data ) {
+				alert('La note de frais a été envoyée');
+				$('#EnvoyerNote').addClass('Disabled');
+				$('#AddLigne').addClass('Disabled');
 			console.log(data);
 		});
+		}
 	});
 </script>
 <script>

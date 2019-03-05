@@ -17,19 +17,18 @@
         <div class="container-fluid profil-layout">
             <div class="row">
                 <div id="recapConges" class="col-md-2 row1">
-                    <h5 align="center"><b>Récapitulatif</b></h5>
-                    <h5 align="center"><b>Congés</b></h5>
+                    <h3 align="center"><b>Récapitulatif</b> <br /><b>Congés</b></h3>
                     <br />
 
-                    <p>Déjà pris cette année : <font size="5">@Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</font></p>
+                    <p>Déjà pris cette année :  <font size="5">@Model._Collaborateur.GetNombreCongesPrisCetteAnnee()</font></p>
 
                     <div id="a-prendre">
-                        <p>A prendre : <font size="5">@Model._Collaborateur.CongesRestants</font></p>
+                        <p>A prendre :  <font size="5">@Model._Collaborateur.CongesRestants</font></p>
                     </div>
                     <div class="listbox-area">
                         <div id="demandesAttente" class="left-area">
                             <span id="ss_elem">
-                                Demandes en attente : <font size="5">@Model._Collaborateur.GetNombreCongesEnAttente()</font>
+                                Demandes en attente :  <font size="5">@Model._Collaborateur.GetNombreCongesEnAttente()</font>
                             </span>
                             <br />
                             <br />
@@ -142,20 +141,30 @@
 
                             )
                         </div>
+						<p><span class="dot" style="background-color: #ff0000;"></span> Refusé <span class="dot" style="background-color: #ffca22;"></span> En Attente <span class="dot" style="background-color: #4caf50;"></span> Accepté</p>
                     </div>
                  
                     <br />
 
-                    <div class="form-group">
-                        <label for="selectType">Sélectionnez le type de congé</label>
-                        <select class="form-control text-center" id="selectType">
-                            <option id="no">Type de congé</option>
-                            <option id="rtt">RTT</option>
-                            <option id="sans">Sans solde</option>
-                            <option id="abs">Absence</option>
-                        </select>
-                    </div>
+					<div class="form-group">
+						<label for="selectType">Sélectionnez le type de congé</label>
+						<br />
+						<div class="row">
+							<div class="col-md-5">
 
+							</div>
+							<select class="col-md-2 form-control text-center" id="selectType">
+								<option id="no">Type de congé</option>
+								<option id="rtt">RTT</option>
+								<option id="sans">Sans solde</option>
+								<option id="abs">Absence</option>
+							</select>
+							<div class="col-md-5">
+
+							</div>
+						</div>
+					</div>
+					<br />
 
                     <button id="demanderConge" type="button" class="btn btn-primary">Je veux ce congé !</button>
 
@@ -335,7 +344,14 @@
 
 </script>
 
-<style>
+<style type="text/css">
+
+	.dot {
+	  height: 10px;
+	  width: 10px;
+	  border-radius: 50%;
+	  display: inline-block;
+	}
 
 #calendar,
 #calendar .k-calendar-view,

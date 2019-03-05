@@ -318,7 +318,7 @@ namespace IntranetPOPS1819.Models
 				Collaborateur jean = AjoutCollaborateur("Monrant", "Jean", "jean@gmail.com", "mdp", "06 28 15 32 25");
 				Collaborateur luc = AjoutCollaborateur("Baton", "Luc", "luc@gmail.com", "mdp", "06 13 47 32 89");
                 Collaborateur john = AjoutCollaborateur("Licencié", "John", "john@gmail.com", "mdp", "06 65 54 54 54");
-
+				
                 //création services
                 Service direction = AjoutService("Direction", TypeService.Direction);
                 AssignerService(direction.Id, marie.Id);

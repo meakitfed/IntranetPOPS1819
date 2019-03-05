@@ -65,3 +65,15 @@
     max-width: 100%;
     overflow: hidden;
 }
+
+.list-group-mine .list-group-item {
+	border-top: 2px solid #404040;
+	border-left-color: #fff;
+	border-right-color: #fff;
+	color: white;
+	text-align:center;
+}
+
+.list-group-mine .list-group-item:hover {
+		color: #343a40;
+}
