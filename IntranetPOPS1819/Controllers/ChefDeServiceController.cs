@@ -98,11 +98,14 @@ namespace IntranetPOPS1819.Controllers
 
         public ActionResult GetInfoNote(int idNote, int idCol)
         {
+            System.Diagnostics.Debug.WriteLine("GetInfoNote " + idNote + " " + idCol);
             Dal dal = new Dal();
             NoteDeFrais note = dal.bdd.NotesDeFrais.FirstOrDefault(n => n.Id == idNote);
+            System.Diagnostics.Debug.WriteLine("j'ai la  note");
             Collaborateur col = dal.ObtenirCollaborateur(idCol);
+            System.Diagnostics.Debug.WriteLine("j'ai lle colabo");
 
-            return Json(new { nomCol = col.Nom, prenomCol = col.Prenom, date = note.Actif, sommeValidee = note.GetSommeValidee() });
+            return Json(new { nomCol = col.Nom, prenomCol = col.Prenom, date = note.Date, sommeValidee = note.GetSommeValidee() }, JsonRequestBehavior.AllowGet);
         }
 
 		protected override void Dispose(bool disposing)
