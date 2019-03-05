@@ -400,6 +400,13 @@ namespace IntranetPOPS1819.Models
 			}
 		}
 
+        public int SupprimerNotif(int idNotif)
+        {
+            bdd.Messages.Remove(bdd.Messages.First(m => m.Id == idNotif));
+            bdd.SaveChanges();
+            return 0;
+        }
+
         public void AjoutConge(int idCollab, Conge c)
         {
             c.Type = TypeConge.Defaut;
