@@ -59,6 +59,8 @@ namespace IntranetPOPS1819.Controllers
             Conge conge = new Conge { Debut = Debut, Fin = Fin, Type = TypeConge.RTT };
             //System.Diagnostics.Debug.WriteLine(col + " " + conge + " " +  Debut+ " " + Fin );
 
+            if (conge.Debut <= DateTime.Today.Date) return "Erreur : Vous demandez un congé dans le passé";
+
             string txt = "Service : " + col.Nom + "\n";
             Message notif = new Message(TypeMessage.NotifCongeAller, col.Prenom + col.Nom + " - " + col.Service.Nom, conge);
 
