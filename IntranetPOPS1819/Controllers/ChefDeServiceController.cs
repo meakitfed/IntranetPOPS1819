@@ -10,8 +10,8 @@ using System.Web.Mvc;
 
 namespace IntranetPOPS1819.Controllers
 {
-    public class ChefDeServiceController : Controller
-    {
+	public class ChefDeServiceController : Controller
+	{
 		private Dal dal;
 
 		public ChefDeServiceController() : this(new Dal())
@@ -26,8 +26,8 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult ValiderLigne(int Id)
 		{
-            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-            System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
+			Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+			System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
 			LigneDeFrais ligne = dal.bdd.LigneDeFrais.FirstOrDefault(l => l.Id == Id);
 			Collaborateur col = dal.bdd.Collaborateurs.FirstOrDefault(co => co.Id == ligne.IdCollab);
 			System.Diagnostics.Debug.WriteLine("Ligne du collaborateur " + col.Nom + " " + col.Prenom + " du service " + col.Service.Nom + " et chef ? " + col.Chef);
@@ -41,12 +41,12 @@ namespace IntranetPOPS1819.Controllers
 			}
 
 			//TODO
-			
-			foreach(NoteDeFrais n in col.NotesDeFrais)
+
+			foreach (NoteDeFrais n in col.NotesDeFrais)
 			{
 				if (n.LignesDeFrais.Contains(ligne))
 				{
-					if(n.EstValidéeParLeChef())
+					if (n.EstValidéeParLeChef())
 					{
 						System.Diagnostics.Debug.WriteLine("Envoi de la note, elle est bien validée par le chef" + Id);
 						dal.EnvoiNoteDeFrais(col.Service.Id, col.Id, n.Id);
@@ -60,7 +60,7 @@ namespace IntranetPOPS1819.Controllers
 				}
 			}
 
-            //dal.ValiderConge(c.Id, new Message { Titre = "Validation de Note", Date = DateTime.Now, Contenu = "Une Ligne de frais a été validée par le chef de service"})
+			//dal.ValiderConge(c.Id, new Message { Titre = "Validation de Note", Date = DateTime.Now, Contenu = "Une Ligne de frais a été validée par le chef de service"})
 			return null;
 		}
 
@@ -73,28 +73,31 @@ namespace IntranetPOPS1819.Controllers
 		}
 		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int idCol)
 		{
-                List<LigneDeFrais> l = new List<LigneDeFrais>();
-                foreach (NoteDeFrais n in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais)
-                {
-                    l.AddRange(n.LignesDeFrais.Where(s => (s.Statut != StatutLigneDeFrais.Validée && s.Statut != StatutLigneDeFrais.ValidéeChef && s.IdCollab == idCol)));
-                }
-                IQueryable<LigneDeFrais> lignedefrais = l.AsQueryable();
-                /*IQueryable<LigneDeFrais> lignedefrais = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();           /*foreach(LigneDeFrais l in lignedefrais)*/
-                /*System.Diagnostics.Debug.WriteLine(l.Mission.Nom);*/
-                DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
-                    Id = ligneDeFrais.Id,
-                    Nom = ligneDeFrais.Nom,
-                    Somme = ligneDeFrais.Somme,
-                    Type = ligneDeFrais.Type,
-                    Statut = ligneDeFrais.Statut,
-                    Date = ligneDeFrais.Date,
-                    ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
-                    Filename = ligneDeFrais.Filename,
-                    Mission = ligneDeFrais.Mission,
-					IdCollab = ligneDeFrais.IdCollab,
-                    IdNote = ligneDeFrais.IdNote,
-					Commentaire = ligneDeFrais.Commentaire,
-				});
+			List<LigneDeFrais> l = new List<LigneDeFrais>();
+			foreach (NoteDeFrais n in dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais)
+			{
+				l.AddRange(n.LignesDeFrais.Where(s => (s.Statut != StatutLigneDeFrais.Validée && s.Statut != StatutLigneDeFrais.ValidéeChef && s.IdCollab == idCol)));
+			}
+			IQueryable<LigneDeFrais> lignedefrais = l.AsQueryable();
+			/*IQueryable<LigneDeFrais> lignedefrais = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name).Service.NotesDeFrais.FirstOrDefault(n => n.Id == IdNote).LignesDeFrais.AsQueryable();           /*foreach(LigneDeFrais l in lignedefrais)*/
+			/*System.Diagnostics.Debug.WriteLine(l.Mission.Nom);*/
+			DataSourceResult result = lignedefrais.ToDataSourceResult(request, ligneDeFrais => new {
+				Id = ligneDeFrais.Id,
+				Nom = ligneDeFrais.Nom,
+				Somme = ligneDeFrais.Somme,
+				Type = ligneDeFrais.Type,
+				Statut = ligneDeFrais.Statut,
+				Date = ligneDeFrais.Date,
+				ResumeFileUrl = ligneDeFrais.ResumeFileUrl,
+				Filename = ligneDeFrais.Filename,
+				Mission = ligneDeFrais.Mission,
+				IdCollab = ligneDeFrais.IdCollab,
+				IdNote = ligneDeFrais.IdNote,
+				Commentaire = ligneDeFrais.Commentaire,
+				Note = new NoteDeFrais
+				{
+					Date = ligneDeFrais.Note.Date
+				} });
 
                 return Json(result);
         }

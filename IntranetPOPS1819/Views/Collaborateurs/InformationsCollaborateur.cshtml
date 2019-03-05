@@ -5,87 +5,90 @@
 
     <div class="row" style="height: 100%">
 
-        <div class="col-9 row1">
-            <div class="row text-center justify-content-center">
-                <h1 class="text-center">@Model.Prenom @Model.Nom</h1>
-            </div>
-            <div class="row">
+		<div class="col-9 row1">
+			<div class="row text-center justify-content-center">
+				<h1 class="text-center">@Model.Prenom @Model.Nom</h1>
+			</div>
+			<br />
+			<br />
 
-                <div class="col">
+			<div class="row">
 
-                    <div id="infos" class="text-center">
+				<div class="col">
 
-                        <br />
-                        <p>Service : @Model.Service.Nom</p>
-                        <p>
-                            Present :	@if (Model.isEnConge())
-                            {
-                                <text>non <i class="em em-cry"></i></text>
-                            }
-                            else
-                            {
-                                <text>oui</text>
-                            }
-                        </p>
-                        <p><i class="em em-e-mail"></i> : @Model.Mail</p>
-                        <p><i class="em em-telephone_receiver"></i> : @Model.Telephone</p>
-                    </div>
+					<div id="infos" class="text-center">
 
-
-
-                </div>
-
-                <div class="col">
-
-                    <img src="@Url.Content(Model.GetLamePpPath())" id="pp" class="rounded border border-dark">
-
-                </div>
-            </div>
-            @{
-                IDal d = new Dal();
-                Collaborateur loggedInUser = d.ObtenirCollaborateur(User.Identity.Name);
-                List<Service> services = d.ObtenirTousLesServices();
-                if (loggedInUser.Admin)
-                {
-                    <br />
-                    <br />
-                    <br />
-
-                    <div class="row justify-content-center">
-                        <div id="actions">
-                            <select id="serviceSelect" class="selectpicker">
-                                <option id="noselect">Nouveau service</option>
-                                @foreach (Service s in services)
-                                {
-                                    <option id="@s.Id">@s.Nom</option>
-                                }
-                            </select>
-                            <button type="button" class="btn-dark" onclick="changer()">Changer de service</button>
-
-                            <div id="retour-changement"></div>
-
-                            <br />
-                            <br />
-                            <br />
-
-                            <button type="button" class="btn btn-danger" onclick="licencier()">Licencier !</button>
-                            <div id="retour-licencier"></div>
-                        </div>
-                    </div>
-                }
-            }
+						<br />
+						<p>Service : @Model.Service.Nom</p>
+						<p>
+							Present :	@if (Model.isEnConge())
+							{
+								<text>non <i class="em em-cry"></i></text>
+							}
+							else
+							{
+								<text>oui</text>
+							}
+						</p>
+						<p><i class="em em-e-mail"></i> : @Model.Mail</p>
+						<p><i class="em em-telephone_receiver"></i> : @Model.Telephone</p>
+					</div>
 
 
 
-        </div>
+				</div>
+
+				<div class="col">
+
+					<img src="@Url.Content(Model.GetLamePpPath())" id="pp" class="rounded border border-dark">
+
+				</div>
+			</div>
+			@{
+				IDal d = new Dal();
+				Collaborateur loggedInUser = d.ObtenirCollaborateur(User.Identity.Name);
+				List<Service> services = d.ObtenirTousLesServices();
+				if (loggedInUser.Admin)
+				{
+					<br />
+					<br />
+					<br />
+
+					<div class="row justify-content-center">
+						<div id="actions">
+							<select id="serviceSelect" class="selectpicker">
+								<option id="noselect">Nouveau service</option>
+								@foreach (Service s in services)
+								{
+									<option id="@s.Id">@s.Nom</option>
+								}
+							</select>
+							<button type="button" class="btn-dark" onclick="changer()">Changer de service</button>
+
+							<div id="retour-changement"></div>
+
+							<br />
+							<br />
+							<br />
+
+							<button type="button" class="btn btn-danger" onclick="licencier()">Licencier !</button>
+							<div id="retour-licencier"></div>
+						</div>
+					</div>
+				}
+			}
+
+
+
+		</div>
 
         <div class="col-3 row1">
-            <h2 class="row3-h">Service @Model.Service.Nom</h2>
+            <h2 class="row3-h text-center">Service @Model.Service.Nom</h2>
             <br />
-            <p><span class="glyphicon glyphicon-calendar"></span> @DateTime.Today.ToString("dd/MM/yyyy")</p>
+            <p class="text-center"><span class="glyphicon glyphicon-calendar"></span> @DateTime.Today.ToString("dd/MM/yyyy")</p>
             <br />
-            <p class="table-bordered">Nombre de collaborateurs absents : @Model.Service.GetNombreCollaborateursEnConges()</p>
-            <p class="table-bordered">Proportion dans le service : @Model.Service.GetProportionAbsents()%</p>
+            <p class="table-bordered text-center">Nombre de collaborateurs absents : @Model.Service.GetNombreCollaborateursEnConges()</p>
+            <p class="table-bordered text-center">Proportion dans le service : @Model.Service.GetProportionAbsents()%</p>
         </div>
     </div>
 

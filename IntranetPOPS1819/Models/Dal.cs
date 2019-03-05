@@ -290,6 +290,12 @@ namespace IntranetPOPS1819.Models
 			s.NotesDeFrais.Remove(n);
 			bdd.SaveChanges();
 		}
+		public void AssocierNomDocument(int IdLigne, string filename)
+		{
+			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(c => c.Id == IdLigne);
+			ligne.Filename = filename;
+			bdd.SaveChanges();
+		}
 		public void MessageDeRefusLigneDefrais(int IdLigne, string message)
 		{
 			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(l => l.Id == IdLigne);
@@ -300,7 +306,15 @@ namespace IntranetPOPS1819.Models
 		public void EnvoiDemandeInformation(Message m)
 		{
 			Service service = bdd.Services.FirstOrDefault(c => TypeService.RessourcesHumaines == c.Type);
+			bdd.Messages.Add(m);
 			service.Messages.Add(m);
+			bdd.SaveChanges();
+		}
+		public void SupprimerDemandeInformation(int id)
+		{
+			Service service = bdd.Services.FirstOrDefault(c => TypeService.RessourcesHumaines == c.Type);
+			Message m = bdd.Messages.FirstOrDefault(c => id == c.Id);
+			service.Messages.Remove(m);
 			bdd.SaveChanges();
 		}
 		public void InitializeBdd()
@@ -436,6 +450,7 @@ namespace IntranetPOPS1819.Models
 					System.Diagnostics.Debug.WriteLine("note != null");
 					ligne.IdCollab = idCollab;
                     ligne.IdNote = idNote;
+					ligne.Note = note;
                     note.LignesDeFrais.Add(ligne);
 					bdd.LigneDeFrais.Add(ligne);
 					System.Diagnostics.Debug.WriteLine("Création ligne de frais dans la BDD");

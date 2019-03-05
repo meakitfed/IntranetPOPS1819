@@ -9,12 +9,14 @@
 				@for (int i = 0; i < Model.Service.Messages.Count; i++)
 				{
 					if (message == null) { message = Model.Service.Messages[i]; }
+					<div id="('message' + @Model.Service.Messages[i].Id)">
 					@Ajax.ActionLink(Model.Service.Messages[i].Emetteur, "InformationMessage", new { id = Model.Service.Messages[i].Id }, new AjaxOptions
 					{
 						InsertionMode = InsertionMode.Replace,
 						UpdateTargetId = "InfoMessage",
 						HttpMethod = "Post"
-					}, new { @class = "list-group-item btn btn-block btn-3" })
+					}, new { @class = "list-group-item btn btn-block btn-3"})
+					</div>
 				}
 			</div>
 			<br />
@@ -28,5 +30,5 @@
 			}
 		</div>
 	</div>
-	
 }
+

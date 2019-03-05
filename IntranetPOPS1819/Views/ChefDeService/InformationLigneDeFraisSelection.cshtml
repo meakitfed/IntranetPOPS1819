@@ -1,46 +1,48 @@
 ﻿@using IntranetPOPS1819.Models
 @model int
 @(Html.Kendo().Grid<IntranetPOPS1819.Models.LigneDeFrais>()
-                              .Name("LigneDeFrais")
-                              .HtmlAttributes(new { style = "height: 500px" })
-                              .Columns(columns =>
-                              {
-                                  columns.Bound(c => c.Nom);
-                                  columns.Bound(c => c.Somme);
-                                  columns.Bound(c => c.Statut).ClientTemplate(
-                                    "# if (Statut == 1){ #" +
-                                        "<font color=\"DarkOrange\">En Attente</font>" +
-                                    "# }else if(Statut == 2){ #" +
-                                        "<font color=\"ForestGreen\">Validée par le chef</font>" +
-                                    "# }else if(Statut == 3){ #" +
-                                        "<font color=\"ForestGreen\">Validée</font>" +
-                                    "# }else{ #" +
-                                        "<font color=\"FireBrick\">Refusée</font>" + "# } #"
-                                    );
-                                  columns.Bound(c => c.Date);
-                                  columns.Bound(c => c.Mission).ClientTemplate(
-                                    "#= Mission.Nom #"
-                                );
-                                  columns.Bound(c => c.Type);
-                                  columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetails"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
-                              })
-                                        .Sortable(sortable =>
-                                        {
-                                            sortable.SortMode(GridSortMode.SingleColumn);
-                                        })
-                                        .Scrollable(scrollable => scrollable.Height("auto"))
-                                        .DataSource(dataSource => dataSource
-                                            .Ajax()
-                                            .Model(model => model.Id(p => p.Id))
-                                            .Read(read => read.Action("LigneDeFrais_Read", "ChefDeService", new { idCol = Model }))
-                                        )
+							  .Name("LigneDeFrais")
+							  .HtmlAttributes(new { style = "height: 500px" })
+							  .Columns(columns =>
+							  {
+								  columns.Bound(c => c.Nom);
+								  columns.Bound(c => c.Somme);
+								  columns.Bound(c => c.Statut).ClientTemplate(
+									"# if (Statut == 1){ #" +
+										"<font color=\"DarkOrange\">En Attente</font>" +
+									"# }else if(Statut == 2){ #" +
+										"<font color=\"ForestGreen\">Validée par le chef</font>" +
+									"# }else if(Statut == 3){ #" +
+										"<font color=\"ForestGreen\">Validée</font>" +
+									"# }else{ #" +
+										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
+									);
+								  columns.Bound(c => c.Date);
+								  columns.Bound(c => c.Filename).ClientTemplate("#= (Filename) ? Filename : \"Aucun Justificatif\" #");
+								  columns.Bound(c => c.Note.Date).ClientTemplate("#= Note.Date ? kendo.toString(kendo.parseDate(Note.Date), 'y') : '' #");
+								  columns.Bound(c => c.Mission).ClientTemplate(
+									"#= Mission.Nom #"
+								);
+								  columns.Bound(c => c.Type);
+								  columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetails"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
+							  })
+										.Sortable(sortable =>
+										{
+											sortable.SortMode(GridSortMode.SingleColumn);
+										})
+										.Scrollable(scrollable => scrollable.Height("auto"))
+										.DataSource(dataSource => dataSource
+											.Ajax()
+											.Model(model => model.Id(p => p.Id))
+											.Read(read => read.Action("LigneDeFrais_Read", "ChefDeService", new { idCol = Model }))
+										)
 )
 
 <div class="modal fade" id="msgModalRefusNote" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Demander les informations</h4>
+				<h4 class="modal-title text-center">Justifier le refus</h4>
 			</div>
 			<form id="messageRefus" method="POST">
 				<div class="modal-body">
@@ -121,6 +123,7 @@
 				data: { id: dataOFSelectedLine.Id, message: texte.value }
 			})
 			console.log('envoi du commentaire : ' + texte.value);
+			texte.value = "";
 		}
 		else {
 			console.log(dataOFSelectedLine);

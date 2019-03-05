@@ -121,13 +121,18 @@ namespace IntranetPOPS1819.Controllers
 						System.Diagnostics.Debug.WriteLine(v);
 					}
 				}
-				/*foreach(HttpPostedFileBase f in Session["RESUMEFILE"] as List<HttpPostedFileBase>)
+				if(Session["RESUMEFILE"] != null)
 				{
-					DirectoryInfo di = Directory.CreateDirectory(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id));
-					f.SaveAs(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id + "/" + f.FileName));
-					System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + f.FileName + "length" + f.ContentLength);
+					foreach (HttpPostedFileBase f in Session["RESUMEFILE"] as List<HttpPostedFileBase>)
+					{
+						DirectoryInfo di = Directory.CreateDirectory(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id));
+						//f.SaveAs(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id + "/" + f.FileName));
+						dal.AssocierNomDocument(ligneDeFrais.Id, f.FileName);
+						ligneDeFrais.Filename = f.FileName; 
+						System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + f.FileName + "length" + f.ContentLength);
+					}
 				}
-				Session.Remove("RESUMEFILE");*/
+				Session.Remove("RESUMEFILE");
 
 				System.Diagnostics.Debug.WriteLine("Passage dans LigneDeFrais_Create envoie des données");
 				return Json(new[] { ligneDeFrais }.ToDataSourceResult(request, ModelState));
@@ -167,7 +172,20 @@ namespace IntranetPOPS1819.Controllers
 					System.Diagnostics.Debug.WriteLine("Changement Statut de Refusé à EnAttente après édition");
 					dal.ChangerStatutLigneDeFrais(entity.Id, StatutLigneDeFrais.EnAttente);
 				}
-				
+				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+				if (Session["RESUMEFILE"] != null)
+				{
+					foreach (HttpPostedFileBase f in Session["RESUMEFILE"] as List<HttpPostedFileBase>)
+					{
+						DirectoryInfo di = Directory.CreateDirectory(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id));
+						//f.SaveAs(Server.MapPath("~/Justifications/" + c.Id + "/" + ligneDeFrais.Id + "/" + f.FileName));
+						dal.AssocierNomDocument(ligneDeFrais.Id, f.FileName);
+						ligneDeFrais.Filename = f.FileName;
+						System.Diagnostics.Debug.WriteLine("Passage dans SaveResumeFile, Nom du fichier enregistré : " + f.FileName + "length" + f.ContentLength);
+					}
+				}
+				Session.Remove("RESUMEFILE");
+
 			}
 			else
 			{

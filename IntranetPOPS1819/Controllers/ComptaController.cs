@@ -99,6 +99,10 @@ namespace IntranetPOPS1819.Controllers
 				IdCollab = ligneDeFrais.IdCollab,
                 IdNote = ligneDeFrais.IdNote,
 				Commentaire = ligneDeFrais.Commentaire,
+				Note = new NoteDeFrais
+				{
+					Date = ligneDeFrais.Note.Date
+				}
 			});
 
 			return Json(result);
