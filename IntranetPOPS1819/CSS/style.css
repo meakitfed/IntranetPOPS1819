@@ -84,3 +84,8 @@
 	background-color: #cccccc;
 	color: #666666;
 }
+
+.list-group-item:focus {
+	font-size: 20px;
+	border: 2px solid black;
+}
