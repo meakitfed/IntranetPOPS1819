@@ -299,14 +299,15 @@ namespace IntranetPOPS1819.Models
 				Collaborateur brian = AjoutCollaborateur("Martin", "Brian", "admin@gmail.com", "admin", "07 06 12 09 83", admin: true);
 
                 Collaborateur didier = AjoutCollaborateur("Degroote", "Didier", "didier@gmail.com", "dede", "06 54 12 09 83");
-                Collaborateur coco = AjoutCollaborateur("Corentin", "Manscour", "coconacros@gmail.com", "coco", "07 06 06 06 06");
+                Collaborateur coco = AjoutCollaborateur("Manscour", "Corentin", "coconacros@gmail.com", "coco", "07 06 06 06 06");
                 Collaborateur isabelle = AjoutCollaborateur("Soun", "Isabelle", "isabelle@gmail.com", "isa", "07 06 12 09 83");
-                Collaborateur marie = AjoutCollaborateur("Marie-Christine", "Henriot", "marie@gmail.com", "mch", "06 13 63 32 18");
-				Collaborateur jean = AjoutCollaborateur("Jean", "Monrant", "jean@gmail.com", "mdp", "06 28 15 32 25");
-				Collaborateur luc = AjoutCollaborateur("Luc", "Baton", "luc@gmail.com", "mdp", "06 13 47 32 89");
+                Collaborateur marie = AjoutCollaborateur("Henriot", "Marie-Christine", "marie@gmail.com", "mch", "06 13 63 32 18");
+				Collaborateur jean = AjoutCollaborateur("Monrant", "Jean", "jean@gmail.com", "mdp", "06 28 15 32 25");
+				Collaborateur luc = AjoutCollaborateur("Baton", "Luc", "luc@gmail.com", "mdp", "06 13 47 32 89");
+                Collaborateur john = AjoutCollaborateur("Licencié", "John", "john@gmail.com", "mdp", "06 65 54 54 54");
 
-				//création services
-				Service direction = AjoutService("Direction", TypeService.Direction);
+                //création services
+                Service direction = AjoutService("Direction", TypeService.Direction);
                 AssignerService(direction.Id, marie.Id);
                 AssignerChefDeService(marie.Id);
 
@@ -320,6 +321,7 @@ namespace IntranetPOPS1819.Models
                 Service rh = AjoutService("Ressource Humaines", TypeService.RessourcesHumaines);
 				AssignerService(rh.Id, isabelle.Id);
                 AssignerChefDeService(isabelle.Id);
+                AssignerService(rh.Id, john.Id);
 
 				string Demande =
 				"Bonjour, \n" +
@@ -345,6 +347,7 @@ namespace IntranetPOPS1819.Models
                 MiseAJourNotesDeFrais(coco.Id);
 				MiseAJourNotesDeFrais(jean.Id);
 				MiseAJourNotesDeFrais(luc.Id);
+                MiseAJourNotesDeFrais(john.Id);
 
 
 				//tout le monde se voit assigner toutes les missions
@@ -373,6 +376,8 @@ namespace IntranetPOPS1819.Models
 				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
 				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
+
+                SupprimerCollaborateur(john.Id);
 			}
             catch (DbEntityValidationException e)
             {
