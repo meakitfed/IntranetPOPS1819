@@ -47,12 +47,22 @@ namespace IntranetPOPS1819.Controllers
 				Collaborateur utilisateur = dal.Authentifier(viewModel._Collaborateur.Mail, viewModel._Collaborateur.MotDePasse);
 				if (utilisateur != null)
 				{
-					FormsAuthentication.SetAuthCookie(utilisateur.Id.ToString(), false);
-					/*if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
-						return Redirect(returnUrl);*/
-					return Redirect("/UserPage/Profil");
+                    if(utilisateur.Licencie)
+                    {
+                        ModelState.AddModelError("Utilisateur.Prenom", "Vous avez été licencié, désolé");
+                    }
+                    else
+                    {
+					    FormsAuthentication.SetAuthCookie(utilisateur.Id.ToString(), false);
+					    /*if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+						    return Redirect(returnUrl);*/
+					    return Redirect("/UserPage/Profil");
+                    }
 				}
-				ModelState.AddModelError("Utilisateur.Prenom", "Prénom et/ou mot de passe incorrect(s)");
+                else
+                {
+				    ModelState.AddModelError("Utilisateur.Prenom", "Prénom et/ou mot de passe incorrect(s)");
+                }
 			}
 			return View(viewModel);
 		}

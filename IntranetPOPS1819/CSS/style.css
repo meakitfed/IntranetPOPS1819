@@ -38,6 +38,10 @@
     margin: 0px auto;
 }
 
+/*.nav-item {
+    float: right;
+}*/
+
 .scrollable-menu {
     height: auto;
     max-height: 200px;

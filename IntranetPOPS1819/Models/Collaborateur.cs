@@ -28,6 +28,7 @@ namespace IntranetPOPS1819.Models
 		//Garder ? TODO
 		public bool Admin { get; set; } = false;
         public bool Chef { get; set; } = false;
+        public bool Licencie { get; set; } = false;
         //[RegularExpression(@"^0[0-9]{9}$")]
 		public string Telephone { get; set; }
 
