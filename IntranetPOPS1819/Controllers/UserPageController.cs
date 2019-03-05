@@ -32,5 +32,12 @@ namespace IntranetPOPS1819.Controllers
             }
             return View(viewModel);
         }
+
+        public int RetirerNotif(int idNotif)
+        {
+            IDal dal = new Dal();
+            System.Diagnostics.Debug.WriteLine("ceci est un message des extra-terrestres");
+            return dal.SupprimerNotif(idNotif);
+        }
     }
 }
