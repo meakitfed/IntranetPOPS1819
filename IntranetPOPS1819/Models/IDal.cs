@@ -18,6 +18,7 @@ namespace IntranetPOPS1819.Models
 		Collaborateur ObtenirDirecteurFinancier();
 		Collaborateur ObtenirPDG();
         Collaborateur ObtenirDRH();
+        void SupprimerCollaborateur(int idCol);
 
 		// Services
 		Service ObtenirServiceDeType(TypeService type);

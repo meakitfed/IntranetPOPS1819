@@ -25,6 +25,22 @@ namespace IntranetPOPS1819.Controllers
 			return PartialView(col);
 		}
 
+        public int Licencier(int idCol)
+        {
+            IDal dal = new Dal();
+            dal.SupprimerCollaborateur(idCol);
+
+            return 0;
+        }
+
+        public int ChangerService(int idCol, int idSer)
+        {
+            IDal dal = new Dal();
+            dal.AssignerService(idSer, idCol);
+
+            return 0;
+        }
+
        
     }
 

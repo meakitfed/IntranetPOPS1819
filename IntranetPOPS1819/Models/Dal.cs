@@ -87,6 +87,13 @@ namespace IntranetPOPS1819.Models
             return null;
         }
 
+        public void SupprimerCollaborateur(int idCol)
+        {
+            Collaborateur col = bdd.Collaborateurs.First(c => c.Id == idCol);
+            col.Licencie = true;
+            bdd.SaveChanges();
+        }
+
         public void EnvoiNoteDeFrais(int idService, int idCollab, int idNote)
 		{
 			Collaborateur c = bdd.Collaborateurs.FirstOrDefault(col => col.Id == idCollab);
@@ -578,6 +585,15 @@ namespace IntranetPOPS1819.Models
 			c.Service = s;
 			bdd.SaveChanges();
 		}
+
+        //public void ChangerService(int idService, int idCollaborateur)
+        //{
+        //    Service s = bdd.Services.FirstOrDefault(serv => serv.Id == idService);
+        //    Collaborateur c = bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollaborateur);
+        //    s.Collaborateurs.Add(c);
+        //    c.Service = s;
+        //    bdd.SaveChanges();
+        //}
 
         public void AssignerMission(int idMission, int idCollaborateur)
         {
