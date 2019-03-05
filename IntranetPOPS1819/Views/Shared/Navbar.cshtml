@@ -104,46 +104,61 @@
             </li>
         </ul>
     </div>
+
     <div class="modal fade" id="msgModal" role="dialog">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Demander les informations</h4>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-row">
-                            <div class="col-md-12" style="margin-left:90px">
-                                <input type="text" class="form-control" id="title" placeholder="Title">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
-                                <textarea class="form-control" rows="10"></textarea>
-                            </div>
-                        </div>
-                        
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="col-md-12" style="margin-left:90px">
-                        <button type="submit" class="btn btn-primary">Envoyer</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Fermer</button>
-                    </div>
-                </div>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Demander les informations</h4>
+				</div>
+				<form id="demandeInfo" action="/onlinejson/test.php" method="POST">
+					<div class="modal-body">
+
+						<div class="form-row">
+							<div class="col-md-12" style="margin-left:90px">
+								<input name="Titre" type="text" class="form-control" id="titleDemandeInfo" placeholder="Title">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="col-md-12" style=" margin-top: 10px; margin-left:90px">
+								<textarea class="form-control" rows="10" id="texteDemandeInfo"></textarea>
+							</div>
+						</div>
+
+
+					</div>
+					<div class="modal-footer">
+						<div class="col-md-12" style="margin-left:90px">
+							<button type="submit" id="submitForm" class="btn btn-primary">Envoyer</button>
+							<button type="button" class="btn btn-primary" data-dismiss="modal" style="float:right">Fermer</button>
+						</div>
+					</div>
+				</form>
             </div>
         </div>
     </div>
 </nav>
     <br />
 }
+<script type="text/javascript">
+		function lire(e) {
+			console.log("bite");
+			var dataItem = this.dataItem($(e.currentTarget).closest("div"));
+			console.log(dataItem);
+		}
+</script>
 
 <script type="text/javascript">
-    function lire(e) {
-        console.log("bite");
-        var dataItem = this.dataItem($(e.currentTarget).closest("div"));
-        console.log(dataItem);
-    }
+	$('#demandeInfo').on('submit', function (e) {
+		e.preventDefault();
+
+		var title = document.getElementById('titleDemandeInfo');
+		var texte = document.getElementById('texteDemandeInfo');
+		
+		$.post('/UserPage/SubmitDemandeInfo', { DemandeInformation: texte.value, DemandeTitre: title.value }, function (data) {
+
+		   });
+	});
 </script>
 
 <style>
