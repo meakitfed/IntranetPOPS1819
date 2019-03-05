@@ -216,6 +216,7 @@ namespace IntranetPOPS1819.Controllers
                     data.Id,
                     data.Debut,
                     data.Fin,
+                    data.Type,
                     data.Nom,
                     data.Service,
                     data.CongesRestants
@@ -350,6 +351,25 @@ namespace IntranetPOPS1819.Controllers
                 return Json(collabos, JsonRequestBehavior.AllowGet);
             }
             return null;
+        }
+
+        public int InfosAbsents(DateTime date)
+        {
+            IDal dal = new Dal();
+            Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+
+            return c.Service.GetNombreCollaborateursEnConges(date);
+        }
+
+        public string ProportionAbsents(DateTime date, string text)
+        {
+            Debug.WriteLine(text);
+            IDal dal = new Dal();
+            Service s = dal.ObtenirTousLesServices().FirstOrDefault(serv => text.Contains(serv.Nom) == true);
+            int num = s.GetNombreCollaborateursEnConges(date), den = s.Collaborateurs.Count();
+
+            return num + " / " + den + "(" + (num / den) + "% )";
+
         }
     }
 }

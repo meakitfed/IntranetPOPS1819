@@ -1,5 +1,9 @@
 ﻿using IntranetPOPS1819.Models;
 using IntranetPOPS1819.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace IntranetPOPS1819.Controllers
@@ -12,15 +16,28 @@ namespace IntranetPOPS1819.Controllers
 		{
 			dal= new Dal();
 		}
+
         public ActionResult NouveauCollabo()
         {
-			if (HttpContext.User.Identity.IsAuthenticated)
+            dal = new Dal();
+            ViewBag.Service = new SelectList(dal.ObtenirTousLesServices(), "Id", "Nom");
+            IEnumerable<SelectListItem> servicesList =
+                                from category in dal.ObtenirTousLesServices()
+                                select new SelectListItem
+                                {
+                                    Text = category.Nom,
+                                    Value = category.Id.ToString()
+                                };
+            ViewData["services"] = servicesList;
+
+            if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				NouveauCollaborateurViewModel vm = new NouveauCollaborateurViewModel
 				{
-					_Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name)
+                    _Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name)
 				};
-				return View(vm);
+                
+                return View(vm);
 			}
 			return View();
 		}
@@ -28,11 +45,15 @@ namespace IntranetPOPS1819.Controllers
         [HttpPost]
         public ActionResult NouveauCollabo(NouveauCollaborateurViewModel vm)
         {
-			if (HttpContext.User.Identity.IsAuthenticated)
+            Debug.WriteLine(vm.Service);
+            int id = Convert.ToInt32(vm.Service);
+
+
+            if (HttpContext.User.Identity.IsAuthenticated)
 			{
-				int id = dal.AjoutCollaborateur(vm.Nom, vm.Prenom, vm.Mail, vm.Nom).Id;
+				dal.AjoutCollaborateur(vm.Nom, vm.Prenom, vm.Mail, vm.Nom, id);
 				foreach (Collaborateur col in dal.ObtenirTousLesCollaborateurs())
-					System.Diagnostics.Debug.WriteLine(col.Nom);
+					Debug.WriteLine(col.Nom);
 
 				vm._Collaborateur = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 				return View(vm);

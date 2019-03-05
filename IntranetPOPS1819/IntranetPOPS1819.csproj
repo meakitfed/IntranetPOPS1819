@@ -5125,7 +5125,6 @@
     <Content Include="Views\Compta\InformationLigneDeFrais.cshtml" />
     <Content Include="Views\Collaborateurs\Index.cshtml" />
     <Content Include="Views\Collaborateurs\InformationsCollaborateur.cshtml" />
-    <Content Include="Views\ChefDeService\InfosService.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MissionsViewModel.cshtml" />
     <Content Include="Views\ChefDeService\InfosService2.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\StatutMission.cshtml" />

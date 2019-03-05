@@ -13,6 +13,7 @@ namespace IntranetPOPS1819.Models
         List<Collaborateur> ObtenirCollaborateursService(int id);
         Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, string tel, bool chef = false, bool admin = false);
         Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, bool chef = false, bool admin = false);
+        Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, int idService, bool chef = false, bool admin = false);
         void AssignerChefDeService(int idCollab);
 		Collaborateur ObtenirDirecteurFinancier();
 		Collaborateur ObtenirPDG();

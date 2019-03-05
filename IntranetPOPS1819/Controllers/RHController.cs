@@ -4,6 +4,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -28,6 +29,7 @@ namespace IntranetPOPS1819.Controllers
 		{
 			return PartialView(dal.bdd.Messages.FirstOrDefault(m => m.Id == id));
 		}
+
 		public ActionResult Conges_ReadRH([DataSourceRequest]DataSourceRequest request)
         {
             IDal dal = new Dal();
@@ -78,6 +80,7 @@ namespace IntranetPOPS1819.Controllers
                     data.Id,
                     data.Debut,
                     data.Fin,
+                    data.Type,
                     data.Nom,
                     data.Service,
                     data.CongesRestants
@@ -130,9 +133,15 @@ namespace IntranetPOPS1819.Controllers
             return c.Service.GetNombreCollaborateursEnConges(date);
         }
 
-        /*public float ProportionAbsents(int nb)
+        public string ProportionAbsents(DateTime date, string text)
         {
-            return 100*nb /
-        }*/
+            Debug.WriteLine(text);
+            IDal dal = new Dal();
+            Service s = dal.ObtenirTousLesServices().FirstOrDefault(serv => text.Contains(serv.Nom) == true);
+            int num = s.GetNombreCollaborateursEnConges(date), den = s.Collaborateurs.Count();
+
+            return num + " / " + den + "(" + (num/den) + "% )";
+
+        }
     }
 }

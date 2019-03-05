@@ -1,4 +1,5 @@
 ﻿@model IntranetPOPS1819.ViewModel.NouveauCollaborateurViewModel
+@using IntranetPOPS1819.Models
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -32,6 +33,17 @@
                 @Html.TextBoxFor(Model => Model.Mail)
                 @Html.ValidationMessageFor(Model => Model.Mail)
             <p>
+        </div>
+        <div align="center">
+            <p>
+                Service :
+                @Html.DropDownListFor(Model => Model.Service, (new Dal()).ObtenirTousLesServices().Select(serv => new SelectListItem()
+               {
+                   Text = serv.Nom,
+                   Value = serv.Id.ToString()
+               }))
+                @Html.ValidationMessageFor(Model => Model.Service)
+            </p>
         </div>
         <div align="center">
             <input type="submit" value="Ajouter collabo" />

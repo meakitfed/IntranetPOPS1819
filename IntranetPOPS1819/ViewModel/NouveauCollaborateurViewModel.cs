@@ -1,5 +1,6 @@
 ﻿using IntranetPOPS1819.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace IntranetPOPS1819.ViewModel
 {
@@ -14,6 +15,7 @@ namespace IntranetPOPS1819.ViewModel
         [Required]
         [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Format incorrect")]
         public string Mail { get; set; }
+        public string Service { get; set; }
         public Collaborateur _Collaborateur { get; set; }
 	}
 }

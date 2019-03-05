@@ -15,5 +15,6 @@ namespace IntranetPOPS1819.ViewModel
         public DateTime Debut { get; set; }
         [DataType(DataType.Date)]
         public DateTime Fin { get; set; }
+        public TypeConge Type { get; set; }
     }
 }
