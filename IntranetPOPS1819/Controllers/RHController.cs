@@ -133,7 +133,7 @@ namespace IntranetPOPS1819.Controllers
             }
 
             //On rend ses congés au collaborateur
-            if (refus)
+            if (refus && dal.ObtenirConge(Convert.ToInt32(nb)).Type == TypeConge.RTT)
             {
                 dal.AjouterCongesRestants(idCollab,  dal.ObtenirConge(Convert.ToInt32(nb)).GetDuree());
             }

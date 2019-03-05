@@ -457,7 +457,7 @@ namespace IntranetPOPS1819.Models
             c.Type = TypeConge.Defaut;
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.Conges.Add(c);
-            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
+            if (c.Type == TypeConge.RTT) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
             bdd.SaveChanges();
         }
 
@@ -466,7 +466,7 @@ namespace IntranetPOPS1819.Models
             c.Type = type;
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.Conges.Add(c);
-            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
+            if (c.Type == TypeConge.RTT) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
             bdd.SaveChanges();
         }
 
@@ -654,7 +654,7 @@ namespace IntranetPOPS1819.Models
         public void SupprimerDemandeConge(int idCollab, int idConge)
         {
             Conge theConge = ObtenirConge(idConge);
-            bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants += theConge.GetDuree();
+            if (theConge.Type == TypeConge.RTT) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants += theConge.GetDuree();
             bdd.Conges.Remove(bdd.Conges.FirstOrDefault(c => c.Id == idConge));
 
             bdd.SaveChanges();
