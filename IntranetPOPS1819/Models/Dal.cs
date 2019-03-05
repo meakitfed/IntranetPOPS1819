@@ -480,7 +480,6 @@ namespace IntranetPOPS1819.Models
 			Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail , MotDePasse = EncodeMD5(mdp), Telephone = tel, Chef = chef, Admin = admin};
 			bdd.Collaborateurs.Add(c);
 			bdd.SaveChanges();
-			System.Diagnostics.Debug.WriteLine(c.Id);
 			return c;
         }
 
@@ -490,7 +489,15 @@ namespace IntranetPOPS1819.Models
             Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail, MotDePasse = EncodeMD5(mdp), Chef = chef, Admin = admin };
             bdd.Collaborateurs.Add(c);
             bdd.SaveChanges();
-            System.Diagnostics.Debug.WriteLine(c.Id);
+            return c;
+        }
+
+        public Collaborateur AjoutCollaborateur(string nom, string prenom, string mail, string mdp, int idService, bool chef = false, bool admin = false)
+        {
+
+            Collaborateur c = new Collaborateur { Nom = nom, Prenom = prenom, Mail = mail, MotDePasse = EncodeMD5(mdp), Service = bdd.Services.First(serv => serv.Id == idService), Chef = chef, Admin = admin };
+            bdd.Collaborateurs.Add(c);
+            bdd.SaveChanges();
             return c;
         }
 

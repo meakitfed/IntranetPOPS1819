@@ -10,16 +10,17 @@
                             .Name("ValiderCongesRH")
                             .Columns(columns =>
                             {
-                                columns.Bound(c => c.Id);
+                                columns.Bound(c => c.Nom);
                                 columns.Bound(c => c.Debut);
                                 columns.Bound(c => c.Fin);
+                                columns.Bound(c => c.Type);
                                 columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetailsRH"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("ValiderCRH"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("RefuserCRH"); }).Width(300);
                             })
                             .Editable(editable => editable.Mode(GridEditMode.InLine)
                             .DisplayDeleteConfirmation(false))
                             .Scrollable()
                             .DataSource(dataSource => dataSource
-                            .Ajax()
+                                .Ajax()
                                 .Model(model => model.Id(p => p.Id))
                                 .Read(read => read.Action("Conges_ReadRH", "RH"))
                                 .Update(update => update.Action("Conges_ValidationRH", "RH"))
@@ -32,27 +33,33 @@
     <thead>
         <tr>
             <th scope="col" class="text-center">Collaborateur</th>
-            <th scope="col" class="text-center">Service @Model.Service</th>
+            <th scope="col" class="text-center">Service</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td scope="row" id="nom">Nom : &nbsp;</td>
-            <td><!-- TODO : DatePicker -->
-            @(Html.Kendo().DatePicker()
-                .Name("datePickerCongesRH")
-                .Value(DateTime.Today)
-            )
-            <button id="get" class="k-button">Get</button>
-            </td>
+            <td scope="row" id="service">Nom : &nbsp;</td>
         </tr>
         <tr>
             <td scope="row" id="CongePris">Congés pris cette année : &nbsp;</td>
-            <td>Collaborateurs Absents : <span id="test"></span></td>
+            <td>
+                <!-- TODO : DatePicker -->
+                @(Html.Kendo().DatePicker()
+                            .Name("datePickerCongesRH")
+                            .Value(DateTime.Today)
+                )
+                <button id="get" class="k-button">Get</button>
+            </td>
         </tr>
         <tr>
             <td scope="row" id="journeesRestantes">Journées restantes : &nbsp;</td>
-            <td>Proportion dans le service : <!-- TODO --></td>
+            <td>Collaborateurs Absents : <span id="test"></span></td>
+            
+        </tr>
+        <tr>
+            <td></td>
+            <td>Proportion dans le service : <span id="propAbs"></span></td>
         </tr>
     </tbody>
 </table>
@@ -69,11 +76,11 @@
         $("#get").click(function () {
             $.get("InfosAbsents", { date: datepicker.value().toISOString()}, function(data) {
                 document.getElementById("test").innerHTML += data;
-                $.get("ProportionAbsents", { date: data }, function (data2) {
-                    document.getElementById("test").innerHTML += data2;
-                });
+                
             });
-            
+            $.get("ProportionAbsents", { date: datepicker.value().toISOString(), text: document.getElementById("service").innerText }, function (data2) {
+                document.getElementById("propAbs").innerHTML += data2;
+            });
         });
     });
 
@@ -82,7 +89,8 @@
 
         var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
 
-        document.getElementById("nom").innerHTML += dataItem.Nom;
+        document.getElementById("nom").innerHTML = 'Nom : &nbsp; ' + dataItem.Nom;
+        document.getElementById("service").innerHTML = 'Nom : &nbsp; ' + dataItem.Service;
         document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
     }
 </script>
