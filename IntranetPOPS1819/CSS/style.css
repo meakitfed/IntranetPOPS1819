@@ -77,3 +77,15 @@
 .list-group-mine .list-group-item:hover {
 		color: #343a40;
 }
+
+
+.disable-button-intranet {
+	border: 1px solid #999999;
+	background-color: #cccccc;
+	color: #666666;
+}
+
+.list-group-item:focus {
+	font-size: 20px;
+	border: 2px solid black;
+}

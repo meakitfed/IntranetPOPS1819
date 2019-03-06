@@ -49,7 +49,9 @@ namespace IntranetPOPS1819.Models
         public int IdNote { get; set; }
 
 		public string Commentaire { get; set; } = "";
-    }
+
+		public virtual NoteDeFrais Note { get; set; }
+	}
 
     public enum StatutLigneDeFrais
     {

@@ -19,19 +19,21 @@
     <div>
         <div class="container-fluid profil-layout">
             <div class="row">
-                <div class="col-md-2 row1 text-center">
-                    <h2 class="row1-h">@Model._Collaborateur.Prenom @Model._Collaborateur.Nom</h2>
-                    
-                    <img src="@Url.Content(Model._Collaborateur.GetLamePpPath())" id="pp" class="rounded border border-dark">
-                    <br />
-                    <p>
-                        Service : @if (@Model._Collaborateur.Service != null)
-                        {@Model._Collaborateur.Service.Nom}
-                    </p>
-                    <p>Rôle : @Model._Collaborateur.RoleToString()</p>
-                    <p><i class="em em-e-mail"></i> : <a href="mailto:@Model._Collaborateur.Mail">@Model._Collaborateur.Mail</a></p>
-                    <p><i class="em em-telephone_receiver"></i> : @Model._Collaborateur.Telephone</p>
-                </div>
+				<div class="col-md-2 row1 text-center">
+					<h2 class="row1-h">@Model._Collaborateur.Prenom @Model._Collaborateur.Nom</h2>
+
+					<img src="@Url.Content(Model._Collaborateur.GetLamePpPath())" id="pp" class="rounded border border-dark">
+					<br />
+
+					<br />
+					<p>
+						Service : @if (@Model._Collaborateur.Service != null)
+						{@Model._Collaborateur.Service.Nom}
+					</p>
+					<p>Rôle : @Model._Collaborateur.RoleToString()</p>
+					<p><i class="em em-e-mail"></i> : <a href="mailto:@Model._Collaborateur.Mail">@Model._Collaborateur.Mail</a></p>
+					<p><i class="em em-telephone_receiver"></i> : @Model._Collaborateur.Telephone</p>
+				</div>
                 <div class="col-md-8">
                     <div class="row2">
                         <h1 class="row2-h">Récapitulatif</h1>

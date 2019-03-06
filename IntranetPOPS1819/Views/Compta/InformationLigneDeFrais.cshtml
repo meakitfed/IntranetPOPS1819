@@ -18,6 +18,8 @@
 										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 									);
 								  columns.Bound(c => c.Date);
+								  columns.Bound(c => c.Filename).ClientTemplate("#= (Filename) ? Filename : \"Aucun Justificatif\" #"); ;
+								  columns.Bound(c => c.Note.Date).ClientTemplate("#= Note.Date ? kendo.toString(kendo.parseDate(Note.Date), 'y') : '' #");
 								  columns.Bound(c => c.Mission).ClientTemplate(
 									"#= Mission.Nom #"
 								);
@@ -40,7 +42,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title">Demander les informations</h4>
+				<h4 class="modal-title text-center">Justifier le refus</h4>
 			</div>
 			<form id="messageRefus" method="POST">
 				<div class="modal-body">
@@ -100,6 +102,7 @@
 				url: 'RefuserLigne',
 				data: { id: dataOFSelectedLine.Id, message: texte.value }
 			})
+			texte.value = "";
 		}
 		else {
 			console.log(dataOFSelectedLine);

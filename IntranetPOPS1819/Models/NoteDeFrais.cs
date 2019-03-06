@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace IntranetPOPS1819.Models
 {
@@ -8,6 +9,7 @@ namespace IntranetPOPS1819.Models
 		public int Id { get; set; }
 		public StatutNote Statut { get; set; } = StatutNote.Brouillon;
 		public TypeService typeDuService { get; set; }
+		[Display(Name = "Note De Frais Associé")]
 		public DateTime Date { get; set; }
 		public bool Actif { get; set; } = false;
 		public virtual List<LigneDeFrais> LignesDeFrais { get; set; } = new List<LigneDeFrais>();

@@ -27,7 +27,7 @@
 											);
 										  columns.Bound(c => c.Type);
 										  columns.Bound(c => c.Date);
-										  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#:Filename#");
+										  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#= (Filename) ? Filename : \"Aucun Justificatif\" #"); ;
 										  columns.Command(command => command.Custom("Détail du refus").Click("showDetailRefus").HtmlAttributes(new { @class = "detailRefus" }).Visible("editVisible")).Width(100);
 										  columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
 										  columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);
@@ -76,7 +76,7 @@
 													<div class="modal-dialog">
 														<div class="modal-content">
 															<div class="modal-header">
-																<h4 class="modal-title">Détail du refus de la ligne de frais</h4>
+																<h4 class="modal-title text-center">Détail du refus de la ligne de frais</h4>
 															</div>
 																<div class="modal-body">
 																	<div class="form-row">
@@ -126,6 +126,9 @@
 	if (test == 'True' || '@ViewData["IsOld"]' == 'True') {
 		$('#EnvoyerNote').addClass('Disabled');
 		$('#AddLigne').addClass('Disabled');
+		$('#AddLigne').addClass('disable-button-intranet');
+		$('#EnvoyerNote').addClass('disable-button-intranet');
+		
 	}
 	$('#EnvoyerNote').click(function () {
 		
@@ -139,6 +142,8 @@
 				alert('La note de frais a été envoyée');
 				$('#EnvoyerNote').addClass('Disabled');
 				$('#AddLigne').addClass('Disabled');
+				$('#AddLigne').addClass('disable-button-intranet');
+				$('#EnvoyerNote').addClass('disable-button-intranet');
 			console.log(data);
 		});
 		}

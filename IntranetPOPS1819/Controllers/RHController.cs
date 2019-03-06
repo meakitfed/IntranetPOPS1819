@@ -24,7 +24,11 @@ namespace IntranetPOPS1819.Controllers
             }
             return View();
         }
-
+		public bool SupprimerDemande(int IdDemande)
+		{
+			dal.SupprimerDemandeInformation(IdDemande);
+			return true;
+		}
 		public ActionResult InformationMessage(int id)
 		{
 			return PartialView(dal.bdd.Messages.FirstOrDefault(m => m.Id == id));

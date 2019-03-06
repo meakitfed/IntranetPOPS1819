@@ -1,5 +1,30 @@
 ﻿@using IntranetPOPS1819.Models
 @model Message
 <br />
-<div class="DemandeInfo col-lg-11">@Model.Contenu</div>
+<span id="conteneurMessage">
+	<div class="DemandeInfo col-lg-11">@Model.Contenu</div>
 
+	<div class="row">
+		<div class="col-md-10">
+
+		</div>
+
+		<div class="col-md-1">
+			<button class="btn btn-1" id="supprimerDemande"> Supprimer </button>
+		</div>
+	</div>
+
+	<script>
+		$('#supprimerDemande').click(function () {
+			var id = "@Model.Id";
+		$.post( "SupprimerDemande", {IdDemande: "@Model.Id"}, function( data ) {
+			alert("vous venez de supprimer la demande");
+			var texte = document.getElementById(('message' + id));
+			var conteneur = document.getElementById('conteneurMessage');
+			texte.style.display = 'none';
+			conteneur.style.display = 'none';
+
+		});
+	});
+	</script>
+</span>

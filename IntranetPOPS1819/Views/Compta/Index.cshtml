@@ -34,7 +34,7 @@
 										if ((c.Service.Type == TypeService.Direction && c.Chef && Model.c.Chef) || (c.Service.Type == TypeService.Direction && !c.Chef) || c.Service.Type != TypeService.Direction)
 										{
 											if (firstCollab == -1) { firstCollab = c.Id; }
-											@Ajax.RawActionLink(string.Format(c.Nom + c.Prenom), "InformationLigneDeFrais", "Compta", new { IdCollab = c.Id }, new AjaxOptions
+											@Ajax.RawActionLink(string.Format(c.Prenom + " " +c.Nom), "InformationLigneDeFrais", "Compta", new { IdCollab = c.Id }, new AjaxOptions
 										   {
 											   InsertionMode = InsertionMode.Replace,
 											   UpdateTargetId = "InfoNoteActive",
