@@ -56,11 +56,11 @@
         </tr>
         <tr>
             <td scope="row" id="journeesRestantes">Journées restantes : &nbsp;</td>
-            <td>Collaborateurs Absents : <span id="test"></span></td>
+            <td><span id="test"></span></td>
         </tr>
         <tr>
             <td></td>
-            <td>Proportion dans le service : <span id="propAbs"></span></td>
+            <td><span id="propAbs"></span></td>
         </tr>
     </tbody>
 </table>
@@ -77,11 +77,11 @@
 
         $("#get").click(function () {
             $.get("InfosAbsents", { date: datepicker.value().toISOString() }, function (data) {
-                document.getElementById("test").innerHTML += data;
+                document.getElementById("test").innerHTML = 'Collaborateurs Absents : &nbsp;' + data;
 
             });
             $.get("ProportionAbsents", { date: datepicker.value().toISOString(), text: document.getElementById("service").innerText }, function (data2) {
-                document.getElementById("propAbs").innerHTML += data2;
+                document.getElementById("propAbs").innerHTML = 'Proportion dans le service:' + data2;
             });
         });
     });
@@ -95,7 +95,7 @@
         document.getElementById("nom").innerHTML = 'Nom : &nbsp; ' + dataItem.Nom;
         document.getElementById("service").innerHTML = 'Nom : &nbsp; ' + dataItem.Service;
         document.getElementById("congesPris").innerHTML = '&nbsp; RTT : &nbsp;' + dataItem.CongesPris[0] + '<br />&nbsp; Sans solde : &nbsp;' + dataItem.CongesPris[1] + '<br />&nbsp; Absences : &nbsp;' + dataItem.CongesPris[2];
-        document.getElementById("journeesRestantes").innerHTML = dataItem.CongesRestants + '&nbsp; jours';
+        document.getElementById("journeesRestantes").innerHTML = 'Journées restantes : &nbsp;' + dataItem.CongesRestants + '&nbsp; jours';
     }
 </script>
 
