@@ -81,13 +81,13 @@
                 @if (c.Notifications.Count() > 0)
                 {<span class="badge badge-notify">@c.Notifications.Count()</span>}</a>
                 <div class=" dropdown-menu dropdown-menu-right scrollable-menu " aria-labelledby="navbarDropdownMenuLink">
-                    @foreach (var m in c.Notifications)
+                    @for (int i = 0; i<c.Notifications.Count; i++)
                     {
-                        <button class="list-group-item" onclick="retirerNotif(@m.Id, '@m.Redirection')">
-                            <b>@m.Titre</b>
+                        <button class="list-group-item" onclick="retirerNotif(@c.Notifications[i].Id, '@c.Notifications[i].Redirection')">
+                            <b>@c.Notifications[i].Titre</b>
                             <p>
-                                <em>@m.Emetteur</em><br />
-                                @m.Contenu<br />
+                                <em>@c.Notifications[i].Emetteur</em><br />
+                                @c.Notifications[i].Contenu<br />
                                 @*@m.Date.ToString("dd/MM/yyyy")<br />
         <em>Cliquez pour consulter</em>*@
                             </p>
