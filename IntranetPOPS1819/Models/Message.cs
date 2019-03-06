@@ -62,13 +62,14 @@ namespace IntranetPOPS1819.Models
                     break;
 				case TypeMessage.NotifNoteRetour:
                     Titre = "Validation de votre note de frais";
-                    Contenu = "";
-                    Redirection = "/NoteDeFrais/Index";
+                    Contenu = n.Date.ToString("Y");
+					Redirection = "/NoteDeFrais/Index";
                     break;
 				default:
 					throw new HttpUnhandledException();
 			}
 		}
+
         public void SetRedirectionAller(Collaborateur c, NoteDeFrais n)
         {
             if (n.Statut == StatutNote.EnAttenteDeValidation)
@@ -106,7 +107,32 @@ namespace IntranetPOPS1819.Models
                  Redirection = "/Compta/Index";
             }
         }
-    }
+		public Message(TypeMessage t, Collaborateur c, LigneDeFrais n, bool refusé)
+		{
+			Type = t;
+			Emetteur = c.Prenom + c.Nom + " - " + c.Service.Nom;
+			//Date = DateTime.Now;
+			Lu = false;
+			switch (t)
+			{
+				case TypeMessage.NotifLigneRetour:
+					
+					if(refusé)
+					{
+						Titre = "Refus d'une ligne de frais";
+					}
+					else
+					{
+						Titre = "Validation d'une ligne de Frais";
+					}
+					Contenu = "nom : " + n.Nom  + " | somme : " + n.Somme;
+					Redirection = "/NoteDeFrais/Index";
+					break;
+				default:
+					throw new HttpUnhandledException();
+			}
+		}
+	}
 
     public enum TypeMessage
     {

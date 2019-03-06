@@ -1,15 +1,19 @@
 ﻿@using IntranetPOPS1819.Models
 @model Message
-<br />
+	<br />
 <span id="conteneurMessage">
-	<div class="DemandeInfo col-lg-11">@Model.Contenu</div>
+	<div class="DemandeInfo col-lg-12">
+		<h5>@Model.Titre</h5>
+		<div>@Model.Contenu</div>
+	</div>
+
 
 	<div class="row">
 		<div class="col-md-10">
 
 		</div>
 
-		<div class="col-md-1">
+		<div class="col-md-2">
 			<button class="btn btn-1" id="supprimerDemande"> Supprimer </button>
 		</div>
 	</div>

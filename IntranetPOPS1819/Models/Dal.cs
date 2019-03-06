@@ -297,6 +297,22 @@ namespace IntranetPOPS1819.Models
 			ligne.Filename = filename;
 			bdd.SaveChanges();
 		}
+		public void AjoutNotificationService(int IdService, Message m)
+		{
+			Service service = bdd.Services.FirstOrDefault(s => s.Id == IdService);
+			foreach(Collaborateur c in service.Collaborateurs)
+			{
+				AjoutNotif(c.Id, m);
+			}
+		}
+		public void AjoutNotificationService(TypeService type, Message m)
+		{
+			Service service = bdd.Services.FirstOrDefault(s => s.Type == type);
+			foreach (Collaborateur c in service.Collaborateurs)
+			{
+				AjoutNotif(c.Id, m);
+			}
+		}
 		public void MessageDeRefusLigneDefrais(int IdLigne, string message)
 		{
 			LigneDeFrais ligne = bdd.LigneDeFrais.FirstOrDefault(l => l.Id == IdLigne);
@@ -359,9 +375,7 @@ namespace IntranetPOPS1819.Models
 				"Serait-il possible de prendre contact par un autre biais ?\n" +
 				"Merci d'avance,\n" +
 				"Nathan.\n";
-				EnvoiDemandeInformation(new Message { Contenu = (Demande), Emetteur = "Nathan" });
-				EnvoiDemandeInformation(new Message { Contenu = "Salut toi 2", Emetteur = "Nathan 2 " });
-				EnvoiDemandeInformation(new Message { Contenu = "Salut toi 3", Emetteur = "Nathan 3" });
+				EnvoiDemandeInformation(new Message { Contenu = (Demande), Emetteur = "Nathan Bonnard - Marketing", Titre = "Problème Parking Velizy" });
 
 				Service marketing = AjoutService("Marketing");
 				AssignerService(marketing.Id, nathan.Id);
@@ -382,7 +396,7 @@ namespace IntranetPOPS1819.Models
 
                 //tout le monde se voit assigner toutes les missions
                 List<Mission> Missions = new List<Mission>();
-				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "Démarchage" };
+				string[] labelsMission = { "Chantier Paris", "Parking Velizy", "Publicité", "R&D" };
 				for (int j = 0; j < labelsMission.Length; j++)
 				{
 					Mission m = AjoutMission(labelsMission[j], compta.Id);

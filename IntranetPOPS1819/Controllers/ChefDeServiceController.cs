@@ -40,7 +40,7 @@ namespace IntranetPOPS1819.Controllers
 				dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.ValidéeChef);
 			}
 
-			//TODO
+			dal.AjoutNotif(ligne.IdCollab, new Message(TypeMessage.NotifLigneRetour, c, ligne, false));
 
 			foreach (NoteDeFrais n in col.NotesDeFrais)
 			{
@@ -69,7 +69,13 @@ namespace IntranetPOPS1819.Controllers
 			System.Diagnostics.Debug.WriteLine("Refuser La ligne" + Id);
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Refusée);
 			dal.MessageDeRefusLigneDefrais(Id, message);
+
+			Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+			LigneDeFrais l = dal.bdd.LigneDeFrais.FirstOrDefault(co => co.Id == Id);
+			dal.AjoutNotif(l.IdCollab, new Message(TypeMessage.NotifLigneRetour, c, l, true));
 			return Json(null, JsonRequestBehavior.AllowGet);
+
+			
 		}
 		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int idCol)
 		{

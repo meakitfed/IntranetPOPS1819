@@ -15,6 +15,10 @@
 												"<div> </div>" +
 												"# } #"
 											);
+
+										  columns.Bound(c => c.Type);
+										  columns.Bound(c => c.Date);
+										  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#= (Filename) ? Filename : \"Aucun Justificatif\" #"); ;
 										  columns.Bound(c => c.Statut).ClientTemplate(
 											"# if (Statut == 1){ #" +
 											"<font color=\"DarkOrange\">En Attente</font>" +
@@ -25,9 +29,6 @@
 										"# }else{ #" +
 											"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 											);
-										  columns.Bound(c => c.Type);
-										  columns.Bound(c => c.Date);
-										  columns.Bound(e => e.ResumeFileUrl).EditorTemplateName("ResumeFileUrl").Title("Justification").ClientTemplate("#= (Filename) ? Filename : \"Aucun Justificatif\" #"); ;
 										  columns.Command(command => command.Custom("Détail du refus").Click("showDetailRefus").HtmlAttributes(new { @class = "detailRefus" }).Visible("editVisible")).Width(100);
 										  columns.Command(command => command.Edit().Text(" ").HtmlAttributes(new { @class = "editer" })).Width(100);
 										  columns.Command(command => command.Destroy().IconClass("fa fa-trash").Text(" ").HtmlAttributes(new { @class = "supprimer" })).Width(100);

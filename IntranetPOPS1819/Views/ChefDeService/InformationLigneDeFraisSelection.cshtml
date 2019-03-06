@@ -7,6 +7,14 @@
 							  {
 								  columns.Bound(c => c.Nom);
 								  columns.Bound(c => c.Somme);
+								  
+								  columns.Bound(c => c.Date);
+								  columns.Bound(c => c.Filename).ClientTemplate("#= (Filename) ? Filename : \"Aucun Justificatif\" #");
+								  columns.Bound(c => c.Note.Date).ClientTemplate("#= Note.Date ? kendo.toString(kendo.parseDate(Note.Date), 'y') : '' #");
+								  columns.Bound(c => c.Mission).ClientTemplate(
+									"#= Mission.Nom #"
+								);
+								  columns.Bound(c => c.Type);
 								  columns.Bound(c => c.Statut).ClientTemplate(
 									"# if (Statut == 1){ #" +
 										"<font color=\"DarkOrange\">En Attente</font>" +
@@ -17,13 +25,6 @@
 									"# }else{ #" +
 										"<font color=\"FireBrick\">Refusée</font>" + "# } #"
 									);
-								  columns.Bound(c => c.Date);
-								  columns.Bound(c => c.Filename).ClientTemplate("#= (Filename) ? Filename : \"Aucun Justificatif\" #");
-								  columns.Bound(c => c.Note.Date).ClientTemplate("#= Note.Date ? kendo.toString(kendo.parseDate(Note.Date), 'y') : '' #");
-								  columns.Bound(c => c.Mission).ClientTemplate(
-									"#= Mission.Nom #"
-								);
-								  columns.Bound(c => c.Type);
 								  columns.Command(command => { command.Custom("Détails").HtmlAttributes(new { @class = "btn btn-light" }).Click("showDetails"); command.Custom(" Valider").IconClass("fas fa-check").HtmlAttributes(new { @class = "btn btn-success" }).Click("Valider"); command.Custom(" Refuser").IconClass("fas fa-times").HtmlAttributes(new { @class = "btn btn-danger" }).Click("Refuser"); }).Width(220);
 							  })
 										.Sortable(sortable =>

@@ -10,14 +10,14 @@ namespace IntranetPOPS1819.Controllers
 {
 	public class UserPageController : Controller
 	{
-		private IDal dal;
+		private Dal dal;
 
 		public UserPageController() : this(new Dal())
 		{
 
 		}
 
-		private UserPageController(IDal dalIoc)
+		private UserPageController(Dal dalIoc)
 		{
 			dal = dalIoc;
 		}
@@ -28,7 +28,8 @@ namespace IntranetPOPS1819.Controllers
 			if (HttpContext.User.Identity.IsAuthenticated)
 			{
 				Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
-				dal.EnvoiDemandeInformation(new Message { Contenu = DemandeInformation, Emetteur = c.Prenom + " " + c.Nom });
+				dal.EnvoiDemandeInformation(new Message { Contenu = DemandeInformation, Emetteur = c.Prenom + " " + c.Nom + " - " + c.Service.Nom, Titre = DemandeTitre });
+				dal.AjoutNotificationService(TypeService.RessourcesHumaines, new Message { Titre = "Deamande Information", Emetteur = c.Prenom + " " + c.Nom + " - " + c.Service.Nom, Redirection = "/RH/Index", Contenu = "Nouvelle demande d'information" });
 				return 1;
 			}
 			return 0;

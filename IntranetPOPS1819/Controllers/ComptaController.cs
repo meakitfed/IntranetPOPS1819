@@ -39,11 +39,12 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult ValiderLigne(int Id)
 		{
-			//Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
+			Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 			System.Diagnostics.Debug.WriteLine("Valider la ligne" + Id);
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Validée);
 			LigneDeFrais ligne = dal.bdd.LigneDeFrais.FirstOrDefault(l => l.Id == Id);
-			Collaborateur col = dal.bdd.Collaborateurs.FirstOrDefault(c => c.Id == ligne.IdCollab);
+			Collaborateur col = dal.bdd.Collaborateurs.FirstOrDefault(co => co.Id == ligne.IdCollab);
+			dal.AjoutNotif(ligne.IdCollab, new Message(TypeMessage.NotifLigneRetour, c, ligne, false));
 			foreach (NoteDeFrais n in col.NotesDeFrais)
 			{
 				if (n.LignesDeFrais.Contains(ligne))
@@ -69,9 +70,12 @@ namespace IntranetPOPS1819.Controllers
 
 		public ActionResult RefuserLigne(int Id, string message = "")
 		{
+			Collaborateur c = dal.ObtenirCollaborateur(HttpContext.User.Identity.Name);
 			System.Diagnostics.Debug.WriteLine("Refuser La ligne" + Id);
 			dal.ChangerStatutLigneDeFrais(Id, StatutLigneDeFrais.Refusée);
 			dal.MessageDeRefusLigneDefrais(Id, message);
+			LigneDeFrais l = dal.bdd.LigneDeFrais.FirstOrDefault(co => co.Id == Id);
+			dal.AjoutNotif(l.IdCollab, new Message(TypeMessage.NotifLigneRetour, c, l, true));
 			return Json(null, JsonRequestBehavior.AllowGet);
 		}
 		public ActionResult LigneDeFrais_Read([DataSourceRequest]DataSourceRequest request, int IdCollab)
