@@ -60,10 +60,13 @@
 }
 
 #pp{
-    height: 250px;
+    max-height: 250px;
+    height: auto;
+    width: auto;
     border: 10px;
     max-width: 100%;
     overflow: hidden;
+    display: block;
 }
 
 .list-group-mine .list-group-item {

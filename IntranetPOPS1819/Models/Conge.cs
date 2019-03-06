@@ -11,7 +11,7 @@ namespace IntranetPOPS1819.Models
         public StatutConge Statut { get; set; }
 
         [Required]
-        public TypeConge Type { get; set; }
+        public TypeConge Type { get; set; } = TypeConge.Defaut;
 
         [Required]
         [DataType(DataType.Date)]
