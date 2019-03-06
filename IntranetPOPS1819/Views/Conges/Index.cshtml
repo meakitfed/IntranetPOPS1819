@@ -80,9 +80,9 @@
                                     {
                                         if (c.Statut == StatutConge.Valide)
                                         {
-                                            <li id="@c.Id">
-                                                Id:@c.Id  @c.Debut.ToString("dd/MM/yy")  @c.GetDuree()j  type:@c.Type.ToString()
-                                            </li>
+                                    <li id="@c.Id">
+                                        @c.Type.ToString().Substring(0, 3) : du @c.Debut.ToString("dd/MM/yy") au @c.Fin.ToString("dd/MM/yy")
+                                    </li>
                                         }
                                     }
 
@@ -351,11 +351,11 @@
 <style type="text/css">
 
 	.dot {
-	  height: 10px;
-	  width: 10px;
-	  border-radius: 50%;
-	  display: inline-block;
-	}
+	    height: 10px;
+	    width: 10px;
+	    border-radius: 50%;
+	    display: inline-block;
+    }
 
 #calendar,
 #calendar .k-calendar-view,
@@ -395,14 +395,14 @@
 
 
     .list-group{
-    max-height: 300px;
-    margin-bottom: 10px;
-    overflow:scroll;
-    -webkit-overflow-scrolling: touch;
+        max-height: 300px;
+        margin-bottom: 10px;
+        overflow:scroll;
+        -webkit-overflow-scrolling: touch;
     }
 
     #selectType {
-   text-align: center;
+        text-align: center;
     }
 
 </style>

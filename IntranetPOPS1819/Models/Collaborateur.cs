@@ -214,7 +214,7 @@ namespace IntranetPOPS1819.Models
 			{
 				foreach (Conge c in Conges)
 				{
-                    if (c.Statut == StatutConge.Valide) nb++;
+                    if (c.Statut == StatutConge.Valide) nb += c.GetDuree();
 				}
 				return nb;
 			}

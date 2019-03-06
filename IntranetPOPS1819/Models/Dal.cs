@@ -387,12 +387,13 @@ namespace IntranetPOPS1819.Models
 
 
                 //Gestion congé
-                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours });
-                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 3, 12), Fin = new DateTime(2019, 3, 15), Statut = StatutConge.Refuse });
+                AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 2), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours, Type = TypeConge.RTT });
+				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 3), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours, Type = TypeConge.RTT });
+				AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 10, 6), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours, Type = TypeConge.RTT });
+				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 4), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours, Type = TypeConge.RTT });
+				AjoutConge(brian.Id, new Conge { Debut = new DateTime(2019, 10, 5), Fin = new DateTime(2019, 10, 10), Statut = StatutConge.EnCours, Type = TypeConge.RTT });
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 3, 12), Fin = new DateTime(2019, 3, 15), Statut = StatutConge.Refuse, Type = TypeConge.RTT });
+                AjoutConge(nathan.Id, new Conge { Debut = new DateTime(2019, 3, 1), Fin = new DateTime(2019, 3, 2), Statut = StatutConge.Valide, Type = TypeConge.RTT });
 
                 SupprimerCollaborateur(john.Id);
 			}
@@ -455,10 +456,9 @@ namespace IntranetPOPS1819.Models
 
         public void AjoutConge(int idCollab, Conge c)
         {
-            c.Type = TypeConge.Defaut;
             bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).Conges.Add(c);
             bdd.Conges.Add(c);
-            if (c.Type == TypeConge.RTT) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
+            if (c.Type == TypeConge.RTT && c.Statut != StatutConge.Refuse) bdd.Collaborateurs.FirstOrDefault(collab => collab.Id == idCollab).CongesRestants -= c.GetDuree();
             bdd.SaveChanges();
         }
 
